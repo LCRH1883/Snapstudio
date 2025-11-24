@@ -3,12 +3,14 @@ package com.example.snapswipe.ui
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.gestures.detectDragGestures
 import androidx.compose.material.icons.Icons
@@ -40,7 +42,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.Shape
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.input.pointer.pointerInput
 import kotlin.math.abs
@@ -236,19 +240,22 @@ fun MainSwipeScreen(
                                         }
                                     }
                                 }
-                                Row(
-                                    modifier = Modifier.fillMaxWidth(),
-                                    horizontalArrangement = Arrangement.spacedBy(12.dp)
+                                BoxWithConstraints(
+                                    modifier = Modifier.fillMaxWidth()
                                 ) {
+                                    val buttonSize = 56.dp
+                                    val xOffsetLeft = this.maxWidth / 3 - buttonSize / 2
+                                    val xOffsetRight = this.maxWidth * 2 / 3 - buttonSize / 2
                                     IconButton(
                                         onClick = onDelete,
-                                        modifier = Modifier.weight(1f)
+                                        modifier = Modifier
+                                            .offset(x = xOffsetLeft)
                                     ) {
                                         Box(
                                             modifier = Modifier
-                                                .size(56.dp)
+                                                .size(buttonSize)
                                                 .clip(CircleShape)
-                                                .background(Color.Red.copy(alpha = 0.7f)),
+                                                .background(Color.Red.copy(alpha = 0.6f)),
                                             contentAlignment = Alignment.Center
                                         ) {
                                             Icon(
@@ -260,13 +267,14 @@ fun MainSwipeScreen(
                                     }
                                     IconButton(
                                         onClick = onKeep,
-                                        modifier = Modifier.weight(1f)
+                                        modifier = Modifier
+                                            .offset(x = xOffsetRight)
                                     ) {
                                         Box(
                                             modifier = Modifier
-                                                .size(56.dp)
+                                                .size(buttonSize)
                                                 .clip(CircleShape)
-                                                .background(Color(0xFF2E7D32).copy(alpha = 0.7f)),
+                                                .background(Color(0xFF2E7D32).copy(alpha = 0.6f)),
                                             contentAlignment = Alignment.Center
                                         ) {
                                             Icon(

@@ -79,3 +79,5 @@
 | 6.2    | 2025-11-24       | Codex  | Implemented share intent via chooser using photo URI with read permission grant. |
 | 7.1    | 2025-11-24       | Codex  | Updated theme palette/typography and main overlay styling for a more refined look and better dark-mode support. |
 | icon v2| 2025-11-24       | Codex  | Updated launcher foreground icon to new img/icon asset. |
+| icon v3| 2025-11-24       | Codex  | Copied new icon to all mipmap density folders to improve clarity/scaling. |
+| icon v4| 2025-11-24       | Codex  | Re-copied new icon into mipmap-anydpi-v26 foreground to ensure adaptive icon uses the right asset. |
