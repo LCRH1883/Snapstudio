@@ -27,7 +27,7 @@ PHASE 0 – Documentation & Project Setup
     - Template: a Compose-based template (Empty Compose Activity, or Empty Activity with Jetpack Compose enabled).
     - Manual check: Project builds successfully; main activity runs and shows the default Compose preview content.
 
-[ ] 0.3 – Configure Jetpack Compose dependencies
+[x] 0.3 – Configure Jetpack Compose dependencies
     - In the app module build.gradle(.kts), ensure:
       - Compose is enabled in buildFeatures.
       - Compose compiler extension version is set.
@@ -41,7 +41,7 @@ PHASE 0 – Documentation & Project Setup
         - DataStore Preferences for settings.
     - Manual check: Sync/Build succeeds; basic composable screen compiles.
 
-[ ] 0.4 – Create initial app scaffold
+[x] 0.4 – Create initial app scaffold
     - Create a composable SnapSwipeApp() that:
       - Sets up Material3 theme.
       - Provides a NavHost for navigation.

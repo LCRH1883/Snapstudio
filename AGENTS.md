@@ -60,3 +60,5 @@
 |--------|------------------|--------|-------------------------------------------|
 | 0.1    | 2024-11-24       | Codex  | Added AGENTS.md, claude.md, BUILD_PLAN.md per setup instructions. |
 | 0.2    | 2024-11-24       | Codex  | Scaffolded Compose-based Android project (minSdk 26, targetSdk 34, pkg com.example.snapswipe). |
+| 0.3    | 2024-11-24       | Codex  | Configured Compose build features/options and dependencies in app Gradle config. |
+| 0.4    | 2024-11-24       | Codex  | Added SnapSwipeApp navigation scaffold with placeholder screens (permissions, main, settings) and wired MainActivity. |
