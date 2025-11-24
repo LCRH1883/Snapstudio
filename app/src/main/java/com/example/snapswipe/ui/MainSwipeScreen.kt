@@ -13,6 +13,8 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.gestures.detectDragGestures
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.Check
 import androidx.compose.material3.Button
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.CircularProgressIndicator
@@ -20,14 +22,25 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SheetState
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
+import androidx.compose.material3.surfaceColorAtElevation
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.input.pointer.pointerInput
 import kotlin.math.abs
@@ -45,11 +58,18 @@ fun MainSwipeScreen(
     onShare: () -> Unit = {},
     onRestart: () -> Unit = {},
     onReload: () -> Unit = {},
-    onUndo: () -> Unit = {}
+    queuedDeleteCount: Int = 0,
+    onCommitQueuedDeletes: () -> Unit = {}
 ) {
     val hasPhotos = uiState.photos.isNotEmpty()
-    val canUndo = uiState.lastAction != null
     val processedAll = !hasPhotos && uiState.lastAction != null && !uiState.isLoading
+    var showShareSheet by remember { mutableStateOf(false) }
+    val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
+    LaunchedEffect(processedAll, queuedDeleteCount) {
+        if (processedAll && queuedDeleteCount > 0) {
+            onCommitQueuedDeletes()
+        }
+    }
     Scaffold(
         topBar = {
             CenterAlignedTopAppBar(
@@ -158,7 +178,7 @@ fun MainSwipeScreen(
                                                 totalDx < -60 -> onDelete()
                                             }
                                         } else if (totalDy < -80) {
-                                            onShare()
+                                            showShareSheet = true
                                         }
                                     }
                                 ) { change, dragAmount ->
@@ -176,7 +196,7 @@ fun MainSwipeScreen(
                             contentScale = ContentScale.Crop
                         )
 
-                        // Gradient overlay for legibility.
+                        // Gradient overlay for legibility using theme colors.
                         Box(
                             modifier = Modifier
                                 .align(Alignment.BottomCenter)
@@ -185,8 +205,8 @@ fun MainSwipeScreen(
                                 .background(
                                     Brush.verticalGradient(
                                         colors = listOf(
-                                            Color.Black.copy(alpha = 0.6f),
-                                            Color.Black.copy(alpha = 0.2f)
+                                            MaterialTheme.colorScheme.scrim.copy(alpha = 0.55f),
+                                            MaterialTheme.colorScheme.scrim.copy(alpha = 0.15f)
                                         )
                                     )
                                 )
@@ -196,47 +216,104 @@ fun MainSwipeScreen(
                                 modifier = Modifier.fillMaxWidth(),
                                 verticalArrangement = Arrangement.spacedBy(8.dp)
                             ) {
+                                val position = uiState.currentPosition ?: 0
+                                val total = if (uiState.totalCount > 0) uiState.totalCount else uiState.photos.size
                                 Text(
-                                    text = "Photo ${uiState.currentIndex + 1} of ${uiState.photos.size}",
+                                    text = "Photo $position of $total",
                                     style = MaterialTheme.typography.titleMedium,
                                     color = Color.White
                                 )
-                                Text(
-                                    text = "Swipe right to keep, left to delete, up to share",
-                                    style = MaterialTheme.typography.bodyMedium,
-                                    color = Color.White.copy(alpha = 0.85f)
-                                )
-                                Row(
-                                    modifier = Modifier.fillMaxWidth(),
-                                    horizontalArrangement = Arrangement.Start
-                                ) {
-                                    Button(
-                                        onClick = onUndo,
-                                        enabled = canUndo
+                                if (queuedDeleteCount > 0) {
+                                    Row(
+                                        modifier = Modifier.fillMaxWidth(),
+                                        horizontalArrangement = Arrangement.Start
                                     ) {
-                                        Text("Undo")
+                                        Button(
+                                            onClick = onCommitQueuedDeletes,
+                                            modifier = Modifier.weight(1f)
+                                        ) {
+                                            Text("Delete queued ($queuedDeleteCount)")
+                                        }
                                     }
                                 }
                                 Row(
                                     modifier = Modifier.fillMaxWidth(),
                                     horizontalArrangement = Arrangement.spacedBy(12.dp)
                                 ) {
-                                    Button(
+                                    IconButton(
                                         onClick = onDelete,
                                         modifier = Modifier.weight(1f)
                                     ) {
-                                        Text("Delete")
+                                        Box(
+                                            modifier = Modifier
+                                                .size(56.dp)
+                                                .clip(CircleShape)
+                                                .background(Color.Red.copy(alpha = 0.7f)),
+                                            contentAlignment = Alignment.Center
+                                        ) {
+                                            Icon(
+                                                imageVector = Icons.Default.Close,
+                                                contentDescription = "Delete",
+                                                tint = Color.White
+                                            )
+                                        }
                                     }
-                                    Button(
+                                    IconButton(
                                         onClick = onKeep,
                                         modifier = Modifier.weight(1f)
                                     ) {
-                                        Text("Keep")
+                                        Box(
+                                            modifier = Modifier
+                                                .size(56.dp)
+                                                .clip(CircleShape)
+                                                .background(Color(0xFF2E7D32).copy(alpha = 0.7f)),
+                                            contentAlignment = Alignment.Center
+                                        ) {
+                                            Icon(
+                                                imageVector = Icons.Default.Check,
+                                                contentDescription = "Keep",
+                                                tint = Color.White
+                                            )
+                                        }
                                     }
                                 }
                             }
                         }
                     }
+                }
+            }
+        }
+    }
+
+    if (showShareSheet) {
+        ModalBottomSheet(
+            onDismissRequest = { showShareSheet = false },
+            sheetState = sheetState
+        ) {
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 24.dp, vertical = 20.dp),
+                verticalArrangement = Arrangement.spacedBy(12.dp)
+            ) {
+                Text(
+                    text = "Share this photo",
+                    style = MaterialTheme.typography.titleMedium
+                )
+                Button(
+                    onClick = {
+                        showShareSheet = false
+                        onShare()
+                    },
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Text("Share photo")
+                }
+                TextButton(
+                    onClick = { showShareSheet = false },
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Text("Cancel")
                 }
             }
         }

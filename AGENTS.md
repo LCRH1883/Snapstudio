@@ -75,3 +75,7 @@
 | 5.1-5.2| 2025-11-24       | Codex  | Implemented delete via MediaStore (intent sender on R+), wired trashCurrent to remove items; keepCurrent now simply advances. |
 | icon   | 2025-11-24       | Codex  | Set launcher icon to provided snap swipe.png image via adaptive icon foreground. |
 | 5.3    | 2025-11-24       | Codex  | Processed photos removed from in-memory list (keep/delete), undo restores last, end-of-run handled without re-showing processed items. |
+| 6.1    | 2025-11-24       | Codex  | Added share ModalBottomSheet on upward swipe with share/cancel actions. |
+| 6.2    | 2025-11-24       | Codex  | Implemented share intent via chooser using photo URI with read permission grant. |
+| 7.1    | 2025-11-24       | Codex  | Updated theme palette/typography and main overlay styling for a more refined look and better dark-mode support. |
+| icon v2| 2025-11-24       | Codex  | Updated launcher foreground icon to new img/icon asset. |

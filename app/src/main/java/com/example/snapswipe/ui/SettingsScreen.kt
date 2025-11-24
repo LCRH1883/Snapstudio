@@ -26,6 +26,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.semantics.Role
 import com.example.snapswipe.data.SortOrder
 import com.example.snapswipe.data.SortOrderPreferences
+import com.example.snapswipe.data.DeleteMode
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -37,6 +38,7 @@ fun SettingsScreen(
     val context = LocalContext.current
     val sortOrderPreferences = androidx.compose.runtime.remember { SortOrderPreferences(context) }
     val sortOrder by sortOrderPreferences.sortOrderFlow.collectAsState(initial = SortOrder.NEWEST_FIRST)
+    val deleteMode by sortOrderPreferences.deleteModeFlow.collectAsState(initial = DeleteMode.IMMEDIATE)
     val coroutineScope = rememberCoroutineScope()
 
     Scaffold(
@@ -75,6 +77,27 @@ fun SettingsScreen(
                     selected = sortOrder == SortOrder.OLDEST_FIRST,
                     onSelect = {
                         coroutineScope.launch { sortOrderPreferences.setSortOrder(SortOrder.OLDEST_FIRST) }
+                    }
+                )
+            }
+
+            Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                Text(
+                    text = "Delete mode",
+                    style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.SemiBold)
+                )
+                SortOrderOption(
+                    label = "Immediate (confirm per delete if required)",
+                    selected = deleteMode == DeleteMode.IMMEDIATE,
+                    onSelect = {
+                        coroutineScope.launch { sortOrderPreferences.setDeleteMode(DeleteMode.IMMEDIATE) }
+                    }
+                )
+                SortOrderOption(
+                    label = "Queue deletions and confirm once",
+                    selected = deleteMode == DeleteMode.QUEUED,
+                    onSelect = {
+                        coroutineScope.launch { sortOrderPreferences.setDeleteMode(DeleteMode.QUEUED) }
                     }
                 )
             }

@@ -2,6 +2,10 @@ package com.example.snapswipe.ui
 
 import android.Manifest
 import android.os.Build
+import android.content.Context
+import android.content.Intent
+import android.content.ActivityNotFoundException
+import android.util.Log
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -26,6 +30,8 @@ import androidx.core.content.ContextCompat
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.snapswipe.data.SortOrder
 import com.example.snapswipe.data.SortOrderPreferences
+import com.example.snapswipe.data.PhotoItem
+import com.example.snapswipe.data.DeleteMode
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -174,13 +180,17 @@ private fun MainScreen(
     val uiState by viewModel.uiState.collectAsState()
     val sortOrderPreferences = remember { SortOrderPreferences(context) }
     val sortOrder by sortOrderPreferences.sortOrderFlow.collectAsState(initial = SortOrder.NEWEST_FIRST)
+    val deleteModePref by sortOrderPreferences.deleteModeFlow.collectAsState(initial = DeleteMode.IMMEDIATE)
     val deleteLauncher = rememberLauncherForActivityResult(ActivityResultContracts.StartIntentSenderForResult()) { result ->
         val success = result.resultCode == android.app.Activity.RESULT_OK
         viewModel.onDeleteCompleted(success)
     }
 
     LaunchedEffect(sortOrder) {
-        viewModel.loadPhotos(sortOrder)
+        viewModel.ensurePhotos(sortOrder)
+    }
+    LaunchedEffect(deleteModePref) {
+        viewModel.setDeleteMode(deleteModePref)
     }
     LaunchedEffect(uiState.pendingDeleteIntent) {
         uiState.pendingDeleteIntent?.let { intent ->
@@ -193,10 +203,11 @@ private fun MainScreen(
         onRequestPermissions = onRequestPermissions,
         onKeep = { viewModel.keepCurrent() },
         onDelete = { viewModel.trashCurrent() },
-        onShare = { /* TODO: implement share in later step */ },
+        onShare = { sharePhoto(context, uiState.currentPhoto) },
         onRestart = { viewModel.restart() },
         onReload = { viewModel.reload() },
-        onUndo = { viewModel.undoLast() }
+        queuedDeleteCount = uiState.queuedDeletes.size,
+        onCommitQueuedDeletes = { viewModel.commitQueuedDeletes() }
     )
 }
 
@@ -210,5 +221,20 @@ private fun photoPermissionForDevice(): String {
         Manifest.permission.READ_MEDIA_IMAGES
     } else {
         Manifest.permission.READ_EXTERNAL_STORAGE
+    }
+}
+
+private fun sharePhoto(context: Context, photo: PhotoItem?) {
+    if (photo == null) return
+    val shareIntent = Intent(Intent.ACTION_SEND).apply {
+        type = "image/*"
+        putExtra(Intent.EXTRA_STREAM, photo.uri)
+        addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+    }
+    val chooser = Intent.createChooser(shareIntent, "Share photo")
+    try {
+        context.startActivity(chooser)
+    } catch (e: ActivityNotFoundException) {
+        Log.w("SnapSwipeApp", "No activity to handle share intent", e)
     }
 }

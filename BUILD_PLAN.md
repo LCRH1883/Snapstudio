@@ -210,36 +210,32 @@ PHASE 5 – Delete / Trash and Keep Behavior
     - Manual check: Repeated swiping in the same run should not loop the same photo.
     - Notes: Keep and delete now remove the photo from the in-memory list, track last action for undo, and show end-of-run when all processed.
 
-[ ] 5.3 – Avoid re-showing processed photos in the same run
-    - Optional but recommended:
-      - Maintain an in-memory set or simple state that tracks which photos were processed during the current session.
-      - Do not show processed photos again until the app is restarted or the list is reloaded intentionally.
-    - Manual check: Repeated swiping in the same run should not loop the same photo.
-
 ------------------------------------------------------------
 PHASE 6 – Share Bottom Menu
 ------------------------------------------------------------
 
-[ ] 6.1 – Implement bottom sheet UI
+[x] 6.1 – Implement bottom sheet UI
     - When the user swipes up:
       - Open a ModalBottomSheet (or similar).
       - Show actions:
         - “Share photo” – triggers system share.
         - “Cancel” – closes the sheet.
     - Manual check: Swiping up on a photo shows and hides the bottom sheet correctly.
+    - Notes: Added ModalBottomSheet on upward swipe with share/cancel options; sheet opens from main screen.
 
-[ ] 6.2 – Implement system share intent
+[x] 6.2 – Implement system share intent
     - Implement a helper function to share the current photo:
       - Use Intent.ACTION_SEND with the photo’s content URI.
       - Use Intent.createChooser so the user can pick the app (Google Photos, Messages, etc.).
       - Ensure you use a content URI that other apps can access (MediaStore URI should work; use appropriate flags).
     - Manual check: Share a photo and confirm that target apps receive and display it.
+    - Notes: Share callback now launches ACTION_SEND chooser with content URI and grants read permission; errors are logged if no handler.
 
 ------------------------------------------------------------
 PHASE 7 – Polish and Testing
 ------------------------------------------------------------
 
-[ ] 7.1 – Visual polish
+[x] 7.1 – Visual polish
     - Improve spacing, typography, and colors using Material3.
     - Ensure dark mode looks reasonable.
     - Add a simple app icon placeholder for Snap Swipe.

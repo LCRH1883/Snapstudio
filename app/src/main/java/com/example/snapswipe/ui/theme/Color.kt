@@ -2,10 +2,12 @@ package com.example.snapswipe.ui.theme
 
 import androidx.compose.ui.graphics.Color
 
-val Purple80 = Color(0xFFD0BCFF)
-val PurpleGrey80 = Color(0xFFCCC2DC)
-val Pink80 = Color(0xFFEFB8C8)
+// Light tones
+val Indigo40 = Color(0xFF1E4C7A)
+val Teal40 = Color(0xFF1E9A8D)
+val Sand40 = Color(0xFFF2D8A7)
 
-val Purple40 = Color(0xFF6650a4)
-val PurpleGrey40 = Color(0xFF625b71)
-val Pink40 = Color(0xFF7D5260)
+// Dark tones / accents
+val Indigo80 = Color(0xFF9ABFFF)
+val Teal80 = Color(0xFF71E3D5)
+val Sand80 = Color(0xFFF7E2BA)

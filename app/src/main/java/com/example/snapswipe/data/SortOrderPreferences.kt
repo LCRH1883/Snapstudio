@@ -17,6 +17,7 @@ private val Context.dataStore by preferencesDataStore(name = PREFERENCES_NAME)
 class SortOrderPreferences(private val context: Context) {
 
     private val sortOrderKey = stringPreferencesKey("photo_sort_order")
+    private val deleteModeKey = stringPreferencesKey("delete_mode")
 
     val sortOrderFlow: Flow<SortOrder> = context.dataStore.data
         .catch { exception ->
@@ -33,9 +34,30 @@ class SortOrderPreferences(private val context: Context) {
             } ?: SortOrder.NEWEST_FIRST
         }
 
+    val deleteModeFlow: Flow<DeleteMode> = context.dataStore.data
+        .catch { exception ->
+            if (exception is IOException) {
+                Log.w(TAG, "Delete mode preferences read failed; using defaults", exception)
+                emit(emptyPreferences())
+            } else {
+                throw exception
+            }
+        }
+        .map { preferences ->
+            preferences[deleteModeKey]?.let { stored ->
+                runCatching { DeleteMode.valueOf(stored) }.getOrNull()
+            } ?: DeleteMode.IMMEDIATE
+        }
+
     suspend fun setSortOrder(order: SortOrder) {
         context.dataStore.edit { prefs ->
             prefs[sortOrderKey] = order.name
+        }
+    }
+
+    suspend fun setDeleteMode(mode: DeleteMode) {
+        context.dataStore.edit { prefs ->
+            prefs[deleteModeKey] = mode.name
         }
     }
 

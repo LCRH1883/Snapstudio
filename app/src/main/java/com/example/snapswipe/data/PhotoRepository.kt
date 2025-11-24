@@ -83,6 +83,31 @@ class PhotoRepository(
         }
     }
 
+    suspend fun deletePhotosBatch(photos: List<PhotoItem>): DeleteResult = withContext(Dispatchers.IO) {
+        if (photos.isEmpty()) return@withContext DeleteResult.Success
+        val uris = photos.map { it.uri }
+        return@withContext try {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                val pendingIntent = MediaStore.createDeleteRequest(contentResolver, uris)
+                DeleteResult.RequiresUserApproval(pendingIntent.intentSender)
+            } else {
+                var deleted = 0
+                uris.forEach { uri ->
+                    val rows = contentResolver.delete(uri, null, null)
+                    if (rows > 0) deleted++
+                }
+                if (deleted == uris.size) {
+                    DeleteResult.Success
+                } else {
+                    DeleteResult.Error(IllegalStateException("Deleted $deleted of ${uris.size}"))
+                }
+            }
+        } catch (e: Exception) {
+            Log.e(TAG, "Failed to delete batch", e)
+            DeleteResult.Error(e)
+        }
+    }
+
     private fun Cursor.getLongOrNull(index: Int): Long? {
         return if (isNull(index)) null else getLong(index)
     }
