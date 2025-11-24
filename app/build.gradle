@@ -4,11 +4,11 @@ plugins {
 }
 
 android {
-    namespace 'com.example.snapswipe'
+    namespace 'com.snapswipe.app'
     compileSdk 34
 
     defaultConfig {
-        applicationId 'com.example.snapswipe'
+        applicationId 'com.snapswipe.app'
         minSdk 26
         targetSdk 34
         versionCode 1

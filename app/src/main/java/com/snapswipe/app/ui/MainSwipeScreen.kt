@@ -1,4 +1,4 @@
-package com.example.snapswipe.ui
+package com.snapswipe.app.ui
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement

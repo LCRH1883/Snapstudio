@@ -1,15 +1,15 @@
-package com.example.snapswipe.ui
+package com.snapswipe.app.ui
 
 import android.content.ContentResolver
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
-import com.example.snapswipe.data.PhotoItem
-import com.example.snapswipe.data.PhotoRepository
-import com.example.snapswipe.data.SortOrder
-import com.example.snapswipe.data.DeleteResult
-import com.example.snapswipe.data.DeleteMode
+import com.snapswipe.app.data.PhotoItem
+import com.snapswipe.app.data.PhotoRepository
+import com.snapswipe.app.data.SortOrder
+import com.snapswipe.app.data.DeleteResult
+import com.snapswipe.app.data.DeleteMode
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update

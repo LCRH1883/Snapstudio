@@ -1,4 +1,4 @@
-package com.example.snapswipe.ui
+package com.snapswipe.app.ui
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -29,9 +29,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.semantics.Role
-import com.example.snapswipe.data.SortOrder
-import com.example.snapswipe.data.SortOrderPreferences
-import com.example.snapswipe.data.DeleteMode
+import com.snapswipe.app.data.SortOrder
+import com.snapswipe.app.data.SortOrderPreferences
+import com.snapswipe.app.data.DeleteMode
 import kotlinx.coroutines.launch
 import android.content.Intent
 import android.net.Uri

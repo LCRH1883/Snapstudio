@@ -1,4 +1,4 @@
-package com.example.snapswipe.data
+package com.snapswipe.app.data
 
 import android.net.Uri
 

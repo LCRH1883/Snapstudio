@@ -1,4 +1,4 @@
-package com.example.snapswipe.ui
+package com.snapswipe.app.ui
 
 import android.Manifest
 import android.os.Build
@@ -29,10 +29,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.snapswipe.data.SortOrder
-import com.example.snapswipe.data.SortOrderPreferences
-import com.example.snapswipe.data.PhotoItem
-import com.example.snapswipe.data.DeleteMode
+import com.snapswipe.app.data.SortOrder
+import com.snapswipe.app.data.SortOrderPreferences
+import com.snapswipe.app.data.PhotoItem
+import com.snapswipe.app.data.DeleteMode
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable

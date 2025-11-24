@@ -1,4 +1,4 @@
-package com.example.snapswipe.ui.theme
+package com.snapswipe.app.ui.theme
 
 import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme

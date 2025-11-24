@@ -1,4 +1,4 @@
-package com.example.snapswipe.ui.theme
+package com.snapswipe.app.ui.theme
 
 import androidx.compose.material3.Typography
 import androidx.compose.ui.text.TextStyle

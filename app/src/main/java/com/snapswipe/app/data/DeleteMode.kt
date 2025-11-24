@@ -1,4 +1,4 @@
-package com.example.snapswipe.data
+package com.snapswipe.app.data
 
 enum class DeleteMode {
     IMMEDIATE,
