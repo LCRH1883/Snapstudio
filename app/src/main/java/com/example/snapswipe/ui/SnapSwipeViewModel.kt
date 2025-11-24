@@ -117,9 +117,11 @@ class SnapSwipeViewModel(
         val photo = _uiState.value.currentPhoto ?: return
         val index = _uiState.value.currentIndex
         val deleteMode = _uiState.value.deleteMode
-        removeCurrentAndAdvance(LastAction.Deleted(photo, index), isDelete = true, queueDelete = deleteMode == DeleteMode.QUEUED)
-        if (deleteMode == DeleteMode.IMMEDIATE) {
-            scheduleDelete(photo)
+        if (deleteMode == DeleteMode.QUEUED) {
+            removeCurrentAndAdvance(LastAction.Deleted(photo, index), isDelete = true, queueDelete = true)
+        } else {
+            removeCurrentAndAdvance(LastAction.Deleted(photo, index), isDelete = true, queueDelete = false)
+            commitImmediateDelete(photo)
         }
     }
 
@@ -168,11 +170,6 @@ class SnapSwipeViewModel(
             }
 
             is LastAction.Deleted -> {
-                if (pendingDeletePhotoId == action.photo.id) {
-                    pendingDeleteJob?.cancel()
-                    pendingDeleteJob = null
-                    pendingDeletePhotoId = null
-                }
                 _uiState.update { state ->
                     val list = state.photos.toMutableList()
                     val insertIndex = action.index.coerceAtMost(list.size)
@@ -231,24 +228,17 @@ class SnapSwipeViewModel(
         }
     }
 
-    private fun scheduleDelete(photo: PhotoItem) {
-        pendingDeleteJob?.cancel()
-        pendingDeletePhotoId = photo.id
-        pendingDeleteJob = viewModelScope.launch {
-            delay(2000)
+    private fun commitImmediateDelete(photo: PhotoItem) {
+        viewModelScope.launch {
             when (val result = repository.deletePhoto(photo)) {
-                is DeleteResult.Success -> {
-                    pendingDeletePhotoId = null
-                    pendingDeleteJob = null
-                }
+                is DeleteResult.Success -> Unit
                 is DeleteResult.RequiresUserApproval -> {
                     pendingApprovalPhotoId = photo.id
                     _uiState.update { it.copy(pendingDeleteIntent = result.intentSender) }
                 }
                 is DeleteResult.Error -> {
                     _uiState.update { it.copy(errorMessage = "Unable to delete photo") }
-                    pendingDeletePhotoId = null
-                    pendingDeleteJob = null
+                    reload()
                 }
             }
         }
