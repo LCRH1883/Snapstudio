@@ -67,3 +67,4 @@
 | 2.2    | 2025-11-24       | Codex  | Added SortOrder enum and MediaStore-backed PhotoRepository with loadPhotos logging count. |
 | 2.3    | 2025-11-24       | Codex  | Added SnapSwipeViewModel wired to PhotoRepository and updated main screen to show index/count with keep/delete advancing. |
 | 3.1    | 2025-11-24       | Codex  | Added SortOrderPreferences DataStore helper and debug UI toggle for sort order. |
+| 3.2    | 2025-11-24       | Codex  | Implemented SettingsScreen with sort order radio options bound to DataStore and about text. |

@@ -23,8 +23,8 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -139,7 +139,7 @@ private fun NavGraphBuilder.settingsRoute(
     onDone: () -> Unit
 ) {
     composable(ROUTE_SETTINGS) {
-        SettingsPlaceholderScreen(onDone = onDone)
+        SettingsScreen(onDone = onDone)
     }
 }
 
@@ -260,28 +260,6 @@ private fun MainScreen(
                     Text("Toggle sort order preference")
                 }
             }
-        }
-    }
-}
-
-@Composable
-private fun SettingsPlaceholderScreen(
-    onDone: () -> Unit
-) {
-    Column(
-        modifier = Modifier.fillMaxSize(),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        Text(
-            text = "Settings placeholder",
-            style = MaterialTheme.typography.titleLarge
-        )
-        Spacer(modifier = Modifier.height(16.dp))
-        Text("About Snap Swipe: Clean up your photos by swiping.")
-        Spacer(modifier = Modifier.height(16.dp))
-        Button(onClick = onDone) {
-            Text("Back")
         }
     }
 }

@@ -129,7 +129,7 @@ PHASE 3 – Settings (Sort Order) with DataStore
     - Manual check: Create a temporary UI or log to confirm the sort order can be read and updated.
     - Notes: Added SortOrderPreferences with DataStore delegate, Flow of SortOrder, and setter; main debug UI shows and toggles stored sort order.
 
-[ ] 3.2 – Implement Settings screen UI
+[x] 3.2 – Implement Settings screen UI
     - Create SettingsScreen composable with:
       - A simple top app bar labeled “Settings”.
       - A section for “Photo review order” with:
@@ -138,6 +138,7 @@ PHASE 3 – Settings (Sort Order) with DataStore
           - “Oldest to newest”.
       - A brief “About Snap Swipe” text (1–2 sentences) and a placeholder version string.
     - Manual check: SettingsScreen renders correctly and reads the current sort order from DataStore.
+    - Notes: Added SettingsScreen with top app bar, radio options bound to DataStore sort order, and about/placeholder version text.
 
 [ ] 3.3 – Connect Settings to navigation and data
     - Add navigation from the main screen to Settings (e.g., top app bar icon).
