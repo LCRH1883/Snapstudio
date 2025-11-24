@@ -48,8 +48,8 @@ fun MainSwipeScreen(
     onUndo: () -> Unit = {}
 ) {
     val hasPhotos = uiState.photos.isNotEmpty()
-    val atEnd = uiState.isAtEnd
     val canUndo = uiState.lastAction != null
+    val processedAll = !hasPhotos && uiState.lastAction != null && !uiState.isLoading
     Scaffold(
         topBar = {
             CenterAlignedTopAppBar(
@@ -97,27 +97,7 @@ fun MainSwipeScreen(
                     }
                 }
 
-                !hasPhotos -> {
-                    Column(
-                        horizontalAlignment = Alignment.CenterHorizontally,
-                        verticalArrangement = Arrangement.spacedBy(8.dp)
-                    ) {
-                        Text(
-                            text = "No photos found.",
-                            style = MaterialTheme.typography.titleMedium
-                        )
-                        Text(
-                            text = "Add photos to your device and refresh.",
-                            style = MaterialTheme.typography.bodyMedium
-                        )
-                        Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-                            Button(onClick = onReload) { Text("Refresh") }
-                            Button(onClick = onOpenSettings) { Text("Settings") }
-                        }
-                    }
-                }
-
-                atEnd -> {
+                processedAll -> {
                     Column(
                         horizontalAlignment = Alignment.CenterHorizontally,
                         verticalArrangement = Arrangement.spacedBy(12.dp),
@@ -133,6 +113,26 @@ fun MainSwipeScreen(
                         )
                         Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
                             Button(onClick = onRestart) { Text("Restart") }
+                            Button(onClick = onOpenSettings) { Text("Settings") }
+                        }
+                    }
+                }
+
+                !hasPhotos -> {
+                    Column(
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.spacedBy(8.dp)
+                    ) {
+                        Text(
+                            text = "No photos found.",
+                            style = MaterialTheme.typography.titleMedium
+                        )
+                        Text(
+                            text = "Add photos to your device and refresh.",
+                            style = MaterialTheme.typography.bodyMedium
+                        )
+                        Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+                            Button(onClick = onReload) { Text("Refresh") }
                             Button(onClick = onOpenSettings) { Text("Settings") }
                         }
                     }

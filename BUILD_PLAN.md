@@ -203,6 +203,12 @@ PHASE 5 – Delete / Trash and Keep Behavior
     - For keepCurrent(), do not modify the photo at all.
     - Simply advance to the next photo.
     - Manual check: After swiping to keep, verify the photo still appears in the system gallery and the app shows the next one.
+[x] 5.3 – Avoid re-showing processed photos in the same run
+    - Optional but recommended:
+      - Maintain an in-memory set or simple state that tracks which photos were processed during the current session.
+      - Do not show processed photos again until the app is restarted or the list is reloaded intentionally.
+    - Manual check: Repeated swiping in the same run should not loop the same photo.
+    - Notes: Keep and delete now remove the photo from the in-memory list, track last action for undo, and show end-of-run when all processed.
 
 [ ] 5.3 – Avoid re-showing processed photos in the same run
     - Optional but recommended:
