@@ -56,14 +56,14 @@ PHASE 0 – Documentation & Project Setup
 PHASE 1 – Permissions & Onboarding
 ------------------------------------------------------------
 
-[ ] 1.1 – Implement permissions screen UI
+[x] 1.1 – Implement permissions screen UI
     - Create a composable PermissionsScreen:
       - Show app name and a short explanation: Snap Swipe needs access to photos to help you clean them up.
       - Show a primary button: “Grant photo access”.
       - Optional secondary button: “Continue without access” that shows an informative message or exits.
     - Manual check: PermissionsScreen displays correctly when the app starts.
 
-[ ] 1.2 – Implement runtime permission request logic
+[x] 1.2 – Implement runtime permission request logic
     - Use rememberLauncherForActivityResult for requesting:
       - READ_MEDIA_IMAGES on Android 13+.
       - READ_EXTERNAL_STORAGE on older versions (if needed).
@@ -74,7 +74,7 @@ PHASE 1 – Permissions & Onboarding
       - If denied: show appropriate error message and allow retry.
     - Manual check: On an emulator/device, verify permission dialog appears and navigation behavior is correct.
 
-[ ] 1.3 – Permission gate before main screen
+[x] 1.3 – Permission gate before main screen
     - Ensure navigation logic checks permissions before showing the main swipe UI.
     - If the permission is not granted at app start:
       - Start on "permissions" route.
@@ -86,14 +86,15 @@ PHASE 1 – Permissions & Onboarding
 PHASE 2 – Photo Data Layer (MediaStore)
 ------------------------------------------------------------
 
-[ ] 2.1 – Define photo model
+[x] 2.1 – Define photo model
     - Create a data class PhotoItem with at least:
       - id: Long (MediaStore ID).
       - uri: Uri.
       - dateTaken: Long? (or similar).
     - Manual check: Data class compiles and is used only within the data layer initially.
+    - Notes: Added PhotoItem data class with id, uri, and dateTaken fields.
 
-[ ] 2.2 – Implement MediaStore photo repository
+[x] 2.2 – Implement MediaStore photo repository
     - Create a repository, e.g. PhotoRepository, responsible for:
       - Querying MediaStore for images from EXTERNAL_CONTENT_URI.
       - Mapping cursor results to PhotoItem objects.
@@ -103,8 +104,9 @@ PHASE 2 – Photo Data Layer (MediaStore)
       - suspend fun loadPhotos(sortOrder: SortOrder): List<PhotoItem>
     - Handle edge cases (no photos, null dates).
     - Manual check: Temporarily log or display the count of loaded photos to verify it works.
+    - Notes: Added SortOrder enum and PhotoRepository querying MediaStore on Dispatchers.IO, logging loaded count and handling null/zero dates.
 
-[ ] 2.3 – Wire repository into a ViewModel
+[x] 2.3 – Wire repository into a ViewModel
     - Create a SnapSwipeViewModel (or MainViewModel) that:
       - Holds the list of PhotoItem loaded from the repository.
       - Exposes the current index and current photo.
@@ -112,18 +114,20 @@ PHASE 2 – Photo Data Layer (MediaStore)
     - Manual check: In a debug placeholder main screen, show:
       - Current photo index and total count.
       - Buttons for “Keep” and “Delete” that just advance to next photo for now.
+    - Notes: Added SnapSwipeViewModel + factory, loads on init, exposes simple state and actions; main screen now shows index/count with keep/delete advancing to next.
 
 ------------------------------------------------------------
 PHASE 3 – Settings (Sort Order) with DataStore
 ------------------------------------------------------------
 
-[ ] 3.1 – Set up DataStore Preferences
+[x] 3.1 – Set up DataStore Preferences
     - Add DataStore initialization in a suitable place (e.g. a singleton or repository).
     - Define a preference key for photo sort order (string or int).
     - Provide functions to:
       - Read current sort order as a Flow<SortOrder>.
       - Persist updated sort order.
     - Manual check: Create a temporary UI or log to confirm the sort order can be read and updated.
+    - Notes: Added SortOrderPreferences with DataStore delegate, Flow of SortOrder, and setter; main debug UI shows and toggles stored sort order.
 
 [ ] 3.2 – Implement Settings screen UI
     - Create SettingsScreen composable with:

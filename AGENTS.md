@@ -62,3 +62,8 @@
 | 0.2    | 2024-11-24       | Codex  | Scaffolded Compose-based Android project (minSdk 26, targetSdk 34, pkg com.example.snapswipe). |
 | 0.3    | 2024-11-24       | Codex  | Configured Compose build features/options and dependencies in app Gradle config. |
 | 0.4    | 2024-11-24       | Codex  | Added SnapSwipeApp navigation scaffold with placeholder screens (permissions, main, settings) and wired MainActivity. |
+| 1.1-1.3| 2024-11-24       | Codex  | Implemented permissions UI, runtime request flow, and navigation gate to block main screen until access is granted. |
+| 2.1    | 2025-11-24       | Codex  | Added PhotoItem data model (id, uri, dateTaken) in the data layer. |
+| 2.2    | 2025-11-24       | Codex  | Added SortOrder enum and MediaStore-backed PhotoRepository with loadPhotos logging count. |
+| 2.3    | 2025-11-24       | Codex  | Added SnapSwipeViewModel wired to PhotoRepository and updated main screen to show index/count with keep/delete advancing. |
+| 3.1    | 2025-11-24       | Codex  | Added SortOrderPreferences DataStore helper and debug UI toggle for sort order. |
