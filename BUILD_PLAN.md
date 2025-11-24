@@ -188,7 +188,7 @@ PHASE 4 – Main Swipe UI with Gestures
 PHASE 5 – Delete / Trash and Keep Behavior
 ------------------------------------------------------------
 
-[ ] 5.1 – Implement delete/trash operation
+[x] 5.1 – Implement delete/trash operation
     - In the repository, implement a function to delete a given PhotoItem:
       - For newer Android versions, use the recommended MediaStore APIs to request deletion, which may show a system confirmation dialog.
       - For older versions, use ContentResolver.delete() on the photo URI.
@@ -197,8 +197,9 @@ PHASE 5 – Delete / Trash and Keep Behavior
       - On success, move to the next photo.
       - Handle errors (e.g., log or show a simple message).
     - Manual check: On a test device (with non-critical photos), swipe to delete and verify the photo is actually removed from the system gallery.
+    - Notes: PhotoRepository deletePhoto handles R+ delete requests via intent sender; ViewModel launches delete intent when required, removes item on success, and shows errors otherwise.
 
-[ ] 5.2 – Implement keep behavior
+[x] 5.2 – Implement keep behavior
     - For keepCurrent(), do not modify the photo at all.
     - Simply advance to the next photo.
     - Manual check: After swiping to keep, verify the photo still appears in the system gallery and the app shows the next one.

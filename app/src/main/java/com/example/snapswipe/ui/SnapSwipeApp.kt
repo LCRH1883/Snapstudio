@@ -195,7 +195,8 @@ private fun MainScreen(
         onDelete = { viewModel.trashCurrent() },
         onShare = { /* TODO: implement share in later step */ },
         onRestart = { viewModel.restart() },
-        onReload = { viewModel.reload() }
+        onReload = { viewModel.reload() },
+        onUndo = { viewModel.undoLast() }
     )
 }
 

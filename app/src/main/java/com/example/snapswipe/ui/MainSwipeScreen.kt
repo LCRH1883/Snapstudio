@@ -44,10 +44,12 @@ fun MainSwipeScreen(
     onDelete: () -> Unit,
     onShare: () -> Unit = {},
     onRestart: () -> Unit = {},
-    onReload: () -> Unit = {}
+    onReload: () -> Unit = {},
+    onUndo: () -> Unit = {}
 ) {
     val hasPhotos = uiState.photos.isNotEmpty()
     val atEnd = uiState.isAtEnd
+    val canUndo = uiState.lastAction != null
     Scaffold(
         topBar = {
             CenterAlignedTopAppBar(
@@ -204,6 +206,17 @@ fun MainSwipeScreen(
                                     style = MaterialTheme.typography.bodyMedium,
                                     color = Color.White.copy(alpha = 0.85f)
                                 )
+                                Row(
+                                    modifier = Modifier.fillMaxWidth(),
+                                    horizontalArrangement = Arrangement.Start
+                                ) {
+                                    Button(
+                                        onClick = onUndo,
+                                        enabled = canUndo
+                                    ) {
+                                        Text("Undo")
+                                    }
+                                }
                                 Row(
                                     modifier = Modifier.fillMaxWidth(),
                                     horizontalArrangement = Arrangement.spacedBy(12.dp)

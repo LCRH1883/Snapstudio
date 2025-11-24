@@ -21,10 +21,16 @@ data class SnapSwipeUiState(
     val isLoading: Boolean = false,
     val sortOrder: SortOrder = SortOrder.NEWEST_FIRST,
     val errorMessage: String? = null,
-    val pendingDeleteIntent: IntentSender? = null
+    val pendingDeleteIntent: IntentSender? = null,
+    val lastAction: LastAction? = null
 ) {
     val currentPhoto: PhotoItem? get() = photos.getOrNull(currentIndex)
     val isAtEnd: Boolean get() = photos.isNotEmpty() && currentIndex >= photos.size
+}
+
+sealed class LastAction {
+    data class Kept(val indexBefore: Int) : LastAction()
+    data class Deleted(val photo: PhotoItem, val index: Int) : LastAction()
 }
 
 class SnapSwipeViewModel(
@@ -45,7 +51,9 @@ class SnapSwipeViewModel(
                     isLoading = true,
                     errorMessage = null,
                     sortOrder = sortOrder,
-                    currentIndex = 0
+                    currentIndex = 0,
+                    lastAction = null,
+                    pendingDeleteIntent = null
                 )
             }
             try {
@@ -55,7 +63,9 @@ class SnapSwipeViewModel(
                         photos = photos,
                         currentIndex = 0,
                         isLoading = false,
-                        errorMessage = null
+                        errorMessage = null,
+                        lastAction = null,
+                        pendingDeleteIntent = null
                     )
                 }
             } catch (e: Exception) {
@@ -75,14 +85,16 @@ class SnapSwipeViewModel(
     }
 
     fun keepCurrent() {
+        val indexBefore = _uiState.value.currentIndex
         advanceIndex()
+        _uiState.update { it.copy(lastAction = LastAction.Kept(indexBefore)) }
     }
 
     fun trashCurrent() {
         val photo = _uiState.value.currentPhoto ?: return
         viewModelScope.launch {
             when (val result = repository.deletePhoto(photo)) {
-                is DeleteResult.Success -> removeCurrentAndAdvance()
+                is DeleteResult.Success -> removeCurrentAndAdvance(photo)
                 is DeleteResult.RequiresUserApproval -> {
                     _uiState.update { it.copy(pendingDeleteIntent = result.intentSender) }
                 }
@@ -95,17 +107,47 @@ class SnapSwipeViewModel(
 
     fun onDeleteCompleted(success: Boolean) {
         if (success) {
-            removeCurrentAndAdvance()
+            _uiState.value.currentPhoto?.let { photo ->
+                removeCurrentAndAdvance(photo)
+            }
         }
         _uiState.update { it.copy(pendingDeleteIntent = null) }
     }
 
     fun restart() {
-        _uiState.update { it.copy(currentIndex = 0) }
+        _uiState.update { it.copy(currentIndex = 0, lastAction = null) }
     }
 
     fun reload() {
         loadPhotos(_uiState.value.sortOrder)
+    }
+
+    fun undoLast() {
+        when (val action = _uiState.value.lastAction) {
+            is LastAction.Kept -> {
+                _uiState.update { state ->
+                    if (state.photos.isEmpty()) state else state.copy(
+                        currentIndex = action.indexBefore.coerceAtLeast(0),
+                        lastAction = null
+                    )
+                }
+            }
+
+            is LastAction.Deleted -> {
+                _uiState.update { state ->
+                    val list = state.photos.toMutableList()
+                    val insertIndex = action.index.coerceAtMost(list.size)
+                    list.add(insertIndex, action.photo)
+                    state.copy(
+                        photos = list,
+                        currentIndex = insertIndex,
+                        lastAction = null
+                    )
+                }
+            }
+
+            null -> Unit
+        }
     }
 
     private fun advanceIndex() {
@@ -119,7 +161,7 @@ class SnapSwipeViewModel(
         }
     }
 
-    private fun removeCurrentAndAdvance() {
+    private fun removeCurrentAndAdvance(removedPhoto: PhotoItem) {
         _uiState.update { state ->
             if (state.photos.isEmpty()) return@update state.copy(pendingDeleteIntent = null)
             val currentIdx = state.currentIndex
@@ -133,7 +175,8 @@ class SnapSwipeViewModel(
                 photos = updated,
                 currentIndex = nextIndex,
                 pendingDeleteIntent = null,
-                errorMessage = null
+                errorMessage = null,
+                lastAction = LastAction.Deleted(removedPhoto, currentIdx)
             )
         }
     }

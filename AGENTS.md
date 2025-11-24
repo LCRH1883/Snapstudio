@@ -72,3 +72,5 @@
 | 4.1    | 2025-11-24       | Codex  | Built MainSwipeScreen with AsyncImage, top bar + settings icon, gesture hint, and keep/delete controls; main route now uses it. |
 | 4.2    | 2025-11-24       | Codex  | Added swipe gesture handling (left=keep, right-to-left=delete, up=share placeholder) on MainSwipeScreen. |
 | 4.3    | 2025-11-24       | Codex  | Added empty and end-of-run states with restart/refresh buttons; ViewModel tracks end-of-list and restart/reload actions. |
+| 5.1-5.2| 2025-11-24       | Codex  | Implemented delete via MediaStore (intent sender on R+), wired trashCurrent to remove items; keepCurrent now simply advances. |
+| icon   | 2025-11-24       | Codex  | Set launcher icon to provided snap swipe.png image via adaptive icon foreground. |
