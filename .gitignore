@@ -1,13 +1,17 @@
 # Gradle
+# Gradle
 .gradle/
 **/build/
 /build/
+.kotlin/
 
 # Local configuration
 local.properties
 
 # IntelliJ / Android Studio
 *.iml
+*.ipr
+*.iws
 .idea/
 
 # Generated files
@@ -16,10 +20,11 @@ output.json
 .externalNativeBuild/
 .cxx/
 
-# Android packaging
+# Android packaging outputs
 *.apk
 *.ap_
 *.aab
+*.aar
 
 # Signing artifacts
 *.keystore
