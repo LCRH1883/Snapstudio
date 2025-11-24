@@ -18,7 +18,7 @@ PHASE 0 – Documentation & Project Setup
     - Ensure both files are committed/available in the repository.
     - Manual check: AGENTS.md and claude.md exist at repo root and render correctly as Markdown.
 
-[ ] 0.2 – Create Android Studio project for Snap Swipe
+[x] 0.2 – Create Android Studio project for Snap Swipe
     - Project name: Snap Swipe.
     - Package name: e.g. com.example.snapswipe (or equivalent).
     - Language: Kotlin.

@@ -59,3 +59,4 @@
 | Step ID | Date (optional) | Agent  | Summary of work                           |
 |--------|------------------|--------|-------------------------------------------|
 | 0.1    | 2024-11-24       | Codex  | Added AGENTS.md, claude.md, BUILD_PLAN.md per setup instructions. |
+| 0.2    | 2024-11-24       | Codex  | Scaffolded Compose-based Android project (minSdk 26, targetSdk 34, pkg com.example.snapswipe). |
