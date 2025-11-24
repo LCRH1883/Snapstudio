@@ -3,7 +3,6 @@ package com.example.snapswipe.ui
 import android.Manifest
 import android.os.Build
 import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -32,6 +31,8 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.compose.ui.unit.dp
+import androidx.activity.result.IntentSenderRequest
+import androidx.activity.result.contract.ActivityResultContracts
 
 private const val ROUTE_PERMISSIONS = "permissions"
 private const val ROUTE_MAIN = "main"
@@ -173,9 +174,18 @@ private fun MainScreen(
     val uiState by viewModel.uiState.collectAsState()
     val sortOrderPreferences = remember { SortOrderPreferences(context) }
     val sortOrder by sortOrderPreferences.sortOrderFlow.collectAsState(initial = SortOrder.NEWEST_FIRST)
+    val deleteLauncher = rememberLauncherForActivityResult(ActivityResultContracts.StartIntentSenderForResult()) { result ->
+        val success = result.resultCode == android.app.Activity.RESULT_OK
+        viewModel.onDeleteCompleted(success)
+    }
 
     LaunchedEffect(sortOrder) {
         viewModel.loadPhotos(sortOrder)
+    }
+    LaunchedEffect(uiState.pendingDeleteIntent) {
+        uiState.pendingDeleteIntent?.let { intent ->
+            deleteLauncher.launch(IntentSenderRequest.Builder(intent).build())
+        }
     }
     MainSwipeScreen(
         uiState = uiState,

@@ -8,17 +8,20 @@ import androidx.lifecycle.viewModelScope
 import com.example.snapswipe.data.PhotoItem
 import com.example.snapswipe.data.PhotoRepository
 import com.example.snapswipe.data.SortOrder
+import com.example.snapswipe.data.DeleteResult
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import android.content.IntentSender
 
 data class SnapSwipeUiState(
     val photos: List<PhotoItem> = emptyList(),
     val currentIndex: Int = 0,
     val isLoading: Boolean = false,
     val sortOrder: SortOrder = SortOrder.NEWEST_FIRST,
-    val errorMessage: String? = null
+    val errorMessage: String? = null,
+    val pendingDeleteIntent: IntentSender? = null
 ) {
     val currentPhoto: PhotoItem? get() = photos.getOrNull(currentIndex)
     val isAtEnd: Boolean get() = photos.isNotEmpty() && currentIndex >= photos.size
@@ -76,7 +79,25 @@ class SnapSwipeViewModel(
     }
 
     fun trashCurrent() {
-        advanceIndex()
+        val photo = _uiState.value.currentPhoto ?: return
+        viewModelScope.launch {
+            when (val result = repository.deletePhoto(photo)) {
+                is DeleteResult.Success -> removeCurrentAndAdvance()
+                is DeleteResult.RequiresUserApproval -> {
+                    _uiState.update { it.copy(pendingDeleteIntent = result.intentSender) }
+                }
+                is DeleteResult.Error -> {
+                    _uiState.update { it.copy(errorMessage = "Unable to delete photo") }
+                }
+            }
+        }
+    }
+
+    fun onDeleteCompleted(success: Boolean) {
+        if (success) {
+            removeCurrentAndAdvance()
+        }
+        _uiState.update { it.copy(pendingDeleteIntent = null) }
     }
 
     fun restart() {
@@ -95,6 +116,25 @@ class SnapSwipeViewModel(
                 val nextIndex = (state.currentIndex + 1).coerceAtMost(state.photos.size)
                 state.copy(currentIndex = nextIndex)
             }
+        }
+    }
+
+    private fun removeCurrentAndAdvance() {
+        _uiState.update { state ->
+            if (state.photos.isEmpty()) return@update state.copy(pendingDeleteIntent = null)
+            val currentIdx = state.currentIndex
+            val updated = state.photos.toMutableList().also { list ->
+                if (currentIdx in list.indices) {
+                    list.removeAt(currentIdx)
+                }
+            }
+            val nextIndex = if (updated.isEmpty()) 0 else currentIdx.coerceAtMost(updated.lastIndex)
+            state.copy(
+                photos = updated,
+                currentIndex = nextIndex,
+                pendingDeleteIntent = null,
+                errorMessage = null
+            )
         }
     }
 
