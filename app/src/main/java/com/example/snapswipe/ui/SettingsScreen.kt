@@ -14,6 +14,7 @@ import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
+import androidx.compose.foundation.text.ClickableText
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -21,13 +22,19 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.semantics.Role
 import com.example.snapswipe.data.SortOrder
 import com.example.snapswipe.data.SortOrderPreferences
 import com.example.snapswipe.data.DeleteMode
 import kotlinx.coroutines.launch
+import android.content.Intent
+import android.net.Uri
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -115,6 +122,37 @@ fun SettingsScreen(
                     text = "Version 1.0 (placeholder)",
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+                Text(
+                    text = "Support",
+                    style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.SemiBold)
+                )
+                val email = "support@snapswipe.xyz"
+                val annotated = buildAnnotatedString {
+                    val start = length
+                    append(email)
+                    addStyle(
+                        SpanStyle(
+                            color = MaterialTheme.colorScheme.primary,
+                            textDecoration = TextDecoration.Underline
+                        ),
+                        start,
+                        start + email.length
+                    )
+                    addStringAnnotation(tag = "email", annotation = email, start = start, end = start + email.length)
+                }
+                ClickableText(
+                    text = annotated,
+                    style = MaterialTheme.typography.bodyMedium,
+                    onClick = { offset ->
+                        annotated.getStringAnnotations(tag = "email", start = offset, end = offset)
+                            .firstOrNull()?.let { annotation ->
+                                val intent = Intent(Intent.ACTION_SENDTO).apply {
+                                    data = Uri.parse("mailto:${annotation.item}")
+                                }
+                                context.startActivity(intent)
+                            }
+                    }
                 )
             }
         }

@@ -49,8 +49,6 @@ class SnapSwipeViewModel(
     private val _uiState = MutableStateFlow(SnapSwipeUiState(isLoading = true))
     val uiState: StateFlow<SnapSwipeUiState> = _uiState
 
-    private var pendingDeleteJob: Job? = null
-    private var pendingDeletePhotoId: Long? = null
     private var pendingApprovalPhotoId: Long? = null
 
     init {

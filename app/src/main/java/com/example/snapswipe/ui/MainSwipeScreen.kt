@@ -17,6 +17,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Check
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.CircularProgressIndicator
@@ -63,7 +64,9 @@ fun MainSwipeScreen(
     onRestart: () -> Unit = {},
     onReload: () -> Unit = {},
     queuedDeleteCount: Int = 0,
-    onCommitQueuedDeletes: () -> Unit = {}
+    onCommitQueuedDeletes: () -> Unit = {},
+    showInstructions: Boolean = false,
+    onDismissInstructions: () -> Unit = {}
 ) {
     val hasPhotos = uiState.photos.isNotEmpty()
     val processedAll = !hasPhotos && uiState.lastAction != null && !uiState.isLoading
@@ -325,5 +328,25 @@ fun MainSwipeScreen(
                 }
             }
         }
+    }
+
+    if (showInstructions) {
+        AlertDialog(
+            onDismissRequest = onDismissInstructions,
+            confirmButton = {
+                TextButton(onClick = onDismissInstructions) { Text("Got it") }
+            },
+            title = { Text("How swiping works") },
+            text = {
+                Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                    Text("• Swipe left to delete (or queue delete).")
+                    Text("• Swipe right to keep.")
+                    Text("• Swipe up to share.")
+                    if (queuedDeleteCount > 0) {
+                        Text("• Tap \"Delete queued\" to confirm all queued deletes at once.")
+                    }
+                }
+            }
+        )
     }
 }

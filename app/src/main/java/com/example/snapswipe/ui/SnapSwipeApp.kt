@@ -23,6 +23,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -39,6 +40,7 @@ import androidx.navigation.compose.rememberNavController
 import androidx.compose.ui.unit.dp
 import androidx.activity.result.IntentSenderRequest
 import androidx.activity.result.contract.ActivityResultContracts
+import kotlinx.coroutines.launch
 
 private const val ROUTE_PERMISSIONS = "permissions"
 private const val ROUTE_MAIN = "main"
@@ -181,6 +183,8 @@ private fun MainScreen(
     val sortOrderPreferences = remember { SortOrderPreferences(context) }
     val sortOrder by sortOrderPreferences.sortOrderFlow.collectAsState(initial = SortOrder.NEWEST_FIRST)
     val deleteModePref by sortOrderPreferences.deleteModeFlow.collectAsState(initial = DeleteMode.IMMEDIATE)
+    val instructionsSeen by sortOrderPreferences.instructionsSeenFlow.collectAsState(initial = false)
+    val coroutineScope = rememberCoroutineScope()
     val deleteLauncher = rememberLauncherForActivityResult(ActivityResultContracts.StartIntentSenderForResult()) { result ->
         val success = result.resultCode == android.app.Activity.RESULT_OK
         viewModel.onDeleteCompleted(success)
@@ -207,7 +211,11 @@ private fun MainScreen(
         onRestart = { viewModel.restart() },
         onReload = { viewModel.reload() },
         queuedDeleteCount = uiState.queuedDeletes.size,
-        onCommitQueuedDeletes = { viewModel.commitQueuedDeletes() }
+        onCommitQueuedDeletes = { viewModel.commitQueuedDeletes() },
+        showInstructions = !instructionsSeen,
+        onDismissInstructions = {
+            coroutineScope.launch { sortOrderPreferences.setInstructionsSeen(true) }
+        }
     )
 }
 
