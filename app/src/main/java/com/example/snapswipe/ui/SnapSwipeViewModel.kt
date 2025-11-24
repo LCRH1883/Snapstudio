@@ -21,6 +21,7 @@ data class SnapSwipeUiState(
     val errorMessage: String? = null
 ) {
     val currentPhoto: PhotoItem? get() = photos.getOrNull(currentIndex)
+    val isAtEnd: Boolean get() = photos.isNotEmpty() && currentIndex >= photos.size
 }
 
 class SnapSwipeViewModel(
@@ -78,12 +79,20 @@ class SnapSwipeViewModel(
         advanceIndex()
     }
 
+    fun restart() {
+        _uiState.update { it.copy(currentIndex = 0) }
+    }
+
+    fun reload() {
+        loadPhotos(_uiState.value.sortOrder)
+    }
+
     private fun advanceIndex() {
         _uiState.update { state ->
             if (state.photos.isEmpty()) {
                 state
             } else {
-                val nextIndex = (state.currentIndex + 1).coerceAtMost(state.photos.lastIndex)
+                val nextIndex = (state.currentIndex + 1).coerceAtMost(state.photos.size)
                 state.copy(currentIndex = nextIndex)
             }
         }

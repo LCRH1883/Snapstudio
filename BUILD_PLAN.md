@@ -140,26 +140,28 @@ PHASE 3 – Settings (Sort Order) with DataStore
     - Manual check: SettingsScreen renders correctly and reads the current sort order from DataStore.
     - Notes: Added SettingsScreen with top app bar, radio options bound to DataStore sort order, and about/placeholder version text.
 
-[ ] 3.3 – Connect Settings to navigation and data
+[x] 3.3 – Connect Settings to navigation and data
     - Add navigation from the main screen to Settings (e.g., top app bar icon).
     - When the sort order changes:
       - Persist it via DataStore.
       - Trigger reload of photos in the ViewModel with the new order.
     - Manual check: Changing the sort order in Settings and returning to the main screen should show photos in the correct order (verify by comparing to the device gallery).
+    - Notes: Main screen collects sort-order preferences and calls ViewModel.loadPhotos on changes; SettingsScreen writes to DataStore via radio options.
 
 ------------------------------------------------------------
 PHASE 4 – Main Swipe UI with Gestures
 ------------------------------------------------------------
 
-[ ] 4.1 – Basic main screen layout
+[x] 4.1 – Basic main screen layout
     - Create MainSwipeScreen composable that:
       - Displays the current photo using Coil’s AsyncImage (or equivalent).
       - Shows optional overlay UI:
-        - A simple top bar with app title and Settings icon.
-        - A small hint text for gestures (e.g., “Swipe left to delete, right to keep, up to share”).
+      - A simple top bar with app title and Settings icon.
+      - A small hint text for gestures (e.g., “Swipe left to delete, right to keep, up to share”).
     - Manual check: With fake or debug images, confirm the layout works in both portrait and (optionally) landscape.
+    - Notes: Added MainSwipeScreen with AsyncImage full-bleed photo, top bar + settings icon, gesture hint, and keep/delete buttons; wired main route to it.
 
-[ ] 4.2 – Implement swipe gesture handling
+[x] 4.2 – Implement swipe gesture handling
     - Use Compose gesture APIs (e.g. pointerInput, swipeable, or draggable) to detect:
       - Horizontal swipes: distinguish left vs right.
       - Vertical swipe upwards to trigger the bottom menu.
@@ -171,14 +173,16 @@ PHASE 4 – Main Swipe UI with Gestures
     - Make sure:
       - After a keep or delete action, the main screen advances to the next photo (or shows a suitable “no more photos” state).
     - Manual check: On-device tests swiping left, right, and up to confirm correct callbacks.
+    - Notes: Added pointerInput drag detection on MainSwipeScreen mapping right-to-left to delete, left-to-right to keep, and upward to share callback (placeholder for share flow).
 
-[ ] 4.3 – “No photos” and “end of list” states
+[x] 4.3 – “No photos” and “end of list” states
     - When there are no photos at all:
       - Show a friendly empty state: “No photos found. Take some photos and come back!”.
     - When the user reaches the end of the list:
       - Show a message like: “You’ve reviewed all photos in this run.”
       - Allow restarting or going back to settings.
     - Manual check: Use a test device/emulator with few or no photos to verify these paths.
+    - Notes: Main screen now shows empty state with refresh/settings buttons and end-of-run state with restart/settings actions; ViewModel tracks end-of-list and restart/reload hooks.
 
 ------------------------------------------------------------
 PHASE 5 – Delete / Trash and Keep Behavior
