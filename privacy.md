@@ -89,7 +89,7 @@ permalink: /privacy/
       <strong>10. Contact Information</strong>
       <p class="muted">For privacy questions or to exercise your rights, contact us:</p>
       <ul>
-        <li><strong>Developer name:</strong> [Insert developer or company name]</li>
+        <li><strong>Developer name:</strong> LCRH</li>
         <li><strong>Address:</strong> [Insert mailing address]</li>
         <li><strong>Email:</strong> [Insert contact email]</li>
       </ul>

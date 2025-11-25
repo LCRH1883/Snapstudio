@@ -99,7 +99,7 @@ Snap Swipe may provide links to third‑party websites or services. We are not r
 
 If you have any questions about this privacy policy or our data practices, please contact us:
 
-- Developer Name: [Insert developer or company name]
+- Developer Name: LCRH
 - Address: [Insert mailing address]
 - Email: [Insert contact email]
 
