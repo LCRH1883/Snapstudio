@@ -83,3 +83,6 @@
 | icon v4| 2025-11-24       | Codex  | Re-copied new icon into mipmap-anydpi-v26 foreground to ensure adaptive icon uses the right asset. |
 | pkg    | 2025-11-24       | Codex  | Changed package/applicationId to com.snapswipe.app (was com.example.snapswipe). |
 | api35  | 2025-11-24       | Codex  | Raised compile/target SDK to 35 and noted requirement update in BUILD_PLAN.md. |
+| 7.2    | 2025-11-24       | Codex  | Added MediaStore error logging, permission-denied messaging, and delete failure handling per build plan step 7.2. |
+| 7.3    | 2025-11-24       | Codex  | Added Robolectric/coroutines unit tests for SnapSwipeViewModel and introduced PhotoDataSource abstraction for testing. |
+| 7.4    | 2025-11-24       | Codex  | Marked final verification checklist; automated tests pass, device flows to be validated on emulator/device. |

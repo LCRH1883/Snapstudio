@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.snapswipe.app.data.PhotoItem
+import com.snapswipe.app.data.PhotoDataSource
 import com.snapswipe.app.data.PhotoRepository
 import com.snapswipe.app.data.SortOrder
 import com.snapswipe.app.data.DeleteResult
@@ -43,7 +44,7 @@ sealed class LastAction {
 }
 
 class SnapSwipeViewModel(
-    private val repository: PhotoRepository
+    private val repository: PhotoDataSource
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(SnapSwipeUiState(isLoading = true))
@@ -91,6 +92,14 @@ class SnapSwipeViewModel(
                         queuedDeletes = emptyList()
                     )
                 }
+            } catch (e: SecurityException) {
+                Log.e(TAG, "Missing permission to load photos", e)
+                _uiState.update {
+                    it.copy(
+                        isLoading = false,
+                        errorMessage = "Permission required. Please grant photo access."
+                    )
+                }
             } catch (e: Exception) {
                 Log.e(TAG, "Failed to load photos", e)
                 _uiState.update {
@@ -128,6 +137,9 @@ class SnapSwipeViewModel(
     fun onDeleteCompleted(success: Boolean) {
         if (success) {
             pendingApprovalPhotoId = null
+        }
+        if (!success) {
+            Log.w(TAG, "Delete approval denied for photoId=$pendingApprovalPhotoId")
         }
         _uiState.update { it.copy(pendingDeleteIntent = null) }
         if (!success) {
@@ -234,9 +246,11 @@ class SnapSwipeViewModel(
                 is DeleteResult.Success -> Unit
                 is DeleteResult.RequiresUserApproval -> {
                     pendingApprovalPhotoId = photo.id
+                    Log.d(TAG, "Launching delete approval for photoId=${photo.id}")
                     _uiState.update { it.copy(pendingDeleteIntent = result.intentSender) }
                 }
                 is DeleteResult.Error -> {
+                    Log.e(TAG, "Immediate delete failed for id=${photo.id}", result.throwable)
                     _uiState.update { it.copy(errorMessage = "Unable to delete photo") }
                     reload()
                 }
@@ -258,6 +272,7 @@ class SnapSwipeViewModel(
                     // queuedDeletes remain until approval result
                 }
                 is DeleteResult.Error -> {
+                    Log.e(TAG, "Queued delete failed for ${queued.size} photos", result.throwable)
                     _uiState.update { it.copy(errorMessage = "Unable to delete queued photos") }
                 }
             }

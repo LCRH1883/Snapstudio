@@ -35,6 +35,7 @@ import com.snapswipe.app.data.DeleteMode
 import kotlinx.coroutines.launch
 import android.content.Intent
 import android.net.Uri
+import com.snapswipe.app.BuildConfig
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -119,7 +120,7 @@ fun SettingsScreen(
                     style = MaterialTheme.typography.bodyMedium
                 )
                 Text(
-                    text = "Version 1.0 (placeholder)",
+                    text = "Version ${BuildConfig.VERSION_NAME}",
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )

@@ -54,9 +54,13 @@ fun SnapSwipeApp() {
     var hasPhotoPermission by remember {
         mutableStateOf(isPhotoPermissionGranted(context))
     }
+    var permissionDenied by remember { mutableStateOf(false) }
 
     LaunchedEffect(hasPhotoPermission) {
         val target = if (hasPhotoPermission) ROUTE_MAIN else ROUTE_PERMISSIONS
+        if (hasPhotoPermission) {
+            permissionDenied = false
+        }
         navController.navigate(target) {
             popUpTo(navController.graph.startDestinationId) { inclusive = true }
             launchSingleTop = true
@@ -71,14 +75,16 @@ fun SnapSwipeApp() {
             permissionsRoute(
                 onGrantAccess = {
                     hasPhotoPermission = true
+                    permissionDenied = false
                 },
                 onSkip = {
                     // Inform the user; keeping placeholder until a dedicated UI is added.
                 },
                 onPermissionDenied = {
-                    // Surface a message in a later UX pass; for now, stay on the screen.
+                    permissionDenied = true
                 },
-                hasPermission = hasPhotoPermission
+                hasPermission = hasPhotoPermission,
+                permissionDenied = permissionDenied
             )
             mainRoute(
                 onOpenSettings = { navController.navigate(ROUTE_SETTINGS) },
@@ -97,7 +103,8 @@ private fun NavGraphBuilder.permissionsRoute(
     onGrantAccess: () -> Unit,
     onSkip: () -> Unit,
     onPermissionDenied: () -> Unit,
-    hasPermission: Boolean
+    hasPermission: Boolean,
+    permissionDenied: Boolean
 ) {
     composable(ROUTE_PERMISSIONS) {
         val permissionToRequest = remember { photoPermissionForDevice() }
@@ -116,7 +123,8 @@ private fun NavGraphBuilder.permissionsRoute(
             onGrantAccess = {
                 launcher.launch(permissionToRequest)
             },
-            onSkip = onSkip
+            onSkip = onSkip,
+            permissionDenied = permissionDenied
         )
     }
 }
@@ -150,7 +158,8 @@ private fun NavGraphBuilder.settingsRoute(
 private fun PermissionsScreen(
     hasPermission: Boolean,
     onGrantAccess: () -> Unit,
-    onSkip: () -> Unit
+    onSkip: () -> Unit,
+    permissionDenied: Boolean
 ) {
     Column(
         modifier = Modifier.fillMaxSize(),
@@ -162,6 +171,14 @@ private fun PermissionsScreen(
             style = MaterialTheme.typography.titleMedium
         )
         Spacer(modifier = Modifier.height(16.dp))
+        if (permissionDenied && !hasPermission) {
+            Text(
+                text = "Permission is required to load your photos. Please grant access.",
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.error
+            )
+            Spacer(modifier = Modifier.height(8.dp))
+        }
         Button(onClick = onGrantAccess, enabled = !hasPermission) {
             Text(if (hasPermission) "Permission granted" else "Grant photo access")
         }
