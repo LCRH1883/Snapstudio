@@ -3,8 +3,33 @@ layout: none
 permalink: /privacy/basic/
 title: Snap Swipe Privacy Policy (Basic)
 ---
+<style>
+  body {
+    margin: 0;
+    padding: 0;
+    font-family: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+    background: #fafafa;
+    color: #111;
+  }
+  .policy-wrap {
+    max-width: 900px;
+    margin: 32px auto 48px;
+    padding: 0 16px;
+  }
+  .policy-wrap pre {
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    font-family: inherit;
+    line-height: 1.6;
+    background: #fff;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+  }
+</style>
 
-Privacy Policy for Snap Swipe
+<div class="policy-wrap">
+<pre>Privacy Policy for Snap Swipe
 
 Effective date: November 25 2025
 
@@ -176,4 +201,5 @@ termly.io
 
 11. Changes to This Policy
 
-We may update this privacy policy from time to time to reflect changes in our practices or legal obligations. When we make material changes, we will notify you by updating the effective date above and providing additional notice within the App or via our website. Your continued use of Snap Swipe after we post an updated policy indicates that you accept the changes.
+We may update this privacy policy from time to time to reflect changes in our practices or legal obligations. When we make material changes, we will notify you by updating the effective date above and providing additional notice within the App or via our website. Your continued use of Snap Swipe after we post an updated policy indicates that you accept the changes.</pre>
+</div>
