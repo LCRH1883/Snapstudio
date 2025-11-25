@@ -110,3 +110,14 @@ description: Clean up your Android photo library with confident left/right swipe
     </div>
   </div>
 </section>
+
+<section class="section" id="feedback">
+  <div class="container">
+    <h2>Feedback & issues</h2>
+    <p class="muted">Found a bug or have an idea? Open a GitHub issue with the form that fits your need.</p>
+    <div class="cta-row" style="margin-top:12px;">
+      <a class="button primary" href="https://github.com/LCRH1883/Snapstudio/issues/new?template=bug-report.yml">Report a bug</a>
+      <a class="button secondary" href="https://github.com/LCRH1883/Snapstudio/issues/new?template=feature-request.yml">Request a feature</a>
+    </div>
+  </div>
+</section>

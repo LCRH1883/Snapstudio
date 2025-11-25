@@ -1,0 +1,41 @@
+name: "Feature request"
+description: "Suggest an improvement or new capability for Snap Swipe."
+title: "[Feature]: "
+labels: ["enhancement"]
+body:
+  - type: input
+    id: summary
+    attributes:
+      label: Summary
+      description: What should change or be added?
+      placeholder: e.g., Allow sorting by album
+    validations:
+      required: true
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem statement
+      description: What problem does this solve for you?
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed solution
+      description: Describe how you’d like it to work (include UI/UX notes if relevant).
+    validations:
+      required: true
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considered
+      description: Other approaches you considered (if any).
+    validations:
+      required: false
+  - type: textarea
+    id: extra
+    attributes:
+      label: Additional context
+      description: Links, mockups, or related requests.
+    validations:
+      required: false
