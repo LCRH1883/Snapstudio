@@ -28,12 +28,14 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.snapswipe.app.data.SortOrder
 import com.snapswipe.app.data.SortOrderPreferences
 import com.snapswipe.app.data.PhotoItem
 import com.snapswipe.app.data.DeleteMode
+import com.snapswipe.app.R
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -170,29 +172,29 @@ private fun PermissionsScreen(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(
-            text = "Snap Swipe needs photo access to help you clean up your gallery.",
+            text = stringResource(R.string.permission_title),
             style = MaterialTheme.typography.titleMedium
         )
         Spacer(modifier = Modifier.height(8.dp))
         Text(
-            text = "We only read your photos locally to let you keep, delete, or share. Nothing is uploaded.",
+            text = stringResource(R.string.permission_rationale),
             style = MaterialTheme.typography.bodySmall
         )
         Spacer(modifier = Modifier.height(16.dp))
         if (permissionDenied && !hasPermission) {
             Text(
-                text = "Permission is required to load your photos. Please grant access.",
+                text = stringResource(R.string.permission_denied_message),
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.error
             )
             Spacer(modifier = Modifier.height(8.dp))
         }
         Button(onClick = onGrantAccess, enabled = !hasPermission) {
-            Text(if (hasPermission) "Permission granted" else "Grant photo access")
+            Text(if (hasPermission) stringResource(R.string.permission_granted) else stringResource(R.string.grant_photo_access))
         }
         Spacer(modifier = Modifier.height(8.dp))
         Button(onClick = onSkip) {
-            Text("Continue without access")
+            Text(stringResource(R.string.continue_without_access))
         }
     }
 }
@@ -266,7 +268,7 @@ private fun sharePhoto(context: Context, photo: PhotoItem?) {
         putExtra(Intent.EXTRA_STREAM, photo.uri)
         addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
     }
-    val chooser = Intent.createChooser(shareIntent, "Share photo")
+    val chooser = Intent.createChooser(shareIntent, context.getString(R.string.share_photo))
     try {
         context.startActivity(chooser)
     } catch (e: ActivityNotFoundException) {
