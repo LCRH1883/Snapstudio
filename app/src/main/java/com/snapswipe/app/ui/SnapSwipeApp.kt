@@ -173,6 +173,11 @@ private fun PermissionsScreen(
             text = "Snap Swipe needs photo access to help you clean up your gallery.",
             style = MaterialTheme.typography.titleMedium
         )
+        Spacer(modifier = Modifier.height(8.dp))
+        Text(
+            text = "We only read your photos locally to let you keep, delete, or share. Nothing is uploaded.",
+            style = MaterialTheme.typography.bodySmall
+        )
         Spacer(modifier = Modifier.height(16.dp))
         if (permissionDenied && !hasPermission) {
             Text(
