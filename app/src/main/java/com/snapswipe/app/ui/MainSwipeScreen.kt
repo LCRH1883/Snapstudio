@@ -17,6 +17,8 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Check
+import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.Undo
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.CenterAlignedTopAppBar
@@ -60,6 +62,8 @@ fun MainSwipeScreen(
     onRequestPermissions: () -> Unit,
     onKeep: () -> Unit,
     onDelete: () -> Unit,
+    onUndo: () -> Unit = {},
+    onHome: () -> Unit = {},
     onShare: () -> Unit = {},
     onRestart: () -> Unit = {},
     onReload: () -> Unit = {},
@@ -80,6 +84,14 @@ fun MainSwipeScreen(
     Scaffold(
         topBar = {
             CenterAlignedTopAppBar(
+                navigationIcon = {
+                    IconButton(onClick = onHome) {
+                        Icon(
+                            imageVector = Icons.Filled.Home,
+                            contentDescription = "Home"
+                        )
+                    }
+                },
                 title = { Text("Snap Swipe") },
                 actions = {
                     IconButton(onClick = onOpenSettings) {
@@ -224,7 +236,7 @@ fun MainSwipeScreen(
                                 verticalArrangement = Arrangement.spacedBy(8.dp)
                             ) {
                                 val position = uiState.currentPosition ?: 0
-                                val total = if (uiState.totalCount > 0) uiState.totalCount else uiState.photos.size
+                                val total = if (uiState.displayTotal > 0) uiState.displayTotal else uiState.photos.size
                                 Text(
                                     text = "Photo $position of $total",
                                     style = MaterialTheme.typography.titleMedium,
@@ -249,6 +261,25 @@ fun MainSwipeScreen(
                                     val buttonSize = 56.dp
                                     val xOffsetLeft = this.maxWidth / 3 - buttonSize / 2
                                     val xOffsetRight = this.maxWidth * 2 / 3 - buttonSize / 2
+                                    val xOffsetBack = (xOffsetLeft / 2) - (buttonSize / 2)
+                                    IconButton(
+                                        onClick = onUndo,
+                                        modifier = Modifier.offset(x = xOffsetBack)
+                                    ) {
+                                        Box(
+                                            modifier = Modifier
+                                                .size(buttonSize)
+                                                .clip(CircleShape)
+                                                .background(MaterialTheme.colorScheme.surfaceColorAtElevation(6.dp).copy(alpha = 0.65f)),
+                                            contentAlignment = Alignment.Center
+                                        ) {
+                                            Icon(
+                                                imageVector = Icons.Default.Undo,
+                                                contentDescription = "Back",
+                                                tint = Color.White
+                                            )
+                                        }
+                                    }
                                     IconButton(
                                         onClick = onDelete,
                                         modifier = Modifier

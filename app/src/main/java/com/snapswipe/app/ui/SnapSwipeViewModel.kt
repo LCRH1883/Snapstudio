@@ -15,8 +15,6 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.delay
 import android.content.IntentSender
 
 data class SnapSwipeUiState(
@@ -30,12 +28,22 @@ data class SnapSwipeUiState(
     val totalCount: Int = 0,
     val keptCount: Int = 0,
     val deleteMode: DeleteMode = DeleteMode.IMMEDIATE,
-    val queuedDeletes: List<PhotoItem> = emptyList()
+    val queuedDeletes: List<PhotoItem> = emptyList(),
+    val confirmedDeleteCount: Int = 0
 ) {
     val currentPhoto: PhotoItem? get() = photos.getOrNull(currentIndex)
     val isAtEnd: Boolean get() = photos.isNotEmpty() && currentIndex >= photos.size
+    val displayTotal: Int
+        get() = (totalCount - confirmedDeleteCount).coerceAtLeast(0)
     val currentPosition: Int?
-        get() = if (photos.isNotEmpty()) keptCount + 1 else null
+        get() {
+            if (photos.isEmpty()) return null
+            return if (sortOrder == SortOrder.NEWEST_FIRST) {
+                displayTotal - photos.size + currentIndex + 1
+            } else {
+                photos.size + confirmedDeleteCount - currentIndex
+            }
+        }
 }
 
 sealed class LastAction {
@@ -51,6 +59,9 @@ class SnapSwipeViewModel(
     val uiState: StateFlow<SnapSwipeUiState> = _uiState
 
     private var pendingApprovalPhotoId: Long? = null
+    private var pendingApprovalDeleteCount: Int = 0
+    private var pendingApprovalType: PendingApprovalType? = null
+    private val history = ArrayDeque<LastAction>()
 
     init {
         loadPhotos(SortOrder.NEWEST_FIRST)
@@ -66,6 +77,7 @@ class SnapSwipeViewModel(
 
     fun loadPhotos(sortOrder: SortOrder = _uiState.value.sortOrder) {
         viewModelScope.launch {
+            history.clear()
             _uiState.update {
                 it.copy(
                     isLoading = true,
@@ -74,11 +86,13 @@ class SnapSwipeViewModel(
                     currentIndex = 0,
                     lastAction = null,
                     pendingDeleteIntent = null,
-                    queuedDeletes = emptyList()
+                    queuedDeletes = emptyList(),
+                    confirmedDeleteCount = 0
                 )
             }
             try {
                 val photos = repository.loadPhotos(sortOrder)
+                history.clear()
                 _uiState.update {
                     it.copy(
                         photos = photos,
@@ -89,7 +103,8 @@ class SnapSwipeViewModel(
                         pendingDeleteIntent = null,
                         totalCount = photos.size,
                         keptCount = 0,
-                        queuedDeletes = emptyList()
+                        queuedDeletes = emptyList(),
+                        confirmedDeleteCount = 0
                     )
                 }
             } catch (e: SecurityException) {
@@ -119,7 +134,7 @@ class SnapSwipeViewModel(
     fun keepCurrent() {
         val photo = _uiState.value.currentPhoto ?: return
         val indexBefore = _uiState.value.currentIndex
-        removeCurrentAndAdvance(LastAction.Kept(photo, indexBefore), isDelete = false)
+        removeCurrentAndAdvance(LastAction.Kept(photo, indexBefore))
     }
 
     fun trashCurrent() {
@@ -127,32 +142,50 @@ class SnapSwipeViewModel(
         val index = _uiState.value.currentIndex
         val deleteMode = _uiState.value.deleteMode
         if (deleteMode == DeleteMode.QUEUED) {
-            removeCurrentAndAdvance(LastAction.Deleted(photo, index), isDelete = true, queueDelete = true)
+            removeCurrentAndAdvance(LastAction.Deleted(photo, index), queueDelete = true)
         } else {
-            removeCurrentAndAdvance(LastAction.Deleted(photo, index), isDelete = true, queueDelete = false)
+            removeCurrentAndAdvance(LastAction.Deleted(photo, index), queueDelete = false)
             commitImmediateDelete(photo)
         }
     }
 
     fun onDeleteCompleted(success: Boolean) {
+        val deleteCount = if (pendingApprovalDeleteCount > 0) pendingApprovalDeleteCount else 1
+        val approvalType = pendingApprovalType
+        val deniedId = pendingApprovalPhotoId
+        pendingApprovalPhotoId = null
+        pendingApprovalDeleteCount = 0
+        pendingApprovalType = null
         if (success) {
-            pendingApprovalPhotoId = null
-        }
-        if (!success) {
-            Log.w(TAG, "Delete approval denied for photoId=$pendingApprovalPhotoId")
-        }
-        _uiState.update { it.copy(pendingDeleteIntent = null) }
-        if (!success) {
+            applyConfirmedDeletes(deleteCount, clearQueue = approvalType == PendingApprovalType.QUEUED)
+            _uiState.update { it.copy(pendingDeleteIntent = null) }
+        } else {
+            Log.w(TAG, "Delete approval denied for photoId=$deniedId")
+            _uiState.update { it.copy(pendingDeleteIntent = null) }
             loadPhotos(_uiState.value.sortOrder)
         }
     }
 
     fun restart() {
-        _uiState.update { it.copy(currentIndex = 0, lastAction = null, keptCount = 0, totalCount = it.photos.size) }
+        _uiState.update {
+            it.copy(
+                currentIndex = 0,
+                lastAction = null,
+                keptCount = 0,
+                totalCount = it.photos.size,
+                confirmedDeleteCount = 0
+            )
+        }
+        history.clear()
     }
 
     fun reload() {
         loadPhotos(_uiState.value.sortOrder)
+    }
+
+    fun goHome() {
+        val order = _uiState.value.sortOrder
+        loadPhotos(order)
     }
 
     fun setDeleteMode(mode: DeleteMode) {
@@ -166,7 +199,8 @@ class SnapSwipeViewModel(
     }
 
     fun undoLast() {
-        when (val action = _uiState.value.lastAction) {
+        val action = history.removeLastOrNull() ?: return
+        when (action) {
             is LastAction.Kept -> {
                 _uiState.update { state ->
                     val list = state.photos.toMutableList()
@@ -175,7 +209,7 @@ class SnapSwipeViewModel(
                     state.copy(
                         photos = list,
                         currentIndex = insertIndex,
-                        lastAction = null,
+                        lastAction = history.lastOrNull(),
                         keptCount = (state.keptCount - 1).coerceAtLeast(0)
                     )
                 }
@@ -189,15 +223,12 @@ class SnapSwipeViewModel(
                     state.copy(
                         photos = list,
                         currentIndex = insertIndex,
-                        lastAction = null,
-                        totalCount = state.totalCount + 1,
+                        lastAction = history.lastOrNull(),
                         queuedDeletes = state.queuedDeletes.filterNot { it.id == action.photo.id },
                         keptCount = (state.keptCount - 1).coerceAtLeast(0)
                     )
                 }
             }
-
-            null -> Unit
         }
     }
 
@@ -212,9 +243,10 @@ class SnapSwipeViewModel(
         }
     }
 
-    private fun removeCurrentAndAdvance(action: LastAction, isDelete: Boolean, queueDelete: Boolean = false) {
+    private fun removeCurrentAndAdvance(action: LastAction, queueDelete: Boolean = false) {
         _uiState.update { state ->
             if (state.photos.isEmpty()) return@update state.copy(pendingDeleteIntent = null)
+            history.addLast(action)
             val currentIdx = state.currentIndex
             val updated = state.photos.toMutableList().also { list ->
                 if (currentIdx in list.indices) {
@@ -234,8 +266,19 @@ class SnapSwipeViewModel(
                 errorMessage = null,
                 lastAction = action,
                 keptCount = state.keptCount + 1,
-                totalCount = if (isDelete) (state.totalCount - 1).coerceAtLeast(0) else state.totalCount,
                 queuedDeletes = newQueued
+            )
+        }
+    }
+
+    private fun applyConfirmedDeletes(count: Int, clearQueue: Boolean = false) {
+        if (count <= 0) return
+        _uiState.update { state ->
+            val appliedDeletes = (state.confirmedDeleteCount + count).coerceAtMost(state.totalCount)
+            state.copy(
+                confirmedDeleteCount = appliedDeletes,
+                queuedDeletes = if (clearQueue) emptyList() else state.queuedDeletes,
+                lastAction = if (clearQueue) null else state.lastAction
             )
         }
     }
@@ -243,9 +286,16 @@ class SnapSwipeViewModel(
     private fun commitImmediateDelete(photo: PhotoItem) {
         viewModelScope.launch {
             when (val result = repository.deletePhoto(photo)) {
-                is DeleteResult.Success -> Unit
+                is DeleteResult.Success -> {
+                    pendingApprovalDeleteCount = 0
+                    pendingApprovalType = null
+                    pendingApprovalPhotoId = null
+                    applyConfirmedDeletes(1)
+                }
                 is DeleteResult.RequiresUserApproval -> {
                     pendingApprovalPhotoId = photo.id
+                    pendingApprovalDeleteCount = 1
+                    pendingApprovalType = PendingApprovalType.IMMEDIATE
                     Log.d(TAG, "Launching delete approval for photoId=${photo.id}")
                     _uiState.update { it.copy(pendingDeleteIntent = result.intentSender) }
                 }
@@ -264,10 +314,15 @@ class SnapSwipeViewModel(
         viewModelScope.launch {
             when (val result = repository.deletePhotosBatch(queued)) {
                 is DeleteResult.Success -> {
-                    _uiState.update { it.copy(queuedDeletes = emptyList(), lastAction = null) }
+                    pendingApprovalDeleteCount = 0
+                    pendingApprovalType = null
+                    pendingApprovalPhotoId = null
+                    applyConfirmedDeletes(queued.size, clearQueue = true)
                 }
                 is DeleteResult.RequiresUserApproval -> {
                     pendingApprovalPhotoId = null
+                    pendingApprovalDeleteCount = queued.size
+                    pendingApprovalType = PendingApprovalType.QUEUED
                     _uiState.update { it.copy(pendingDeleteIntent = result.intentSender) }
                     // queuedDeletes remain until approval result
                 }
@@ -281,6 +336,11 @@ class SnapSwipeViewModel(
 
     private companion object {
         private const val TAG = "SnapSwipeViewModel"
+    }
+
+    private enum class PendingApprovalType {
+        IMMEDIATE,
+        QUEUED
     }
 }
 

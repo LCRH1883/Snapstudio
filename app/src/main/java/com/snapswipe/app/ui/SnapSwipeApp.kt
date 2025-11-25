@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -141,9 +142,9 @@ private fun NavGraphBuilder.mainRoute(
         MainScreen(
             onOpenSettings = onOpenSettings,
             onRequestPermissions = onBackToPermissions,
-            viewModel = viewModel
-        )
-    }
+        viewModel = viewModel
+    )
+}
 }
 
 private fun NavGraphBuilder.settingsRoute(
@@ -162,7 +163,9 @@ private fun PermissionsScreen(
     permissionDenied: Boolean
 ) {
     Column(
-        modifier = Modifier.fillMaxSize(),
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(horizontal = 24.dp),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
@@ -224,6 +227,8 @@ private fun MainScreen(
         onRequestPermissions = onRequestPermissions,
         onKeep = { viewModel.keepCurrent() },
         onDelete = { viewModel.trashCurrent() },
+        onUndo = { viewModel.undoLast() },
+        onHome = { viewModel.goHome() },
         onShare = { sharePhoto(context, uiState.currentPhoto) },
         onRestart = { viewModel.restart() },
         onReload = { viewModel.reload() },
