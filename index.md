@@ -24,7 +24,7 @@ description: Clean up your Android photo library with confident left/right swipe
 
     <div class="hero-visual">
       <div class="frame">
-        <img class="screenshot" src="{{ "/img/screenshots/Screenshot_20251124_034104.png" | relative_url }}" alt="Snap Swipe main swipe screen preview">
+        <img class="screenshot" src="{{ "/img/screenshots/Screenshot_20251125_025042_SnapSwipe.jpg" | relative_url }}" alt="Snap Swipe main swipe screen preview">
       </div>
     </div>
   </div>
