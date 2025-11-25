@@ -82,3 +82,4 @@
 | icon v3| 2025-11-24       | Codex  | Copied new icon to all mipmap density folders to improve clarity/scaling. |
 | icon v4| 2025-11-24       | Codex  | Re-copied new icon into mipmap-anydpi-v26 foreground to ensure adaptive icon uses the right asset. |
 | pkg    | 2025-11-24       | Codex  | Changed package/applicationId to com.snapswipe.app (was com.example.snapswipe). |
+| api35  | 2025-11-24       | Codex  | Raised compile/target SDK to 35 and noted requirement update in BUILD_PLAN.md. |

@@ -26,6 +26,7 @@ PHASE 0 – Documentation & Project Setup
     - Target/compile SDK: latest stable available.
     - Template: a Compose-based template (Empty Compose Activity, or Empty Activity with Jetpack Compose enabled).
     - Manual check: Project builds successfully; main activity runs and shows the default Compose preview content.
+    - Notes: Updated compile/target SDK to API 35 to meet Play requirements.
 
 [x] 0.3 – Configure Jetpack Compose dependencies
     - In the app module build.gradle(.kts), ensure:
