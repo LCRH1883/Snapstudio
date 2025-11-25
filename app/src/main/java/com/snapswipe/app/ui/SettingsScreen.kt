@@ -21,6 +21,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
@@ -36,6 +37,11 @@ import kotlinx.coroutines.launch
 import android.content.Intent
 import android.net.Uri
 import com.snapswipe.app.BuildConfig
+import androidx.compose.ui.res.stringResource
+import com.snapswipe.app.R
+import androidx.compose.material3.AlertDialog
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -48,14 +54,15 @@ fun SettingsScreen(
     val sortOrder by sortOrderPreferences.sortOrderFlow.collectAsState(initial = SortOrder.NEWEST_FIRST)
     val deleteMode by sortOrderPreferences.deleteModeFlow.collectAsState(initial = DeleteMode.IMMEDIATE)
     val coroutineScope = rememberCoroutineScope()
+    val showAbout = remember { mutableStateOf(false) }
 
     Scaffold(
         topBar = {
             CenterAlignedTopAppBar(
-                title = { Text("Settings") },
+                title = { Text(stringResource(R.string.settings_title)) },
                 actions = {
                     TextButton(onClick = onDone) {
-                        Text("Done")
+                        Text(stringResource(R.string.done))
                     }
                 }
             )
@@ -70,18 +77,18 @@ fun SettingsScreen(
         ) {
             Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
                 Text(
-                    text = "Photo review order",
+                    text = stringResource(R.string.photo_review_order),
                     style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.SemiBold)
                 )
                 SortOrderOption(
-                    label = "Newest to oldest",
+                    label = stringResource(R.string.newest_to_oldest),
                     selected = sortOrder == SortOrder.NEWEST_FIRST,
                     onSelect = {
                         coroutineScope.launch { sortOrderPreferences.setSortOrder(SortOrder.NEWEST_FIRST) }
                     }
                 )
                 SortOrderOption(
-                    label = "Oldest to newest",
+                    label = stringResource(R.string.oldest_to_newest),
                     selected = sortOrder == SortOrder.OLDEST_FIRST,
                     onSelect = {
                         coroutineScope.launch { sortOrderPreferences.setSortOrder(SortOrder.OLDEST_FIRST) }
@@ -91,18 +98,18 @@ fun SettingsScreen(
 
             Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
                 Text(
-                    text = "Delete mode",
+                    text = stringResource(R.string.delete_mode),
                     style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.SemiBold)
                 )
                 SortOrderOption(
-                    label = "Immediate (confirm per delete if required)",
+                    label = stringResource(R.string.delete_mode_immediate),
                     selected = deleteMode == DeleteMode.IMMEDIATE,
                     onSelect = {
                         coroutineScope.launch { sortOrderPreferences.setDeleteMode(DeleteMode.IMMEDIATE) }
                     }
                 )
                 SortOrderOption(
-                    label = "Queue deletions and confirm once",
+                    label = stringResource(R.string.delete_mode_queued),
                     selected = deleteMode == DeleteMode.QUEUED,
                     onSelect = {
                         coroutineScope.launch { sortOrderPreferences.setDeleteMode(DeleteMode.QUEUED) }
@@ -112,23 +119,29 @@ fun SettingsScreen(
 
             Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
                 Text(
-                    text = "About Snap Swipe",
+                    text = stringResource(R.string.about_snap_swipe),
                     style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.SemiBold)
                 )
                 Text(
-                    text = "Clean up your photos by swiping to keep, delete, or share.",
-                    style = MaterialTheme.typography.bodyMedium
+                    text = stringResource(R.string.about_snap_swipe_body),
+                    style = MaterialTheme.typography.bodyMedium,
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier.fillMaxWidth()
                 )
                 Text(
-                    text = "Version ${BuildConfig.VERSION_NAME}",
+                    text = stringResource(R.string.version_label, BuildConfig.VERSION_NAME),
                     style = MaterialTheme.typography.bodySmall,
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier.fillMaxWidth(),
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
                 Text(
-                    text = "Support",
-                    style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.SemiBold)
+                    text = stringResource(R.string.support),
+                    style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.SemiBold),
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier.fillMaxWidth()
                 )
-                val email = "support@snapswipe.xyz"
+                val email = stringResource(R.string.support_email)
                 val annotated = buildAnnotatedString {
                     val start = length
                     append(email)
@@ -142,21 +155,56 @@ fun SettingsScreen(
                     )
                     addStringAnnotation(tag = "email", annotation = email, start = start, end = start + email.length)
                 }
-                ClickableText(
-                    text = annotated,
-                    style = MaterialTheme.typography.bodyMedium,
-                    onClick = { offset ->
-                        annotated.getStringAnnotations(tag = "email", start = offset, end = offset)
-                            .firstOrNull()?.let { annotation ->
-                                val intent = Intent(Intent.ACTION_SENDTO).apply {
-                                    data = Uri.parse("mailto:${annotation.item}")
+                Column(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    ClickableText(
+                        text = annotated,
+                        style = MaterialTheme.typography.bodyMedium,
+                        onClick = { offset ->
+                            annotated.getStringAnnotations(tag = "email", start = offset, end = offset)
+                                .firstOrNull()?.let { annotation ->
+                                    val intent = Intent(Intent.ACTION_SENDTO).apply {
+                                        data = Uri.parse("mailto:${annotation.item}")
+                                    }
+                                    context.startActivity(intent)
                                 }
-                                context.startActivity(intent)
-                            }
+                        }
+                    )
+                    TextButton(onClick = { showAbout.value = true }) {
+                        Text(stringResource(R.string.about_snap_swipe))
                     }
-                )
+                }
             }
         }
+    }
+
+    if (showAbout.value) {
+        AlertDialog(
+            onDismissRequest = { showAbout.value = false },
+            confirmButton = {
+                TextButton(onClick = { showAbout.value = false }) {
+                    Text(stringResource(R.string.done))
+                }
+            },
+            title = { Text(stringResource(R.string.about_snap_swipe)) },
+            text = {
+                Column(
+                    verticalArrangement = Arrangement.spacedBy(8.dp),
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Text(
+                        text = stringResource(R.string.supported_android_versions, "26+", "35"),
+                        style = MaterialTheme.typography.bodyMedium
+                    )
+                    Text(
+                        text = stringResource(R.string.supported_languages_list),
+                        style = MaterialTheme.typography.bodyMedium
+                    )
+                }
+            }
+        )
     }
 }
 

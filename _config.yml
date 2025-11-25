@@ -1,0 +1,32 @@
+title: Snap Swipe
+description: Clean up your Android photo library with fast left/right swipes.
+permalink: pretty
+exclude:
+  - app
+  - build
+  - build.gradle
+  - gradle
+  - gradle.properties
+  - gradlew
+  - gradlew.bat
+  - settings.gradle
+  - local.properties
+  - .gradle
+  - .idea
+  - .jdks
+  - .github
+  - build
+  - README.md
+  - claude.md
+  - CLAUDE.md
+  - AGENTS.md
+  - BUILD_PLAN.md
+  - img/screenshots/*.psd
+
+defaults:
+  -
+    scope:
+      path: ""
+      type: "pages"
+    values:
+      layout: default

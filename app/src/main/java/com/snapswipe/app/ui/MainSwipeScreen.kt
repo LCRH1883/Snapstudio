@@ -17,6 +17,8 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Check
+import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.Undo
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.CenterAlignedTopAppBar
@@ -51,6 +53,8 @@ import androidx.compose.ui.input.pointer.pointerInput
 import kotlin.math.abs
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
+import androidx.compose.ui.res.stringResource
+import com.snapswipe.app.R
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -60,6 +64,8 @@ fun MainSwipeScreen(
     onRequestPermissions: () -> Unit,
     onKeep: () -> Unit,
     onDelete: () -> Unit,
+    onUndo: () -> Unit = {},
+    onHome: () -> Unit = {},
     onShare: () -> Unit = {},
     onRestart: () -> Unit = {},
     onReload: () -> Unit = {},
@@ -80,12 +86,20 @@ fun MainSwipeScreen(
     Scaffold(
         topBar = {
             CenterAlignedTopAppBar(
-                title = { Text("Snap Swipe") },
+                navigationIcon = {
+                    IconButton(onClick = onHome) {
+                        Icon(
+                            imageVector = Icons.Filled.Home,
+                            contentDescription = stringResource(R.string.home)
+                        )
+                    }
+                },
+                title = { Text(stringResource(R.string.app_name)) },
                 actions = {
                     IconButton(onClick = onOpenSettings) {
                         Icon(
                             imageVector = Icons.Filled.Settings,
-                            contentDescription = "Settings"
+                            contentDescription = stringResource(R.string.settings)
                         )
                     }
                 }
@@ -105,7 +119,7 @@ fun MainSwipeScreen(
                         verticalArrangement = Arrangement.spacedBy(12.dp)
                     ) {
                         CircularProgressIndicator()
-                        Text("Loading photos...")
+                        Text(stringResource(R.string.loading_photos))
                     }
                 }
 
@@ -119,7 +133,7 @@ fun MainSwipeScreen(
                             color = MaterialTheme.colorScheme.error
                         )
                         Button(onClick = onRequestPermissions) {
-                            Text("Check permissions")
+                            Text(stringResource(R.string.check_permissions))
                         }
                     }
                 }
@@ -131,16 +145,16 @@ fun MainSwipeScreen(
                         modifier = Modifier.padding(horizontal = 24.dp)
                     ) {
                         Text(
-                            text = "You’ve reviewed all photos in this run.",
+                            text = stringResource(R.string.reviewed_run_title),
                             style = MaterialTheme.typography.titleMedium
                         )
                         Text(
-                            text = "Restart or adjust settings to change the order.",
+                            text = stringResource(R.string.reviewed_run_subtitle),
                             style = MaterialTheme.typography.bodyMedium
                         )
                         Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-                            Button(onClick = onRestart) { Text("Restart") }
-                            Button(onClick = onOpenSettings) { Text("Settings") }
+                            Button(onClick = onRestart) { Text(stringResource(R.string.restart)) }
+                            Button(onClick = onOpenSettings) { Text(stringResource(R.string.settings)) }
                         }
                     }
                 }
@@ -151,16 +165,16 @@ fun MainSwipeScreen(
                         verticalArrangement = Arrangement.spacedBy(8.dp)
                     ) {
                         Text(
-                            text = "No photos found.",
+                            text = stringResource(R.string.no_photos_title),
                             style = MaterialTheme.typography.titleMedium
                         )
                         Text(
-                            text = "Add photos to your device and refresh.",
+                            text = stringResource(R.string.no_photos_subtitle),
                             style = MaterialTheme.typography.bodyMedium
                         )
                         Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-                            Button(onClick = onReload) { Text("Refresh") }
-                            Button(onClick = onOpenSettings) { Text("Settings") }
+                            Button(onClick = onReload) { Text(stringResource(R.string.refresh)) }
+                            Button(onClick = onOpenSettings) { Text(stringResource(R.string.settings)) }
                         }
                     }
                 }
@@ -224,9 +238,9 @@ fun MainSwipeScreen(
                                 verticalArrangement = Arrangement.spacedBy(8.dp)
                             ) {
                                 val position = uiState.currentPosition ?: 0
-                                val total = if (uiState.totalCount > 0) uiState.totalCount else uiState.photos.size
+                                val total = if (uiState.displayTotal > 0) uiState.displayTotal else uiState.photos.size
                                 Text(
-                                    text = "Photo $position of $total",
+                                    text = stringResource(R.string.photo_position, position, total),
                                     style = MaterialTheme.typography.titleMedium,
                                     color = Color.White
                                 )
@@ -239,7 +253,7 @@ fun MainSwipeScreen(
                                             onClick = onCommitQueuedDeletes,
                                             modifier = Modifier.weight(1f)
                                         ) {
-                                            Text("Delete queued ($queuedDeleteCount)")
+                                            Text(stringResource(R.string.delete_queued_count, queuedDeleteCount))
                                         }
                                     }
                                 }
@@ -249,6 +263,25 @@ fun MainSwipeScreen(
                                     val buttonSize = 56.dp
                                     val xOffsetLeft = this.maxWidth / 3 - buttonSize / 2
                                     val xOffsetRight = this.maxWidth * 2 / 3 - buttonSize / 2
+                                    val xOffsetBack = (xOffsetLeft / 2) - (buttonSize / 2)
+                                    IconButton(
+                                        onClick = onUndo,
+                                        modifier = Modifier.offset(x = xOffsetBack)
+                                    ) {
+                                        Box(
+                                            modifier = Modifier
+                                                .size(buttonSize)
+                                                .clip(CircleShape)
+                                                .background(MaterialTheme.colorScheme.surfaceColorAtElevation(6.dp).copy(alpha = 0.65f)),
+                                            contentAlignment = Alignment.Center
+                                        ) {
+                                            Icon(
+                                                imageVector = Icons.Default.Undo,
+                                                contentDescription = "Back",
+                                                tint = Color.White
+                                            )
+                                        }
+                                    }
                                     IconButton(
                                         onClick = onDelete,
                                         modifier = Modifier
@@ -263,7 +296,7 @@ fun MainSwipeScreen(
                                         ) {
                                             Icon(
                                                 imageVector = Icons.Default.Close,
-                                                contentDescription = "Delete",
+                                                contentDescription = stringResource(R.string.delete_label),
                                                 tint = Color.White
                                             )
                                         }
@@ -282,7 +315,7 @@ fun MainSwipeScreen(
                                         ) {
                                             Icon(
                                                 imageVector = Icons.Default.Check,
-                                                contentDescription = "Keep",
+                                                contentDescription = stringResource(R.string.keep_label),
                                                 tint = Color.White
                                             )
                                         }
@@ -308,7 +341,7 @@ fun MainSwipeScreen(
                 verticalArrangement = Arrangement.spacedBy(12.dp)
             ) {
                 Text(
-                    text = "Share this photo",
+                    text = stringResource(R.string.share_sheet_title),
                     style = MaterialTheme.typography.titleMedium
                 )
                 Button(
@@ -318,13 +351,13 @@ fun MainSwipeScreen(
                     },
                     modifier = Modifier.fillMaxWidth()
                 ) {
-                    Text("Share photo")
+                    Text(stringResource(R.string.share_photo))
                 }
                 TextButton(
                     onClick = { showShareSheet = false },
                     modifier = Modifier.fillMaxWidth()
                 ) {
-                    Text("Cancel")
+                    Text(stringResource(R.string.cancel))
                 }
             }
         }
@@ -334,16 +367,16 @@ fun MainSwipeScreen(
         AlertDialog(
             onDismissRequest = onDismissInstructions,
             confirmButton = {
-                TextButton(onClick = onDismissInstructions) { Text("Got it") }
+                TextButton(onClick = onDismissInstructions) { Text(stringResource(R.string.done)) }
             },
-            title = { Text("How swiping works") },
+            title = { Text(stringResource(R.string.instructions_title)) },
             text = {
                 Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                    Text("• Swipe left to delete (or queue delete).")
-                    Text("• Swipe right to keep.")
-                    Text("• Swipe up to share.")
+                    Text(stringResource(R.string.instructions_delete))
+                    Text(stringResource(R.string.instructions_keep))
+                    Text(stringResource(R.string.instructions_share))
                     if (queuedDeleteCount > 0) {
-                        Text("• Tap \"Delete queued\" to confirm all queued deletes at once.")
+                        Text(stringResource(R.string.instructions_queue))
                     }
                 }
             }
