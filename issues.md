@@ -12,10 +12,5 @@ description: File a bug or request a feature via our Jira forms.
       <a class="button secondary" href="https://lcrh.atlassian.net/jira/software/form/907163e5-eb64-44fd-980d-ff6bb2e4b7a9">Request a feature</a>
       <a class="button secondary" href="mailto:support@snapswipe.xyz?subject=Snap%20Swipe%20Support">Email support</a>
     </div>
-    <div class="chip-row" style="margin-top:14px;">
-      <span class="chip">Bug form (Jira): summary, repro steps, expected vs actual, device info</span>
-      <span class="chip">Feature form (Jira): problem statement, proposal, context</span>
-      <span class="chip">Email support@snapswipe.xyz</span>
-    </div>
   </div>
 </section>
