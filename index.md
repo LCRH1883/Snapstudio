@@ -114,10 +114,10 @@ description: Clean up your Android photo library with confident left/right swipe
 <section class="section" id="feedback">
   <div class="container">
     <h2>Feedback & issues</h2>
-    <p class="muted">Found a bug or have an idea? Open a GitHub issue with the form that fits your need.</p>
+    <p class="muted">Found a bug or have an idea? Use the Jira forms below: one for bugs, one for feature ideas.</p>
     <div class="cta-row" style="margin-top:12px;">
-      <a class="button primary" href="https://github.com/LCRH1883/Snapstudio/issues/new?template=bug-report.yml">Report a bug</a>
-      <a class="button secondary" href="https://github.com/LCRH1883/Snapstudio/issues/new?template=feature-request.yml">Request a feature</a>
+      <a class="button primary" href="https://lcrh.atlassian.net/jira/software/form/b830de01-9a38-4fb8-9043-201ac848504c?atlOrigin=eyJpIjoiZWYwYzU5ZWU5ODczNGQ4NWJhODdkM2I2MTJiNzBkNWQiLCJwIjoiaiJ9">Report a bug</a>
+      <a class="button secondary" href="https://lcrh.atlassian.net/jira/software/form/907163e5-eb64-44fd-980d-ff6bb2e4b7a9">Request a feature</a>
     </div>
   </div>
 </section>
