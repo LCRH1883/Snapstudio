@@ -90,7 +90,7 @@ description: Clean up your Android photo library with confident left/right swipe
 <section class="section" id="join-testing">
   <div class="container">
     <h2>Join the testing program</h2>
-    <p class="muted">Follow these steps to join the Google Play testing track. Use the same email for the Google Group and Play Store tester registration.</p>
+    <p class="muted">Follow these steps (and use the buttons) to join the Google Play testing track. Use the same email for the Google Group and Play Store tester registration.</p>
     <ul class="step-list">
       <li class="step">
         <strong>1) Join the group</strong>
@@ -105,6 +105,11 @@ description: Clean up your Android photo library with confident left/right swipe
         <span class="muted"><a href="https://play.google.com/store/apps/details?id=com.snapswipe.app">Install Snap Swipe from Google Play</a> using that same account.</span>
       </li>
     </ul>
+    <div class="cta-row" style="margin-top:12px; gap:8px; flex-wrap:wrap;">
+      <a class="button primary" href="https://groups.google.com/g/snapswipe/">Join group</a>
+      <a class="button secondary" href="https://play.google.com/apps/testing/com.snapswipe.app">Approve testing</a>
+      <a class="button secondary" href="https://play.google.com/store/apps/details?id=com.snapswipe.app">Download app</a>
+    </div>
     <div class="cta-row" style="margin-top:16px;">
       <a class="button secondary" href="{{ "/privacy/" | relative_url }}">Review privacy details</a>
     </div>
