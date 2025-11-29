@@ -10,6 +10,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.map
 import java.io.IOException
+import com.snapswipe.app.data.InteractionMode
 
 private const val PREFERENCES_NAME = "snap_swipe_prefs"
 private val Context.dataStore by preferencesDataStore(name = PREFERENCES_NAME)
@@ -19,6 +20,7 @@ class SortOrderPreferences(private val context: Context) {
     private val sortOrderKey = stringPreferencesKey("photo_sort_order")
     private val deleteModeKey = stringPreferencesKey("delete_mode")
     private val instructionsSeenKey = stringPreferencesKey("instructions_seen")
+    private val interactionModeKey = stringPreferencesKey("interaction_mode")
 
     val sortOrderFlow: Flow<SortOrder> = context.dataStore.data
         .catch { exception ->
@@ -63,6 +65,21 @@ class SortOrderPreferences(private val context: Context) {
             preferences[instructionsSeenKey]?.toBooleanStrictOrNull() ?: false
         }
 
+    val interactionModeFlow: Flow<InteractionMode> = context.dataStore.data
+        .catch { exception ->
+            if (exception is IOException) {
+                Log.w(TAG, "Interaction mode read failed; using default", exception)
+                emit(emptyPreferences())
+            } else {
+                throw exception
+            }
+        }
+        .map { preferences ->
+            preferences[interactionModeKey]?.let { stored ->
+                runCatching { InteractionMode.valueOf(stored) }.getOrNull()
+            } ?: InteractionMode.SWIPE_TO_CHOOSE
+        }
+
     suspend fun setSortOrder(order: SortOrder) {
         context.dataStore.edit { prefs ->
             prefs[sortOrderKey] = order.name
@@ -78,6 +95,12 @@ class SortOrderPreferences(private val context: Context) {
     suspend fun setInstructionsSeen(seen: Boolean) {
         context.dataStore.edit { prefs ->
             prefs[instructionsSeenKey] = seen.toString()
+        }
+    }
+
+    suspend fun setInteractionMode(mode: InteractionMode) {
+        context.dataStore.edit { prefs ->
+            prefs[interactionModeKey] = mode.name
         }
     }
 

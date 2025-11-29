@@ -27,7 +27,10 @@
     <string name="instructions_delete">• Desliza a la izquierda para eliminar (o poner en cola).</string>
     <string name="instructions_keep">• Desliza a la derecha para conservar.</string>
     <string name="instructions_share">• Desliza hacia arriba para compartir.</string>
-    <string name="instructions_queue">• Toca “Eliminar en cola” para confirmar todas las eliminaciones pendientes.</string>
+    <string name="instructions_queue">• Toca "Eliminar en cola" para confirmar todas las eliminaciones pendientes.</string>
+    <string name="instructions_share_scroll">• Desliza a la derecha para compartir la carpeta/foto actual.</string>
+    <string name="instructions_next_scroll">• Desliza hacia arriba para ver la siguiente foto (entra desde abajo).</string>
+    <string name="instructions_prev_scroll">• Desliza hacia abajo para volver a la foto anterior (entra desde arriba).</string>
     <string name="settings_title">Ajustes</string>
     <string name="done">Listo</string>
     <string name="photo_review_order">Orden de revisión de fotos</string>
@@ -36,6 +39,9 @@
     <string name="delete_mode">Modo de eliminación</string>
     <string name="delete_mode_immediate">Inmediato (confirmar por eliminación si es necesario)</string>
     <string name="delete_mode_queued">Poner en cola y confirmar una vez</string>
+    <string name="snap_interaction_mode">Modo de interacción</string>
+    <string name="mode_swipe_to_choose">Deslizar para elegir</string>
+    <string name="mode_scroll_and_delete">Desplazar y eliminar</string>
     <string name="app_language">Idioma de la app</string>
     <string name="use_device_language">Usar el idioma del dispositivo</string>
     <string name="language_english">Inglés</string>

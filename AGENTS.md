@@ -88,3 +88,4 @@
 | 7.4    | 2025-11-24       | Codex  | Marked final verification checklist; automated tests pass, device flows to be validated on emulator/device. |
 | 8.1    | 2025-11-28       | Codex  | Added locale config and Settings language picker applying AppCompatDelegate app locales. |
 | 8.2    | 2025-11-28       | Codex  | Enabled autoStoreLocales service and set fallback locale to ensure device language is chosen by default. |
+| 9.1    | 2025-11-28       | Codex  | Added “Scroll and delete” interaction mode with gesture re-mapping, animations, and settings toggle. |

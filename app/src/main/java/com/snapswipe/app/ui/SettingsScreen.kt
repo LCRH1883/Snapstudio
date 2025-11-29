@@ -12,6 +12,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.foundation.text.ClickableText
@@ -34,6 +35,7 @@ import androidx.compose.ui.semantics.Role
 import com.snapswipe.app.data.SortOrder
 import com.snapswipe.app.data.SortOrderPreferences
 import com.snapswipe.app.data.DeleteMode
+import com.snapswipe.app.data.InteractionMode
 import androidx.appcompat.app.AppCompatDelegate
 import kotlinx.coroutines.launch
 import android.content.Intent
@@ -56,12 +58,23 @@ fun SettingsScreen(
     val sortOrderPreferences = androidx.compose.runtime.remember { SortOrderPreferences(context) }
     val sortOrder by sortOrderPreferences.sortOrderFlow.collectAsState(initial = SortOrder.NEWEST_FIRST)
     val deleteMode by sortOrderPreferences.deleteModeFlow.collectAsState(initial = DeleteMode.IMMEDIATE)
+    val interactionMode by sortOrderPreferences.interactionModeFlow.collectAsState(initial = InteractionMode.SWIPE_TO_CHOOSE)
     var selectedLanguage by remember { mutableStateOf(AppCompatDelegate.getApplicationLocales().toAppLanguage()) }
     val coroutineScope = rememberCoroutineScope()
     val showAbout = remember { mutableStateOf(false) }
+    val showLanguageDialog = remember { mutableStateOf(false) }
     val applyLanguage: (AppLanguage) -> Unit = { language ->
         selectedLanguage = language
         AppCompatDelegate.setApplicationLocales(language.toLocaleList())
+    }
+    val currentLanguageLabel = when (selectedLanguage) {
+        AppLanguage.SYSTEM -> stringResource(R.string.use_device_language)
+        AppLanguage.ENGLISH -> stringResource(R.string.language_english)
+        AppLanguage.KOREAN -> stringResource(R.string.language_korean)
+        AppLanguage.FRENCH -> stringResource(R.string.language_french)
+        AppLanguage.SPANISH -> stringResource(R.string.language_spanish)
+        AppLanguage.GERMAN -> stringResource(R.string.language_german)
+        AppLanguage.CHINESE_SIMPLIFIED -> stringResource(R.string.language_chinese_simplified)
     }
 
     Scaffold(
@@ -127,44 +140,36 @@ fun SettingsScreen(
 
             Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
                 Text(
-                    text = stringResource(R.string.app_language),
+                    text = stringResource(R.string.snap_interaction_mode),
                     style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.SemiBold)
                 )
                 SettingsRadioOption(
-                    label = stringResource(R.string.use_device_language),
-                    selected = selectedLanguage == AppLanguage.SYSTEM,
-                    onSelect = { applyLanguage(AppLanguage.SYSTEM) }
+                    label = stringResource(R.string.mode_swipe_to_choose),
+                    selected = interactionMode == InteractionMode.SWIPE_TO_CHOOSE,
+                    onSelect = {
+                        coroutineScope.launch { sortOrderPreferences.setInteractionMode(InteractionMode.SWIPE_TO_CHOOSE) }
+                    }
                 )
                 SettingsRadioOption(
-                    label = stringResource(R.string.language_english),
-                    selected = selectedLanguage == AppLanguage.ENGLISH,
-                    onSelect = { applyLanguage(AppLanguage.ENGLISH) }
+                    label = stringResource(R.string.mode_scroll_and_delete),
+                    selected = interactionMode == InteractionMode.SCROLL_AND_DELETE,
+                    onSelect = {
+                        coroutineScope.launch { sortOrderPreferences.setInteractionMode(InteractionMode.SCROLL_AND_DELETE) }
+                    }
                 )
-                SettingsRadioOption(
-                    label = stringResource(R.string.language_korean),
-                    selected = selectedLanguage == AppLanguage.KOREAN,
-                    onSelect = { applyLanguage(AppLanguage.KOREAN) }
+            }
+
+            Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                Text(
+                    text = stringResource(R.string.app_language),
+                    style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.SemiBold)
                 )
-                SettingsRadioOption(
-                    label = stringResource(R.string.language_french),
-                    selected = selectedLanguage == AppLanguage.FRENCH,
-                    onSelect = { applyLanguage(AppLanguage.FRENCH) }
-                )
-                SettingsRadioOption(
-                    label = stringResource(R.string.language_spanish),
-                    selected = selectedLanguage == AppLanguage.SPANISH,
-                    onSelect = { applyLanguage(AppLanguage.SPANISH) }
-                )
-                SettingsRadioOption(
-                    label = stringResource(R.string.language_german),
-                    selected = selectedLanguage == AppLanguage.GERMAN,
-                    onSelect = { applyLanguage(AppLanguage.GERMAN) }
-                )
-                SettingsRadioOption(
-                    label = stringResource(R.string.language_chinese_simplified),
-                    selected = selectedLanguage == AppLanguage.CHINESE_SIMPLIFIED,
-                    onSelect = { applyLanguage(AppLanguage.CHINESE_SIMPLIFIED) }
-                )
+                Button(
+                    onClick = { showLanguageDialog.value = true },
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Text(currentLanguageLabel)
+                }
             }
 
             Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
@@ -251,6 +256,78 @@ fun SettingsScreen(
                     Text(
                         text = stringResource(R.string.supported_languages_list),
                         style = MaterialTheme.typography.bodyMedium
+                    )
+                }
+            }
+        )
+    }
+
+    if (showLanguageDialog.value) {
+        AlertDialog(
+            onDismissRequest = { showLanguageDialog.value = false },
+            confirmButton = {
+                TextButton(onClick = { showLanguageDialog.value = false }) {
+                    Text(stringResource(R.string.done))
+                }
+            },
+            title = { Text(stringResource(R.string.app_language)) },
+            text = {
+                Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                    SettingsRadioOption(
+                        label = stringResource(R.string.use_device_language),
+                        selected = selectedLanguage == AppLanguage.SYSTEM,
+                        onSelect = {
+                            applyLanguage(AppLanguage.SYSTEM)
+                            showLanguageDialog.value = false
+                        }
+                    )
+                    SettingsRadioOption(
+                        label = stringResource(R.string.language_english),
+                        selected = selectedLanguage == AppLanguage.ENGLISH,
+                        onSelect = {
+                            applyLanguage(AppLanguage.ENGLISH)
+                            showLanguageDialog.value = false
+                        }
+                    )
+                    SettingsRadioOption(
+                        label = stringResource(R.string.language_korean),
+                        selected = selectedLanguage == AppLanguage.KOREAN,
+                        onSelect = {
+                            applyLanguage(AppLanguage.KOREAN)
+                            showLanguageDialog.value = false
+                        }
+                    )
+                    SettingsRadioOption(
+                        label = stringResource(R.string.language_french),
+                        selected = selectedLanguage == AppLanguage.FRENCH,
+                        onSelect = {
+                            applyLanguage(AppLanguage.FRENCH)
+                            showLanguageDialog.value = false
+                        }
+                    )
+                    SettingsRadioOption(
+                        label = stringResource(R.string.language_spanish),
+                        selected = selectedLanguage == AppLanguage.SPANISH,
+                        onSelect = {
+                            applyLanguage(AppLanguage.SPANISH)
+                            showLanguageDialog.value = false
+                        }
+                    )
+                    SettingsRadioOption(
+                        label = stringResource(R.string.language_german),
+                        selected = selectedLanguage == AppLanguage.GERMAN,
+                        onSelect = {
+                            applyLanguage(AppLanguage.GERMAN)
+                            showLanguageDialog.value = false
+                        }
+                    )
+                    SettingsRadioOption(
+                        label = stringResource(R.string.language_chinese_simplified),
+                        selected = selectedLanguage == AppLanguage.CHINESE_SIMPLIFIED,
+                        onSelect = {
+                            applyLanguage(AppLanguage.CHINESE_SIMPLIFIED)
+                            showLanguageDialog.value = false
+                        }
                     )
                 }
             }

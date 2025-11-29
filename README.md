@@ -4,6 +4,7 @@ Snap Swipe is a Jetpack Compose Android app that helps you clean up your photos 
 
 ## Key features
 - Swipe left to delete (immediate or queued), right to keep, up to share.
+- Optional “Scroll and delete” mode: left to delete, right to share, vertical swipes move to next/previous photo with slide animation.
 - Delete modes: immediate (per-photo confirmation when required) or queued (confirm a batch once).
 - Undo/back to step through previous actions; home jumps to start/end based on sort order.
 - Sort order: newest-to-oldest or oldest-to-newest.

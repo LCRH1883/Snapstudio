@@ -27,7 +27,10 @@
     <string name="instructions_delete">• 左滑删除（或加入队列）。</string>
     <string name="instructions_keep">• 右滑保留。</string>
     <string name="instructions_share">• 上滑分享。</string>
-    <string name="instructions_queue">• 点按“删除队列”一次确认所有排队的删除。</string>
+    <string name="instructions_queue">• 点按\"删除队列\"一次确认所有排队的删除。</string>
+    <string name="instructions_share_scroll">• 右滑分享当前文件夹/照片。</string>
+    <string name="instructions_next_scroll">• 上滑查看下一张照片（从底部滑入）。</string>
+    <string name="instructions_prev_scroll">• 下滑返回上一张照片（从顶部滑入）。</string>
     <string name="settings_title">设置</string>
     <string name="done">完成</string>
     <string name="photo_review_order">照片查看顺序</string>
@@ -36,6 +39,9 @@
     <string name="delete_mode">删除模式</string>
     <string name="delete_mode_immediate">立即（需要时逐项确认）</string>
     <string name="delete_mode_queued">加入队列并一次确认</string>
+    <string name="snap_interaction_mode">交互模式</string>
+    <string name="mode_swipe_to_choose">滑动选择</string>
+    <string name="mode_scroll_and_delete">滑动浏览并删除</string>
     <string name="app_language">应用语言</string>
     <string name="use_device_language">使用设备语言</string>
     <string name="language_english">英语</string>

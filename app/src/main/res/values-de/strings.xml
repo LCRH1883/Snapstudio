@@ -27,7 +27,10 @@
     <string name="instructions_delete">• Nach links wischen zum Löschen (oder in Warteschlange).</string>
     <string name="instructions_keep">• Nach rechts wischen zum Behalten.</string>
     <string name="instructions_share">• Nach oben wischen zum Teilen.</string>
-    <string name="instructions_queue">• Tippe auf „Löschen in Warteschlange“, um alle wartenden Löschungen zu bestätigen.</string>
+    <string name="instructions_queue">• Tippe auf \"Löschen in Warteschlange\", um alle wartenden Löschungen zu bestätigen.</string>
+    <string name="instructions_share_scroll">• Nach rechts wischen, um den aktuellen Ordner/das Foto zu teilen.</string>
+    <string name="instructions_next_scroll">• Nach oben wischen, um das nächste Foto zu sehen (kommt von unten).</string>
+    <string name="instructions_prev_scroll">• Nach unten wischen, um zum vorherigen Foto zurückzukehren (kommt von oben).</string>
     <string name="settings_title">Einstellungen</string>
     <string name="done">Fertig</string>
     <string name="photo_review_order">Reihenfolge der Fotodurchsicht</string>
@@ -36,6 +39,9 @@
     <string name="delete_mode">Löschmodus</string>
     <string name="delete_mode_immediate">Sofort (bei Bedarf je Löschung bestätigen)</string>
     <string name="delete_mode_queued">Warteschlange und einmal bestätigen</string>
+    <string name="snap_interaction_mode">Interaktionsmodus</string>
+    <string name="mode_swipe_to_choose">Wischen zum Auswählen</string>
+    <string name="mode_scroll_and_delete">Scrollen und Löschen</string>
     <string name="app_language">App-Sprache</string>
     <string name="use_device_language">Gerätesprache verwenden</string>
     <string name="language_english">Englisch</string>

@@ -131,6 +131,23 @@ class SnapSwipeViewModel(
         advanceIndex()
     }
 
+    fun stepForward() {
+        _uiState.update { state ->
+            if (state.photos.isEmpty()) return@update state
+            val maxIndex = state.photos.lastIndex
+            val nextIndex = (state.currentIndex + 1).coerceAtMost(maxIndex)
+            state.copy(currentIndex = nextIndex)
+        }
+    }
+
+    fun stepBack() {
+        _uiState.update { state ->
+            if (state.photos.isEmpty()) return@update state
+            val prevIndex = (state.currentIndex - 1).coerceAtLeast(0)
+            state.copy(currentIndex = prevIndex)
+        }
+    }
+
     fun keepCurrent() {
         val photo = _uiState.value.currentPhoto ?: return
         val indexBefore = _uiState.value.currentIndex
@@ -161,8 +178,10 @@ class SnapSwipeViewModel(
             _uiState.update { it.copy(pendingDeleteIntent = null) }
         } else {
             Log.w(TAG, "Delete approval denied for photoId=$deniedId")
+            if (approvalType == PendingApprovalType.IMMEDIATE) {
+                restoreDeniedImmediate(deniedId)
+            }
             _uiState.update { it.copy(pendingDeleteIntent = null) }
-            loadPhotos(_uiState.value.sortOrder)
         }
     }
 
@@ -237,7 +256,8 @@ class SnapSwipeViewModel(
             if (state.photos.isEmpty()) {
                 state
             } else {
-                val nextIndex = (state.currentIndex + 1).coerceAtMost(state.photos.size)
+                val maxIndex = state.photos.lastIndex
+                val nextIndex = (state.currentIndex + 1).coerceAtMost(maxIndex)
                 state.copy(currentIndex = nextIndex)
             }
         }
@@ -341,6 +361,24 @@ class SnapSwipeViewModel(
     private enum class PendingApprovalType {
         IMMEDIATE,
         QUEUED
+    }
+
+    private fun restoreDeniedImmediate(photoId: Long?) {
+        val lastDeleted = history.lastOrNull() as? LastAction.Deleted
+        if (photoId == null || lastDeleted?.photo?.id != photoId) return
+        history.removeLast()
+        _uiState.update { state ->
+            val list = state.photos.toMutableList()
+            val insertIndex = lastDeleted.index.coerceAtMost(list.size)
+            list.add(insertIndex, lastDeleted.photo)
+            state.copy(
+                photos = list,
+                currentIndex = insertIndex,
+                lastAction = history.lastOrNull(),
+                queuedDeletes = state.queuedDeletes.filterNot { it.id == photoId },
+                keptCount = (state.keptCount - 1).coerceAtLeast(0)
+            )
+        }
     }
 }
 
