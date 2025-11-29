@@ -42,6 +42,14 @@
     <string name="delete_mode">Delete mode</string>
     <string name="delete_mode_immediate">Immediate (confirm per delete if required)</string>
     <string name="delete_mode_queued">Queue deletions and confirm once</string>
+    <string name="app_language">App language</string>
+    <string name="use_device_language">Use device language</string>
+    <string name="language_english">English</string>
+    <string name="language_korean">Korean</string>
+    <string name="language_french">French</string>
+    <string name="language_spanish">Spanish</string>
+    <string name="language_german">German</string>
+    <string name="language_chinese_simplified">Chinese (Simplified)</string>
     <string name="about_snap_swipe">About Snap Swipe</string>
     <string name="about_snap_swipe_body">Clean up your photos by swiping to keep, delete, or share.</string>
     <string name="version_label">Version %1$s</string>

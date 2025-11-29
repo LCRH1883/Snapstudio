@@ -36,6 +36,14 @@
     <string name="delete_mode">Modo de eliminación</string>
     <string name="delete_mode_immediate">Inmediato (confirmar por eliminación si es necesario)</string>
     <string name="delete_mode_queued">Poner en cola y confirmar una vez</string>
+    <string name="app_language">Idioma de la app</string>
+    <string name="use_device_language">Usar el idioma del dispositivo</string>
+    <string name="language_english">Inglés</string>
+    <string name="language_korean">Coreano</string>
+    <string name="language_french">Francés</string>
+    <string name="language_spanish">Español</string>
+    <string name="language_german">Alemán</string>
+    <string name="language_chinese_simplified">Chino (simplificado)</string>
     <string name="about_snap_swipe">Acerca de Snap Swipe</string>
     <string name="about_snap_swipe_body">Limpia tus fotos deslizando para conservar, eliminar o compartir.</string>
     <string name="version_label">Versión %1$s</string>

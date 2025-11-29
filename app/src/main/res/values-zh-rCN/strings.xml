@@ -36,6 +36,14 @@
     <string name="delete_mode">删除模式</string>
     <string name="delete_mode_immediate">立即（需要时逐项确认）</string>
     <string name="delete_mode_queued">加入队列并一次确认</string>
+    <string name="app_language">应用语言</string>
+    <string name="use_device_language">使用设备语言</string>
+    <string name="language_english">英语</string>
+    <string name="language_korean">韩语</string>
+    <string name="language_french">法语</string>
+    <string name="language_spanish">西班牙语</string>
+    <string name="language_german">德语</string>
+    <string name="language_chinese_simplified">中文（简体）</string>
     <string name="about_snap_swipe">关于 Snap Swipe</string>
     <string name="about_snap_swipe_body">通过滑动保留、删除或分享来整理你的照片。</string>
     <string name="version_label">版本 %1$s</string>

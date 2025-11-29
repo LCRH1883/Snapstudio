@@ -7,11 +7,13 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
+import androidx.appcompat.app.AppCompatDelegate
 import com.snapswipe.app.ui.theme.SnapSwipeTheme
 import com.snapswipe.app.ui.SnapSwipeApp
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
+        AppCompatDelegate.setApplicationLocales(AppCompatDelegate.getApplicationLocales())
         super.onCreate(savedInstanceState)
         setContent {
             SnapSwipeTheme {

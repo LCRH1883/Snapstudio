@@ -86,3 +86,5 @@
 | 7.2    | 2025-11-24       | Codex  | Added MediaStore error logging, permission-denied messaging, and delete failure handling per build plan step 7.2. |
 | 7.3    | 2025-11-24       | Codex  | Added Robolectric/coroutines unit tests for SnapSwipeViewModel and introduced PhotoDataSource abstraction for testing. |
 | 7.4    | 2025-11-24       | Codex  | Marked final verification checklist; automated tests pass, device flows to be validated on emulator/device. |
+| 8.1    | 2025-11-28       | Codex  | Added locale config and Settings language picker applying AppCompatDelegate app locales. |
+| 8.2    | 2025-11-28       | Codex  | Enabled autoStoreLocales service and set fallback locale to ensure device language is chosen by default. |

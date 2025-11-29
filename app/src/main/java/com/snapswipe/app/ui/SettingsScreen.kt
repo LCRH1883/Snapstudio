@@ -19,6 +19,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.text.style.TextAlign
@@ -33,6 +34,7 @@ import androidx.compose.ui.semantics.Role
 import com.snapswipe.app.data.SortOrder
 import com.snapswipe.app.data.SortOrderPreferences
 import com.snapswipe.app.data.DeleteMode
+import androidx.appcompat.app.AppCompatDelegate
 import kotlinx.coroutines.launch
 import android.content.Intent
 import android.net.Uri
@@ -42,6 +44,7 @@ import com.snapswipe.app.R
 import androidx.compose.material3.AlertDialog
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.core.os.LocaleListCompat
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -53,8 +56,13 @@ fun SettingsScreen(
     val sortOrderPreferences = androidx.compose.runtime.remember { SortOrderPreferences(context) }
     val sortOrder by sortOrderPreferences.sortOrderFlow.collectAsState(initial = SortOrder.NEWEST_FIRST)
     val deleteMode by sortOrderPreferences.deleteModeFlow.collectAsState(initial = DeleteMode.IMMEDIATE)
+    var selectedLanguage by remember { mutableStateOf(AppCompatDelegate.getApplicationLocales().toAppLanguage()) }
     val coroutineScope = rememberCoroutineScope()
     val showAbout = remember { mutableStateOf(false) }
+    val applyLanguage: (AppLanguage) -> Unit = { language ->
+        selectedLanguage = language
+        AppCompatDelegate.setApplicationLocales(language.toLocaleList())
+    }
 
     Scaffold(
         topBar = {
@@ -80,14 +88,14 @@ fun SettingsScreen(
                     text = stringResource(R.string.photo_review_order),
                     style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.SemiBold)
                 )
-                SortOrderOption(
+                SettingsRadioOption(
                     label = stringResource(R.string.newest_to_oldest),
                     selected = sortOrder == SortOrder.NEWEST_FIRST,
                     onSelect = {
                         coroutineScope.launch { sortOrderPreferences.setSortOrder(SortOrder.NEWEST_FIRST) }
                     }
                 )
-                SortOrderOption(
+                SettingsRadioOption(
                     label = stringResource(R.string.oldest_to_newest),
                     selected = sortOrder == SortOrder.OLDEST_FIRST,
                     onSelect = {
@@ -101,19 +109,61 @@ fun SettingsScreen(
                     text = stringResource(R.string.delete_mode),
                     style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.SemiBold)
                 )
-                SortOrderOption(
+                SettingsRadioOption(
                     label = stringResource(R.string.delete_mode_immediate),
                     selected = deleteMode == DeleteMode.IMMEDIATE,
                     onSelect = {
                         coroutineScope.launch { sortOrderPreferences.setDeleteMode(DeleteMode.IMMEDIATE) }
                     }
                 )
-                SortOrderOption(
+                SettingsRadioOption(
                     label = stringResource(R.string.delete_mode_queued),
                     selected = deleteMode == DeleteMode.QUEUED,
                     onSelect = {
                         coroutineScope.launch { sortOrderPreferences.setDeleteMode(DeleteMode.QUEUED) }
                     }
+                )
+            }
+
+            Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                Text(
+                    text = stringResource(R.string.app_language),
+                    style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.SemiBold)
+                )
+                SettingsRadioOption(
+                    label = stringResource(R.string.use_device_language),
+                    selected = selectedLanguage == AppLanguage.SYSTEM,
+                    onSelect = { applyLanguage(AppLanguage.SYSTEM) }
+                )
+                SettingsRadioOption(
+                    label = stringResource(R.string.language_english),
+                    selected = selectedLanguage == AppLanguage.ENGLISH,
+                    onSelect = { applyLanguage(AppLanguage.ENGLISH) }
+                )
+                SettingsRadioOption(
+                    label = stringResource(R.string.language_korean),
+                    selected = selectedLanguage == AppLanguage.KOREAN,
+                    onSelect = { applyLanguage(AppLanguage.KOREAN) }
+                )
+                SettingsRadioOption(
+                    label = stringResource(R.string.language_french),
+                    selected = selectedLanguage == AppLanguage.FRENCH,
+                    onSelect = { applyLanguage(AppLanguage.FRENCH) }
+                )
+                SettingsRadioOption(
+                    label = stringResource(R.string.language_spanish),
+                    selected = selectedLanguage == AppLanguage.SPANISH,
+                    onSelect = { applyLanguage(AppLanguage.SPANISH) }
+                )
+                SettingsRadioOption(
+                    label = stringResource(R.string.language_german),
+                    selected = selectedLanguage == AppLanguage.GERMAN,
+                    onSelect = { applyLanguage(AppLanguage.GERMAN) }
+                )
+                SettingsRadioOption(
+                    label = stringResource(R.string.language_chinese_simplified),
+                    selected = selectedLanguage == AppLanguage.CHINESE_SIMPLIFIED,
+                    onSelect = { applyLanguage(AppLanguage.CHINESE_SIMPLIFIED) }
                 )
             }
 
@@ -209,7 +259,7 @@ fun SettingsScreen(
 }
 
 @Composable
-private fun SortOrderOption(
+private fun SettingsRadioOption(
     label: String,
     selected: Boolean,
     onSelect: () -> Unit
@@ -235,4 +285,29 @@ private fun SortOrderOption(
             style = MaterialTheme.typography.bodyLarge
         )
     }
+}
+
+private enum class AppLanguage(val languageTag: String) {
+    SYSTEM(""),
+    ENGLISH("en"),
+    KOREAN("ko"),
+    FRENCH("fr"),
+    SPANISH("es"),
+    GERMAN("de"),
+    CHINESE_SIMPLIFIED("zh-CN");
+
+    fun toLocaleList(): LocaleListCompat {
+        return if (this == SYSTEM) {
+            LocaleListCompat.getEmptyLocaleList()
+        } else {
+            LocaleListCompat.forLanguageTags(languageTag)
+        }
+    }
+}
+
+private fun LocaleListCompat.toAppLanguage(): AppLanguage {
+    if (isEmpty) return AppLanguage.SYSTEM
+    val firstTag = toLanguageTags().substringBefore(",")
+    return AppLanguage.entries.firstOrNull { it.languageTag.equals(firstTag, ignoreCase = true) }
+        ?: AppLanguage.SYSTEM
 }

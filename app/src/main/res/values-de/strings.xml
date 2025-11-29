@@ -36,6 +36,14 @@
     <string name="delete_mode">Löschmodus</string>
     <string name="delete_mode_immediate">Sofort (bei Bedarf je Löschung bestätigen)</string>
     <string name="delete_mode_queued">Warteschlange und einmal bestätigen</string>
+    <string name="app_language">App-Sprache</string>
+    <string name="use_device_language">Gerätesprache verwenden</string>
+    <string name="language_english">Englisch</string>
+    <string name="language_korean">Koreanisch</string>
+    <string name="language_french">Französisch</string>
+    <string name="language_spanish">Spanisch</string>
+    <string name="language_german">Deutsch</string>
+    <string name="language_chinese_simplified">Chinesisch (vereinfacht)</string>
     <string name="about_snap_swipe">Über Snap Swipe</string>
     <string name="about_snap_swipe_body">Räume deine Fotos auf, indem du zum Behalten, Löschen oder Teilen wischst.</string>
     <string name="version_label">Version %1$s</string>

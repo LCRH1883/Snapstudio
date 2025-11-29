@@ -36,6 +36,14 @@
     <string name="delete_mode">삭제 모드</string>
     <string name="delete_mode_immediate">즉시 (필요 시 삭제마다 확인)</string>
     <string name="delete_mode_queued">대기열에 넣고 한 번에 확인</string>
+    <string name="app_language">앱 언어</string>
+    <string name="use_device_language">기기 언어 사용</string>
+    <string name="language_english">영어</string>
+    <string name="language_korean">한국어</string>
+    <string name="language_french">프랑스어</string>
+    <string name="language_spanish">스페인어</string>
+    <string name="language_german">독일어</string>
+    <string name="language_chinese_simplified">중국어(간체)</string>
     <string name="about_snap_swipe">Snap Swipe 정보</string>
     <string name="about_snap_swipe_body">보관, 삭제, 공유를 스와이프로 처리하며 사진을 정리하세요.</string>
     <string name="version_label">버전 %1$s</string>
