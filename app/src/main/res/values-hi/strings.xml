@@ -54,7 +54,6 @@
     <string name="language_spanish">स्पैनिश</string>
     <string name="language_german">जर्मन</string>
     <string name="language_chinese_simplified">चीनी (सरलीकृत)</string>
-    <string name="interaction_mode_setting">इंटरैक्शन मोड</string>
     <string name="mode_swipe_to_choose">स्वाइप करके चुनें</string>
     <string name="mode_scroll_and_delete">स्क्रॉल करें और हटाएँ</string>
     <string name="about_snap_swipe">Snap Swipe के बारे में</string>

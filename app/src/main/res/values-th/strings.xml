@@ -54,7 +54,6 @@
     <string name="language_spanish">สเปน</string>
     <string name="language_german">เยอรมัน</string>
     <string name="language_chinese_simplified">จีน (ตัวย่อ)</string>
-    <string name="interaction_mode_setting">โหมดการโต้ตอบ</string>
     <string name="mode_swipe_to_choose">ปัดเพื่อเลือก</string>
     <string name="mode_scroll_and_delete">เลื่อนแล้วลบ</string>
     <string name="about_snap_swipe">เกี่ยวกับ Snap Swipe</string>

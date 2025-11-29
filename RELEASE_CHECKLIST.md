@@ -1,6 +1,6 @@
 # Snap Swipe – Release Prep Checklist
 
-- [ ] Set release version in `app/build.gradle` (`versionCode`, `versionName`).
+- [ ] Set release version in `app/build.gradle` (`versionCode`, `versionName`) per `VERSIONING.md`.
 - [ ] Configure signing for release (Play App Signing or local keystore) in Gradle or Android Studio.
 - [ ] Build and test release APK/AAB: `./gradlew assembleRelease` and smoke test on device (permissions, keep/delete/queue delete, share, settings).
 - [ ] Verify shrink/obfuscate: ensure images/loaders work and no crashes with R8 enabled.

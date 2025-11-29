@@ -36,7 +36,7 @@ If you prefer APK for testing:
 Artifact: `app/build/outputs/apk/release/app-release.apk`.
 
 ### Release checklist (summary)
-- versionCode/versionName set (current: 3).
+- versionCode/versionName set (current: versionName 1.2.0, versionCode 010200; see VERSIONING.md for scheme).
 - Shrink/obfuscate enabled for release; allowBackup=false.
 - Permissions: READ_MEDIA_IMAGES (and READ_EXTERNAL_STORAGE maxSdk32).
 - Smoke-test release build on device: permissions, swipes, delete modes, share, settings, numbering, undo/back, home.
