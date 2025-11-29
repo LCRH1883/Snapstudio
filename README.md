@@ -45,8 +45,7 @@ See `RELEASE_CHECKLIST.md` for full list.
 
 ## Localization
 - Strings are in `app/src/main/res/values/strings.xml` with translations in `values-ko`, `values-fr`, `values-es`, `values-de`, `values-zh-rCN`.
-- UI uses `stringResource`; device locale will select the right resources automatically (English is the fallback).
-- Per-app language selection is available via Android's App language settings or in-app under Settings -> App language; selections are persisted by the system.
+- UI uses `stringResource`; device locale will select the right resources automatically (English is the fallback). The app follows the device/app language; there is no in-app picker.
 
 ## Permissions and privacy
 - Requests photo access (READ_MEDIA_IMAGES; legacy READ_EXTERNAL_STORAGE on SDK ≤ 32).

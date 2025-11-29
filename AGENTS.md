@@ -89,3 +89,5 @@
 | 8.1    | 2025-11-28       | Codex  | Added locale config and Settings language picker applying AppCompatDelegate app locales. |
 | 8.2    | 2025-11-28       | Codex  | Enabled autoStoreLocales service and set fallback locale to ensure device language is chosen by default. |
 | 9.1    | 2025-11-28       | Codex  | Added “Scroll and delete” interaction mode with gesture re-mapping, animations, and settings toggle. |
+| 9.2    | 2025-11-28       | Codex  | Removed in-app language picker; Settings now reflects device language only. |
+| 9.3    | 2025-11-28       | Codex  | Removed language section from Settings entirely; localization follows device/app language. |
