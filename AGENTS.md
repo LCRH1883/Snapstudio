@@ -93,3 +93,4 @@
 | 9.3    | 2025-11-28       | Codex  | Removed language section from Settings entirely; localization follows device/app language. |
 | 9.4    | 2025-11-28       | Codex  | Added locales and strings for Japanese, Vietnamese, Thai, and Hindi; updated locale config and docs. |
 | 9.5    | 2025-11-28       | Codex  | Added Portuguese, Italian, Dutch, and Ukrainian locales/strings; updated locale config and docs. |
+| ver1.2.0 |                  | Codex  | Switched to zero-padded MMmmpp versionCode scheme, set 1.2.0 / 010200, added VERSIONING.md + VERSION_HISTORY.md. |
