@@ -1,0 +1,67 @@
+<resources>
+    <string name="app_name">Snap Swipe</string>
+
+    <!-- Permissions -->
+    <string name="permission_title">O Snap Swipe precisa de acesso às fotos para ajudar a limpar sua galeria.</string>
+    <string name="permission_rationale">Lemos suas fotos apenas no dispositivo para manter, apagar ou compartilhar. Nada é enviado.</string>
+    <string name="permission_denied_message">A permissão é necessária para carregar suas fotos. Conceda acesso.</string>
+    <string name="grant_photo_access">Conceder acesso às fotos</string>
+    <string name="permission_granted">Permissão concedida</string>
+    <string name="continue_without_access">Continuar sem acesso</string>
+
+    <!-- Main UI -->
+    <string name="loading_photos">Carregando fotos…</string>
+    <string name="check_permissions">Verificar permissões</string>
+    <string name="reviewed_run_title">Você revisou todas as fotos desta rodada.</string>
+    <string name="reviewed_run_subtitle">Reinicie ou ajuste as configurações para mudar a ordem.</string>
+    <string name="restart">Reiniciar</string>
+    <string name="settings">Configurações</string>
+    <string name="no_photos_title">Nenhuma foto encontrada.</string>
+    <string name="no_photos_subtitle">Adicione fotos ao dispositivo e atualize.</string>
+    <string name="refresh">Atualizar</string>
+    <string name="photo_position">Foto %1$d de %2$d</string>
+    <string name="delete_queued_count">Exclusões na fila (%1$d)</string>
+    <string name="delete_label">Excluir</string>
+    <string name="keep_label">Manter</string>
+    <string name="share_sheet_title">Compartilhar esta foto</string>
+    <string name="share_photo">Compartilhar foto</string>
+    <string name="cancel">Cancelar</string>
+    <string name="home">Início</string>
+    <string name="instructions_title">Como funciona o swipe</string>
+    <string name="instructions_delete">• Deslize para a esquerda para excluir (ou colocar na fila).</string>
+    <string name="instructions_keep">• Deslize para a direita para manter.</string>
+    <string name="instructions_share">• Deslize para cima para compartilhar.</string>
+    <string name="instructions_queue">• Toque em "Exclusões na fila" para confirmar todas de uma vez.</string>
+    <string name="instructions_share_scroll">• Deslize para a direita para compartilhar a foto atual.</string>
+    <string name="instructions_next_scroll">• Deslize para cima para ver a próxima foto (entra por baixo).</string>
+    <string name="instructions_prev_scroll">• Deslize para baixo para voltar à foto anterior (entra por cima).</string>
+
+    <!-- Settings -->
+    <string name="settings_title">Configurações</string>
+    <string name="done">Concluído</string>
+    <string name="photo_review_order">Ordem de revisão de fotos</string>
+    <string name="newest_to_oldest">Da mais nova para a mais antiga</string>
+    <string name="oldest_to_newest">Da mais antiga para a mais nova</string>
+    <string name="delete_mode">Modo de exclusão</string>
+    <string name="delete_mode_immediate">Imediato (confirmar cada exclusão se necessário)</string>
+    <string name="delete_mode_queued">Colocar na fila e confirmar uma vez</string>
+    <string name="interaction_mode_setting">Modo de interação</string>
+    <string name="snap_interaction_mode">Modo de interação</string>
+    <string name="mode_swipe_to_choose">Deslizar para escolher</string>
+    <string name="mode_scroll_and_delete">Rolar e excluir</string>
+    <string name="app_language">Idioma do app</string>
+    <string name="use_device_language">Usar idioma do dispositivo</string>
+    <string name="language_english">Inglês</string>
+    <string name="language_korean">Coreano</string>
+    <string name="language_french">Francês</string>
+    <string name="language_spanish">Espanhol</string>
+    <string name="language_german">Alemão</string>
+    <string name="language_chinese_simplified">Chinês (simplificado)</string>
+    <string name="about_snap_swipe">Sobre o Snap Swipe</string>
+    <string name="about_snap_swipe_body">Organize suas fotos deslizando para manter, apagar ou compartilhar.</string>
+    <string name="version_label">Versão %1$s</string>
+    <string name="support">Suporte</string>
+    <string name="support_email">support@snapswipe.xyz</string>
+    <string name="supported_android_versions">Versões Android compatíveis: %1$s a %2$s</string>
+    <string name="supported_languages_list">Idiomas suportados: Inglês, Coreano, Francês, Espanhol, Alemão, Chinês (Simplificado), Japonês, Vietnamita, Tailandês, Hindi, Português, Italiano, Holandês, Ucraniano</string>
+</resources>

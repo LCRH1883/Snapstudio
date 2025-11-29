@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Snap Swipe</string>
+
+    <!-- Permissions -->
+    <string name="permission_title">Snap Swipe necessita dell\'accesso alle foto per aiutarti a ripulire la galleria.</string>
+    <string name="permission_rationale">Leggiamo le foto solo sul dispositivo per poterle conservare, eliminare o condividere. Nulla viene caricato online.</string>
+    <string name="permission_denied_message">Serve l\'autorizzazione per caricare le tue foto. Concedi l\'accesso.</string>
+    <string name="grant_photo_access">Concedi accesso alle foto</string>
+    <string name="permission_granted">Autorizzazione concessa</string>
+    <string name="continue_without_access">Continua senza accesso</string>
+
+    <!-- Main UI -->
+    <string name="loading_photos">Caricamento foto...</string>
+    <string name="check_permissions">Controlla i permessi</string>
+    <string name="reviewed_run_title">Hai esaminato tutte le foto di questa sessione.</string>
+    <string name="reviewed_run_subtitle">Riavvia o modifica le impostazioni per cambiare l\'ordine.</string>
+    <string name="restart">Riavvia</string>
+    <string name="settings">Impostazioni</string>
+    <string name="no_photos_title">Nessuna foto trovata.</string>
+    <string name="no_photos_subtitle">Aggiungi foto al dispositivo e aggiorna.</string>
+    <string name="refresh">Aggiorna</string>
+    <string name="photo_position">Foto %1$d di %2$d</string>
+    <string name="delete_queued_count">Eliminazioni in coda (%1$d)</string>
+    <string name="delete_label">Elimina</string>
+    <string name="keep_label">Conserva</string>
+    <string name="share_sheet_title">Condividi questa foto</string>
+    <string name="share_photo">Condividi foto</string>
+    <string name="cancel">Annulla</string>
+    <string name="home">Home</string>
+    <string name="instructions_title">Come funzionano gli swipe</string>
+    <string name="instructions_delete">- Swipe a sinistra per eliminare (o mettere in coda).</string>
+    <string name="instructions_keep">- Swipe a destra per conservare.</string>
+    <string name="instructions_share">- Swipe verso l\'alto per condividere.</string>
+    <string name="instructions_queue">- Tocca \"Eliminazioni in coda\" per confermare tutto insieme.</string>
+    <string name="instructions_share_scroll">- Swipe a destra per condividere la foto corrente.</string>
+    <string name="instructions_next_scroll">- Swipe verso l\'alto per la foto successiva (arriva dal basso).</string>
+    <string name="instructions_prev_scroll">- Swipe verso il basso per tornare alla foto precedente (arriva dall\'alto).</string>
+
+    <!-- Settings -->
+    <string name="settings_title">Impostazioni</string>
+    <string name="done">Fatto</string>
+    <string name="photo_review_order">Ordine di revisione delle foto</string>
+    <string name="newest_to_oldest">Dalla più recente alla più vecchia</string>
+    <string name="oldest_to_newest">Dalla più vecchia alla più recente</string>
+    <string name="delete_mode">Modalità di eliminazione</string>
+    <string name="delete_mode_immediate">Immediata (conferma per foto se necessario)</string>
+    <string name="delete_mode_queued">Metti in coda e conferma una volta</string>
+    <string name="interaction_mode_setting">Modalità di interazione</string>
+    <string name="snap_interaction_mode">Modalità di interazione</string>
+    <string name="mode_swipe_to_choose">Swipe per scegliere</string>
+    <string name="mode_scroll_and_delete">Scorri ed elimina</string>
+    <string name="app_language">Lingua dell\'app</string>
+    <string name="use_device_language">Usa la lingua del dispositivo</string>
+    <string name="language_english">Inglese</string>
+    <string name="language_korean">Coreano</string>
+    <string name="language_french">Francese</string>
+    <string name="language_spanish">Spagnolo</string>
+    <string name="language_german">Tedesco</string>
+    <string name="language_chinese_simplified">Cinese (semplificato)</string>
+    <string name="about_snap_swipe">Informazioni su Snap Swipe</string>
+    <string name="about_snap_swipe_body">Organizza le foto scorrendo per conservarle, eliminarle o condividerle.</string>
+    <string name="version_label">Versione %1$s</string>
+    <string name="support">Supporto</string>
+    <string name="support_email">support@snapswipe.xyz</string>
+    <string name="supported_android_versions">Versioni Android supportate: %1$s - %2$s</string>
+    <string name="supported_languages_list">Lingue supportate: inglese, coreano, francese, spagnolo, tedesco, cinese (semplificato), giapponese, vietnamita, thailandese, hindi, portoghese, italiano, olandese, ucraino</string>
+</resources>

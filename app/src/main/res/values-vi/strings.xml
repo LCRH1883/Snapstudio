@@ -1,0 +1,58 @@
+<resources>
+    <string name="app_name">Snap Swipe</string>
+
+    <!-- Permissions -->
+    <string name="permission_title">Snap Swipe cần quyền truy cập ảnh để giúp bạn dọn dẹp thư viện.</string>
+    <string name="permission_rationale">Chúng tôi chỉ đọc ảnh trên thiết bị để giữ, xóa hoặc chia sẻ. Không có gì được tải lên.</string>
+    <string name="permission_denied_message">Cần quyền để tải ảnh. Vui lòng cho phép.</string>
+    <string name="grant_photo_access">Cho phép truy cập ảnh</string>
+    <string name="permission_granted">Đã cấp quyền</string>
+    <string name="continue_without_access">Tiếp tục không cần quyền</string>
+
+    <!-- Main UI -->
+    <string name="loading_photos">Đang tải ảnh…</string>
+    <string name="check_permissions">Kiểm tra quyền</string>
+    <string name="reviewed_run_title">Bạn đã xem hết ảnh trong lượt này.</string>
+    <string name="reviewed_run_subtitle">Khởi động lại hoặc điều chỉnh cài đặt để đổi thứ tự.</string>
+    <string name="restart">Khởi động lại</string>
+    <string name="settings">Cài đặt</string>
+    <string name="no_photos_title">Không tìm thấy ảnh.</string>
+    <string name="no_photos_subtitle">Thêm ảnh vào thiết bị rồi làm mới.</string>
+    <string name="refresh">Làm mới</string>
+    <string name="photo_position">Ảnh %1$d trên %2$d</string>
+    <string name="delete_queued_count">Đang chờ xóa (%1$d)</string>
+    <string name="delete_label">Xóa</string>
+    <string name="keep_label">Giữ</string>
+    <string name="share_sheet_title">Chia sẻ ảnh này</string>
+    <string name="share_photo">Chia sẻ ảnh</string>
+    <string name="cancel">Hủy</string>
+    <string name="home">Trang chủ</string>
+    <string name="instructions_title">Cách thao tác vuốt</string>
+    <string name="instructions_delete">• Vuốt trái để xóa (hoặc đưa vào hàng đợi).</string>
+    <string name="instructions_keep">• Vuốt phải để giữ.</string>
+    <string name="instructions_share">• Vuốt lên để chia sẻ.</string>
+    <string name="instructions_queue">• Chạm “Xóa hàng đợi” để xác nhận tất cả một lần.</string>
+    <string name="instructions_share_scroll">• Vuốt phải để chia sẻ ảnh hiện tại.</string>
+    <string name="instructions_next_scroll">• Vuốt lên để xem ảnh tiếp theo (trượt lên từ dưới).</string>
+    <string name="instructions_prev_scroll">• Vuốt xuống để quay lại ảnh trước (trượt xuống từ trên).</string>
+
+    <!-- Settings -->
+    <string name="settings_title">Cài đặt</string>
+    <string name="done">Xong</string>
+    <string name="photo_review_order">Thứ tự xem ảnh</string>
+    <string name="newest_to_oldest">Mới đến cũ</string>
+    <string name="oldest_to_newest">Cũ đến mới</string>
+    <string name="delete_mode">Chế độ xóa</string>
+    <string name="delete_mode_immediate">Ngay lập tức (xác nhận từng ảnh nếu cần)</string>
+    <string name="delete_mode_queued">Xếp hàng và xác nhận một lần</string>
+    <string name="interaction_mode_setting">Chế độ tương tác</string>
+    <string name="mode_swipe_to_choose">Vuốt để chọn</string>
+    <string name="mode_scroll_and_delete">Cuộn và xóa</string>
+    <string name="about_snap_swipe">Giới thiệu Snap Swipe</string>
+    <string name="about_snap_swipe_body">Dọn dẹp ảnh bằng cách vuốt để giữ, xóa hoặc chia sẻ.</string>
+    <string name="version_label">Phiên bản %1$s</string>
+    <string name="support">Hỗ trợ</string>
+    <string name="support_email">support@snapswipe.xyz</string>
+    <string name="supported_android_versions">Phiên bản Android hỗ trợ: %1$s đến %2$s</string>
+    <string name="supported_languages_list">Ngôn ngữ hỗ trợ: Tiếng Anh, Hàn, Pháp, Tây Ban Nha, Đức, Trung (Giản thể), Nhật, Việt, Thái, Hindi</string>
+</resources>
