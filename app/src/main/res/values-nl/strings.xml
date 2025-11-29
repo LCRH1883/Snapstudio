@@ -45,7 +45,6 @@
     <string name="delete_mode">Verwijdermodus</string>
     <string name="delete_mode_immediate">Direct (per foto bevestigen indien nodig)</string>
     <string name="delete_mode_queued">In wachtrij en eenmaal bevestigen</string>
-    <string name="interaction_mode_setting">Interactie modus</string>
     <string name="snap_interaction_mode">Interactie modus</string>
     <string name="mode_swipe_to_choose">Swipe om te kiezen</string>
     <string name="mode_scroll_and_delete">Scrollen en verwijderen</string>

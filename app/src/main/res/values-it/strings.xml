@@ -46,7 +46,6 @@
     <string name="delete_mode">Modalità di eliminazione</string>
     <string name="delete_mode_immediate">Immediata (conferma per foto se necessario)</string>
     <string name="delete_mode_queued">Metti in coda e conferma una volta</string>
-    <string name="interaction_mode_setting">Modalità di interazione</string>
     <string name="snap_interaction_mode">Modalità di interazione</string>
     <string name="mode_swipe_to_choose">Swipe per scegliere</string>
     <string name="mode_scroll_and_delete">Scorri ed elimina</string>

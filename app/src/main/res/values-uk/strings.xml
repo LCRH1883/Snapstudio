@@ -45,7 +45,6 @@
     <string name="delete_mode">Режим видалення</string>
     <string name="delete_mode_immediate">Негайно (за потреби підтверджувати кожне)</string>
     <string name="delete_mode_queued">Додати в чергу та підтвердити разом</string>
-    <string name="interaction_mode_setting">Режим взаємодії</string>
     <string name="snap_interaction_mode">Режим взаємодії</string>
     <string name="mode_swipe_to_choose">Свайп для вибору</string>
     <string name="mode_scroll_and_delete">Гортати та видаляти</string>
