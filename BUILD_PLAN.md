@@ -290,3 +290,15 @@ PHASE 9 – Interaction Modes
     - Add a settings toggle between “Swipe to choose” (existing) and “Scroll and delete”.
     - Scroll and delete: right-to-left deletes; left-to-right shares; vertical swipes move forward/back with vertical slide animation; undo/back button hidden.
     - Manual check: Switching modes updates gestures/UI immediately; share/delete still work; vertical swipes navigate without reloading.
+
+------------------------------------------------------------
+PHASE 10 – Settings UI Polish
+------------------------------------------------------------
+
+[x] 10.1 – Wireframe-inspired Settings refresh
+    - Rebuild Settings screen layout to mirror the wireframe kit style with a profile header, grouped cards, chip toggles, and clearer links.
+    - Manual check: New layout matches the wireframe aesthetic; sort order, interaction mode, and delete mode still update preferences correctly; support/about/what’s new dialogs remain accessible.
+
+[x] 10.2 – Theme selector (light/dark/system)
+    - Add a Settings control for appearance and persist it.
+    - Wire the preference through SnapSwipeTheme so the entire app follows the chosen light/dark/system mode.
