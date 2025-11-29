@@ -79,7 +79,6 @@ fun SnapSwipeApp() {
             permissionsRoute(
                 onGrantAccess = {
                     hasPhotoPermission = true
-                    permissionDenied = false
                 },
                 onSkip = {
                     // Inform the user; keeping placeholder until a dedicated UI is added.
