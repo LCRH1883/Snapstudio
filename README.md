@@ -44,8 +44,8 @@ Artifact: `app/build/outputs/apk/release/app-release.apk`.
 See `RELEASE_CHECKLIST.md` for full list.
 
 ## Localization
-- Strings are in `app/src/main/res/values/strings.xml` with translations in `values-ko`, `values-fr`, `values-es`, `values-de`, `values-zh-rCN`.
-- UI uses `stringResource`; device locale will select the right resources automatically (English is the fallback). The app follows the device/app language; there is no in-app picker.
+- Strings are in `app/src/main/res/values/strings.xml` with translations in `values-ko`, `values-fr`, `values-es`, `values-de`, `values-zh-rCN`, `values-ja`, `values-vi`, `values-th`, `values-hi`, `values-pt`, `values-it`, `values-nl`, `values-uk`.
+- UI uses `stringResource`; device/app locale selects the matching resources automatically (English is the fallback). There is no in-app picker.
 
 ## Permissions and privacy
 - Requests photo access (READ_MEDIA_IMAGES; legacy READ_EXTERNAL_STORAGE on SDK ≤ 32).

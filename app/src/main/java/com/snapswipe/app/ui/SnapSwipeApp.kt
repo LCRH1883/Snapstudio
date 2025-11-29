@@ -50,6 +50,7 @@ private const val ROUTE_PERMISSIONS = "permissions"
 private const val ROUTE_MAIN = "main"
 private const val ROUTE_SETTINGS = "settings"
 
+@Suppress("UNUSED_VALUE")
 @Composable
 fun SnapSwipeApp() {
     val navController = rememberNavController()
