@@ -266,3 +266,18 @@ PHASE 7 – Polish and Testing
       - Deleting photos and confirming deletion in the device gallery.
     - Note any issues and create new checklist items for fixes or improvements.
     - Notes: Automated checks are green; please run the above flows on device/emulator to confirm UX and gallery effects since device verification is not available in this environment.
+
+------------------------------------------------------------
+PHASE 8 – Localization Polish
+------------------------------------------------------------
+
+[x] 8.1 – Add app language picker and locale config
+    - Add locale_config and manifest declaration for supported locales.
+    - Provide Settings option to change the app language (system default, en/ko/fr/es/de/zh-CN) using AppCompatDelegate application locales.
+    - Manual check: Switching language via Settings or Android's App language updates UI strings immediately.
+    - Notes: Locale config added; Settings now contains an App language section that updates per-app locale using AppCompatDelegate.
+
+[x] 8.2 – Persist app language and default to device locale
+    - Enable AppCompat autoStoreLocales service so system-level app language settings are stored.
+    - Set default/fallback locale explicitly (English) via resources.properties.
+    - Manual check: Fresh install follows device language; system “App language” setting persists chosen locale.
