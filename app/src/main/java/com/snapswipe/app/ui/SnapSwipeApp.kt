@@ -15,7 +15,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -37,6 +36,7 @@ import com.snapswipe.app.data.SortOrderPreferences
 import com.snapswipe.app.data.PhotoItem
 import com.snapswipe.app.data.DeleteMode
 import com.snapswipe.app.data.InteractionMode
+import com.snapswipe.app.data.ThemeMode
 import com.snapswipe.app.R
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.NavHost
@@ -46,6 +46,7 @@ import androidx.compose.ui.unit.dp
 import androidx.activity.result.IntentSenderRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import kotlinx.coroutines.launch
+import com.snapswipe.app.ui.theme.SnapSwipeTheme
 
 private const val ROUTE_PERMISSIONS = "permissions"
 private const val ROUTE_MAIN = "main"
@@ -56,6 +57,9 @@ private const val ROUTE_SETTINGS = "settings"
 fun SnapSwipeApp() {
     val navController = rememberNavController()
     val context = LocalContext.current
+
+    val sortOrderPreferences = remember { SortOrderPreferences(context) }
+    val themeMode by sortOrderPreferences.themeModeFlow.collectAsState(initial = ThemeMode.SYSTEM)
 
     var hasPhotoPermission by remember {
         mutableStateOf(isPhotoPermissionGranted(context))
@@ -73,7 +77,7 @@ fun SnapSwipeApp() {
         }
     }
 
-    Surface(color = MaterialTheme.colorScheme.background) {
+    SnapSwipeTheme(themeMode = themeMode) {
         NavHost(
             navController = navController,
             startDestination = ROUTE_PERMISSIONS

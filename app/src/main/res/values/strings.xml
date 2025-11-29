@@ -78,4 +78,11 @@
     <string name="settings_about_subtitle">See supported devices and languages.</string>
     <string name="settings_profile_tagline">Photo cleanup companion</string>
     <string name="settings_header_hint">Tune how Snap Swipe behaves before you start swiping.</string>
+    <string name="settings_section_appearance">Appearance</string>
+    <string name="settings_section_appearance_subtitle">Choose light, dark, or follow your device.</string>
+    <string name="settings_theme_title">Theme</string>
+    <string name="settings_theme_subtitle">Switch the app look without leaving Snap Swipe.</string>
+    <string name="theme_system">Use device</string>
+    <string name="theme_light">Light</string>
+    <string name="theme_dark">Dark</string>
 </resources>

@@ -11,6 +11,7 @@ import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.map
 import java.io.IOException
 import com.snapswipe.app.data.InteractionMode
+import com.snapswipe.app.data.ThemeMode
 
 private const val PREFERENCES_NAME = "snap_swipe_prefs"
 private val Context.dataStore by preferencesDataStore(name = PREFERENCES_NAME)
@@ -22,6 +23,7 @@ class SortOrderPreferences(private val context: Context) {
     private val instructionsSeenKey = stringPreferencesKey("instructions_seen")
     private val interactionModeKey = stringPreferencesKey("interaction_mode")
     private val lastSeenVersionKey = stringPreferencesKey("last_seen_version")
+    private val themeModeKey = stringPreferencesKey("theme_mode")
 
     val sortOrderFlow: Flow<SortOrder> = context.dataStore.data
         .catch { exception ->
@@ -92,6 +94,21 @@ class SortOrderPreferences(private val context: Context) {
         }
         .map { preferences -> preferences[lastSeenVersionKey] }
 
+    val themeModeFlow: Flow<ThemeMode> = context.dataStore.data
+        .catch { exception ->
+            if (exception is IOException) {
+                Log.w(TAG, "Theme mode read failed; using default", exception)
+                emit(emptyPreferences())
+            } else {
+                throw exception
+            }
+        }
+        .map { preferences ->
+            preferences[themeModeKey]?.let { stored ->
+                runCatching { ThemeMode.valueOf(stored) }.getOrNull()
+            } ?: ThemeMode.SYSTEM
+        }
+
     suspend fun setSortOrder(order: SortOrder) {
         context.dataStore.edit { prefs ->
             prefs[sortOrderKey] = order.name
@@ -119,6 +136,12 @@ class SortOrderPreferences(private val context: Context) {
     suspend fun setLastSeenVersion(version: String) {
         context.dataStore.edit { prefs ->
             prefs[lastSeenVersionKey] = version
+        }
+    }
+
+    suspend fun setThemeMode(mode: ThemeMode) {
+        context.dataStore.edit { prefs ->
+            prefs[themeModeKey] = mode.name
         }
     }
 

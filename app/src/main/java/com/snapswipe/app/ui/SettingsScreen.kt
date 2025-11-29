@@ -20,6 +20,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.AlternateEmail
+import androidx.compose.material.icons.rounded.Brightness6
 import androidx.compose.material.icons.rounded.ChevronRight
 import androidx.compose.material.icons.rounded.DeleteSweep
 import androidx.compose.material.icons.rounded.Gesture
@@ -60,6 +61,7 @@ import com.snapswipe.app.data.DeleteMode
 import com.snapswipe.app.data.InteractionMode
 import com.snapswipe.app.data.SortOrder
 import com.snapswipe.app.data.SortOrderPreferences
+import com.snapswipe.app.data.ThemeMode
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -72,6 +74,7 @@ fun SettingsScreen(
     val sortOrder by sortOrderPreferences.sortOrderFlow.collectAsState(initial = SortOrder.NEWEST_FIRST)
     val deleteMode by sortOrderPreferences.deleteModeFlow.collectAsState(initial = DeleteMode.IMMEDIATE)
     val interactionMode by sortOrderPreferences.interactionModeFlow.collectAsState(initial = InteractionMode.SWIPE_TO_CHOOSE)
+    val themeMode by sortOrderPreferences.themeModeFlow.collectAsState(initial = ThemeMode.SYSTEM)
     val coroutineScope = rememberCoroutineScope()
     val showAbout = remember { mutableStateOf(false) }
     val showWhatsNew = remember { mutableStateOf(false) }
@@ -101,6 +104,26 @@ fun SettingsScreen(
                 .padding(horizontal = 20.dp, vertical = 16.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
+            SettingsSectionCard(
+                title = stringResource(R.string.settings_section_appearance),
+                subtitle = stringResource(R.string.settings_section_appearance_subtitle)
+            ) {
+                SegmentedSettingRow(
+                    icon = Icons.Rounded.Brightness6,
+                    title = stringResource(R.string.settings_theme_title),
+                    subtitle = stringResource(R.string.settings_theme_subtitle),
+                    options = listOf(
+                        SegmentedOption(ThemeMode.SYSTEM, stringResource(R.string.theme_system)),
+                        SegmentedOption(ThemeMode.LIGHT, stringResource(R.string.theme_light)),
+                        SegmentedOption(ThemeMode.DARK, stringResource(R.string.theme_dark))
+                    ),
+                    selected = themeMode,
+                    onSelect = { mode ->
+                        coroutineScope.launch { sortOrderPreferences.setThemeMode(mode) }
+                    }
+                )
+            }
+
             SettingsSectionCard(
                 title = stringResource(R.string.settings_section_review),
                 subtitle = stringResource(R.string.settings_section_review_subtitle)

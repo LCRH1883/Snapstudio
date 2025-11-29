@@ -96,3 +96,5 @@
 | ver1.2.0 |                  | Codex  | Switched to zero-padded MMmmpp versionCode scheme, set 1.2.0 / 010200, added VERSIONING.md + VERSION_HISTORY.md. |
 | ver1.2.0a |                  | Codex  | Added one-time “What’s New” popup keyed to version, updated strings and release notes for scroll mode + languages. |
 | 10.1   | 2025-11-29       | Codex  | Restyled Settings screen with profile header and chip-based controls inspired by the wireframe kit; added helper strings. |
+| 10.2   | 2025-11-29       | Codex  | Added app appearance setting (light/dark/system), wired theme preference through DataStore and theme wrapper. |
+| 10.3   | 2025-11-29       | Codex  | Shrunk main screen header bar (home/settings) for a slimmer photo-viewing layout. |

@@ -4,11 +4,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
-import androidx.compose.ui.Modifier
 import androidx.appcompat.app.AppCompatDelegate
-import com.snapswipe.app.ui.theme.SnapSwipeTheme
 import com.snapswipe.app.ui.SnapSwipeApp
 
 class MainActivity : ComponentActivity() {
@@ -16,11 +12,7 @@ class MainActivity : ComponentActivity() {
         AppCompatDelegate.setApplicationLocales(AppCompatDelegate.getApplicationLocales())
         super.onCreate(savedInstanceState)
         setContent {
-            SnapSwipeTheme {
-                Surface(modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background) {
-                    SnapSwipeApp()
-                }
-            }
+            SnapSwipeApp()
         }
     }
 }
