@@ -281,3 +281,12 @@ PHASE 8 – Localization Polish
     - Enable AppCompat autoStoreLocales service so system-level app language settings are stored.
     - Set default/fallback locale explicitly (English) via resources.properties.
     - Manual check: Fresh install follows device language; system “App language” setting persists chosen locale.
+
+------------------------------------------------------------
+PHASE 9 – Interaction Modes
+------------------------------------------------------------
+
+[x] 9.1 – Add “Scroll and delete” mode
+    - Add a settings toggle between “Swipe to choose” (existing) and “Scroll and delete”.
+    - Scroll and delete: right-to-left deletes; left-to-right shares; vertical swipes move forward/back with vertical slide animation; undo/back button hidden.
+    - Manual check: Switching modes updates gestures/UI immediately; share/delete still work; vertical swipes navigate without reloading.

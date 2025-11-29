@@ -1,0 +1,67 @@
+<resources>
+    <string name="app_name">Snap Swipe</string>
+
+    <!-- Permissions -->
+    <string name="permission_title">Snap Swipe ต้องการสิทธิ์เข้าถึงรูปเพื่อช่วยจัดระเบียบแกลเลอรี</string>
+    <string name="permission_rationale">เราจะอ่านรูปในเครื่องเพื่อเก็บ ลบ หรือแชร์เท่านั้น ไม่อัปโหลดใดๆ</string>
+    <string name="permission_denied_message">ต้องการสิทธิ์เพื่อโหลดรูป โปรดอนุญาต</string>
+    <string name="grant_photo_access">อนุญาตเข้าถึงรูป</string>
+    <string name="permission_granted">ให้สิทธิ์แล้ว</string>
+    <string name="continue_without_access">ดำเนินการต่อโดยไม่ให้สิทธิ์</string>
+
+    <!-- Main UI -->
+    <string name="loading_photos">กำลังโหลดรูป…</string>
+    <string name="check_permissions">ตรวจสอบสิทธิ์</string>
+    <string name="reviewed_run_title">คุณได้ตรวจรูปในรอบนี้ครบแล้ว</string>
+    <string name="reviewed_run_subtitle">เริ่มใหม่หรือปรับการตั้งค่าเพื่อเปลี่ยนลำดับ</string>
+    <string name="restart">เริ่มใหม่</string>
+    <string name="settings">การตั้งค่า</string>
+    <string name="no_photos_title">ไม่พบรูป</string>
+    <string name="no_photos_subtitle">เพิ่มรูปในเครื่องแล้วรีเฟรช</string>
+    <string name="refresh">รีเฟรช</string>
+    <string name="photo_position">รูป %1$d จาก %2$d</string>
+    <string name="delete_queued_count">รอลบ (%1$d)</string>
+    <string name="delete_label">ลบ</string>
+    <string name="keep_label">เก็บ</string>
+    <string name="share_sheet_title">แชร์รูปนี้</string>
+    <string name="share_photo">แชร์รูป</string>
+    <string name="cancel">ยกเลิก</string>
+    <string name="home">หน้าแรก</string>
+    <string name="instructions_title">วิธีการปัด</string>
+    <string name="instructions_delete">• ปัดซ้ายเพื่อลบ (หรือต่อคิว)</string>
+    <string name="instructions_keep">• ปัดขวาเพื่อเก็บ</string>
+    <string name="instructions_share">• ปัดขึ้นเพื่อแชร์</string>
+    <string name="instructions_queue">• แตะ “รอลบ” เพื่อยืนยันทั้งหมดครั้งเดียว</string>
+    <string name="instructions_share_scroll">• ปัดขวาเพื่อแชร์รูปปัจจุบัน</string>
+    <string name="instructions_next_scroll">• ปัดขึ้นเพื่อดูรูปถัดไป (เลื่อนขึ้นจากล่าง)</string>
+    <string name="instructions_prev_scroll">• ปัดลงเพื่อย้อนกลับรูปก่อนหน้า (เลื่อนลงจากบน)</string>
+
+    <!-- Settings -->
+    <string name="settings_title">การตั้งค่า</string>
+    <string name="done">เสร็จสิ้น</string>
+    <string name="photo_review_order">ลำดับการตรวจรูป</string>
+    <string name="newest_to_oldest">ใหม่ไปเก่า</string>
+    <string name="oldest_to_newest">เก่าไปใหม่</string>
+    <string name="delete_mode">โหมดลบ</string>
+    <string name="delete_mode_immediate">ลบทันที (ยืนยันรายรูปหากจำเป็น)</string>
+    <string name="delete_mode_queued">ต่อคิวแล้วยืนยันครั้งเดียว</string>
+    <string name="snap_interaction_mode">โหมดการโต้ตอบ</string>
+    <string name="app_language">ภาษาของแอป</string>
+    <string name="use_device_language">ใช้ภาษาของอุปกรณ์</string>
+    <string name="language_english">อังกฤษ</string>
+    <string name="language_korean">เกาหลี</string>
+    <string name="language_french">ฝรั่งเศส</string>
+    <string name="language_spanish">สเปน</string>
+    <string name="language_german">เยอรมัน</string>
+    <string name="language_chinese_simplified">จีน (ตัวย่อ)</string>
+    <string name="interaction_mode_setting">โหมดการโต้ตอบ</string>
+    <string name="mode_swipe_to_choose">ปัดเพื่อเลือก</string>
+    <string name="mode_scroll_and_delete">เลื่อนแล้วลบ</string>
+    <string name="about_snap_swipe">เกี่ยวกับ Snap Swipe</string>
+    <string name="about_snap_swipe_body">จัดระเบียบรูปด้วยการปัดเพื่อเก็บ ลบ หรือแชร์</string>
+    <string name="version_label">เวอร์ชัน %1$s</string>
+    <string name="support">การช่วยเหลือ</string>
+    <string name="support_email">support@snapswipe.xyz</string>
+    <string name="supported_android_versions">Android ที่รองรับ: %1$s ถึง %2$s</string>
+    <string name="supported_languages_list">ภาษาที่รองรับ: อังกฤษ เกาหลี ฝรั่งเศส สเปน เยอรมัน จีน (ตัวย่อ) ญี่ปุ่น เวียดนาม ไทย ฮินดี</string>
+</resources>

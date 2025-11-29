@@ -1,0 +1,67 @@
+<resources>
+    <string name="app_name">Snap Swipe</string>
+
+    <!-- Permissions -->
+    <string name="permission_title">Snap Swipe потребує доступу до фото, щоб допомогти очистити галерею.</string>
+    <string name="permission_rationale">Ми читаємо фото лише на пристрої, щоб залишати, видаляти чи ділитися. Нічого не завантажується.</string>
+    <string name="permission_denied_message">Для завантаження фото потрібен дозвіл. Будь ласка, надайте його.</string>
+    <string name="grant_photo_access">Надати доступ до фото</string>
+    <string name="permission_granted">Дозвіл надано</string>
+    <string name="continue_without_access">Продовжити без доступу</string>
+
+    <!-- Main UI -->
+    <string name="loading_photos">Завантаження фото…</string>
+    <string name="check_permissions">Перевірити дозволи</string>
+    <string name="reviewed_run_title">Ви переглянули всі фото цього сеансу.</string>
+    <string name="reviewed_run_subtitle">Перезапустіть або змініть налаштування, щоб змінити порядок.</string>
+    <string name="restart">Перезапуск</string>
+    <string name="settings">Налаштування</string>
+    <string name="no_photos_title">Фото не знайдено.</string>
+    <string name="no_photos_subtitle">Додайте фото на пристрій і оновіть.</string>
+    <string name="refresh">Оновити</string>
+    <string name="photo_position">Фото %1$d із %2$d</string>
+    <string name="delete_queued_count">Видалення в черзі (%1$d)</string>
+    <string name="delete_label">Видалити</string>
+    <string name="keep_label">Залишити</string>
+    <string name="share_sheet_title">Поділитися цим фото</string>
+    <string name="share_photo">Поділитися фото</string>
+    <string name="cancel">Скасувати</string>
+    <string name="home">Головна</string>
+    <string name="instructions_title">Як працюють жести</string>
+    <string name="instructions_delete">• Проведіть ліворуч, щоб видалити (або додати в чергу).</string>
+    <string name="instructions_keep">• Проведіть праворуч, щоб залишити.</string>
+    <string name="instructions_share">• Проведіть вгору, щоб поділитися.</string>
+    <string name="instructions_queue">• Натисніть «Видалення в черзі», щоб підтвердити все одразу.</string>
+    <string name="instructions_share_scroll">• Проведіть праворуч, щоб поділитися поточним фото.</string>
+    <string name="instructions_next_scroll">• Проведіть вгору, щоб перейти до наступного фото (входить знизу).</string>
+    <string name="instructions_prev_scroll">• Проведіть вниз, щоб повернутися до попереднього фото (входить зверху).</string>
+
+    <!-- Settings -->
+    <string name="settings_title">Налаштування</string>
+    <string name="done">Готово</string>
+    <string name="photo_review_order">Порядок перегляду фото</string>
+    <string name="newest_to_oldest">Від нових до старих</string>
+    <string name="oldest_to_newest">Від старих до нових</string>
+    <string name="delete_mode">Режим видалення</string>
+    <string name="delete_mode_immediate">Негайно (за потреби підтверджувати кожне)</string>
+    <string name="delete_mode_queued">Додати в чергу та підтвердити разом</string>
+    <string name="interaction_mode_setting">Режим взаємодії</string>
+    <string name="snap_interaction_mode">Режим взаємодії</string>
+    <string name="mode_swipe_to_choose">Свайп для вибору</string>
+    <string name="mode_scroll_and_delete">Гортати та видаляти</string>
+    <string name="app_language">Мова застосунку</string>
+    <string name="use_device_language">Використовувати мову пристрою</string>
+    <string name="language_english">Англійська</string>
+    <string name="language_korean">Корейська</string>
+    <string name="language_french">Французька</string>
+    <string name="language_spanish">Іспанська</string>
+    <string name="language_german">Німецька</string>
+    <string name="language_chinese_simplified">Китайська (спрощена)</string>
+    <string name="about_snap_swipe">Про Snap Swipe</string>
+    <string name="about_snap_swipe_body">Упорядковуйте фото, проводячи для збереження, видалення чи спільного доступу.</string>
+    <string name="version_label">Версія %1$s</string>
+    <string name="support">Підтримка</string>
+    <string name="support_email">support@snapswipe.xyz</string>
+    <string name="supported_android_versions">Підтримувані Android: %1$s до %2$s</string>
+    <string name="supported_languages_list">Підтримувані мови: англійська, корейська, французька, іспанська, німецька, китайська (спрощена), японська, в’єтнамська, тайська, хінді, португальська, італійська, нідерландська, українська</string>
+</resources>

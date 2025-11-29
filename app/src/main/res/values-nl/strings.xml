@@ -1,0 +1,67 @@
+<resources>
+    <string name="app_name">Snap Swipe</string>
+
+    <!-- Permissions -->
+    <string name="permission_title">Snap Swipe heeft fototoegang nodig om je galerij op te ruimen.</string>
+    <string name="permission_rationale">We lezen je foto’s alleen lokaal om te bewaren, te verwijderen of te delen. Er wordt niets geüpload.</string>
+    <string name="permission_denied_message">Toestemming is vereist om foto’s te laden. Geef alsjeblieft toegang.</string>
+    <string name="grant_photo_access">Fototoegang geven</string>
+    <string name="permission_granted">Toestemming verleend</string>
+    <string name="continue_without_access">Doorgaan zonder toegang</string>
+
+    <!-- Main UI -->
+    <string name="loading_photos">Foto’s laden…</string>
+    <string name="check_permissions">Controleer permissies</string>
+    <string name="reviewed_run_title">Je hebt alle foto’s in deze sessie bekeken.</string>
+    <string name="reviewed_run_subtitle">Herstart of pas de instellingen aan om de volgorde te wijzigen.</string>
+    <string name="restart">Herstarten</string>
+    <string name="settings">Instellingen</string>
+    <string name="no_photos_title">Geen foto’s gevonden.</string>
+    <string name="no_photos_subtitle">Voeg foto’s toe aan het apparaat en ververs.</string>
+    <string name="refresh">Verversen</string>
+    <string name="photo_position">Foto %1$d van %2$d</string>
+    <string name="delete_queued_count">Verwijderingen in de wachtrij (%1$d)</string>
+    <string name="delete_label">Verwijderen</string>
+    <string name="keep_label">Behouden</string>
+    <string name="share_sheet_title">Deze foto delen</string>
+    <string name="share_photo">Foto delen</string>
+    <string name="cancel">Annuleren</string>
+    <string name="home">Home</string>
+    <string name="instructions_title">Zo werkt swipen</string>
+    <string name="instructions_delete">• Swipe naar links om te verwijderen (of in de wachtrij te zetten).</string>
+    <string name="instructions_keep">• Swipe naar rechts om te behouden.</string>
+    <string name="instructions_share">• Swipe omhoog om te delen.</string>
+    <string name="instructions_queue">• Tik op "Verwijderingen in de wachtrij" om alles in één keer te bevestigen.</string>
+    <string name="instructions_share_scroll">• Swipe naar rechts om de huidige foto te delen.</string>
+    <string name="instructions_next_scroll">• Swipe omhoog voor de volgende foto (schuift van onderen in).</string>
+    <string name="instructions_prev_scroll">• Swipe omlaag voor de vorige foto (schuift van boven in).</string>
+
+    <!-- Settings -->
+    <string name="settings_title">Instellingen</string>
+    <string name="done">Gereed</string>
+    <string name="photo_review_order">Volgorde voor fotoreview</string>
+    <string name="newest_to_oldest">Nieuw naar oud</string>
+    <string name="oldest_to_newest">Oud naar nieuw</string>
+    <string name="delete_mode">Verwijdermodus</string>
+    <string name="delete_mode_immediate">Direct (per foto bevestigen indien nodig)</string>
+    <string name="delete_mode_queued">In wachtrij en eenmaal bevestigen</string>
+    <string name="interaction_mode_setting">Interactie modus</string>
+    <string name="snap_interaction_mode">Interactie modus</string>
+    <string name="mode_swipe_to_choose">Swipe om te kiezen</string>
+    <string name="mode_scroll_and_delete">Scrollen en verwijderen</string>
+    <string name="app_language">App-taal</string>
+    <string name="use_device_language">Apparaattaal gebruiken</string>
+    <string name="language_english">Engels</string>
+    <string name="language_korean">Koreaans</string>
+    <string name="language_french">Frans</string>
+    <string name="language_spanish">Spaans</string>
+    <string name="language_german">Duits</string>
+    <string name="language_chinese_simplified">Chinees (vereenvoudigd)</string>
+    <string name="about_snap_swipe">Over Snap Swipe</string>
+    <string name="about_snap_swipe_body">Ruim je foto’s op door te swipen om te behouden, te verwijderen of te delen.</string>
+    <string name="version_label">Versie %1$s</string>
+    <string name="support">Support</string>
+    <string name="support_email">support@snapswipe.xyz</string>
+    <string name="supported_android_versions">Ondersteunde Android-versies: %1$s tot %2$s</string>
+    <string name="supported_languages_list">Ondersteunde talen: Engels, Koreaans, Frans, Spaans, Duits, Chinees (vereenvoudigd), Japans, Vietnamees, Thais, Hindi, Portugees, Italiaans, Nederlands, Oekraïens</string>
+</resources>

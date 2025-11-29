@@ -4,6 +4,7 @@ Snap Swipe is a Jetpack Compose Android app that helps you clean up your photos 
 
 ## Key features
 - Swipe left to delete (immediate or queued), right to keep, up to share.
+- Optional “Scroll and delete” mode: left to delete, right to share, vertical swipes move to next/previous photo with slide animation.
 - Delete modes: immediate (per-photo confirmation when required) or queued (confirm a batch once).
 - Undo/back to step through previous actions; home jumps to start/end based on sort order.
 - Sort order: newest-to-oldest or oldest-to-newest.
@@ -43,9 +44,8 @@ Artifact: `app/build/outputs/apk/release/app-release.apk`.
 See `RELEASE_CHECKLIST.md` for full list.
 
 ## Localization
-- Strings are in `app/src/main/res/values/strings.xml` with translations in `values-ko`, `values-fr`, `values-es`, `values-de`, `values-zh-rCN`.
-- UI uses `stringResource`; device locale will select the right resources automatically (English is the fallback).
-- Per-app language selection is available via Android's App language settings or in-app under Settings -> App language; selections are persisted by the system.
+- Strings are in `app/src/main/res/values/strings.xml` with translations in `values-ko`, `values-fr`, `values-es`, `values-de`, `values-zh-rCN`, `values-ja`, `values-vi`, `values-th`, `values-hi`, `values-pt`, `values-it`, `values-nl`, `values-uk`.
+- UI uses `stringResource`; device/app locale selects the matching resources automatically (English is the fallback). There is no in-app picker.
 
 ## Permissions and privacy
 - Requests photo access (READ_MEDIA_IMAGES; legacy READ_EXTERNAL_STORAGE on SDK ≤ 32).

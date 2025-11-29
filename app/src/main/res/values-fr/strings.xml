@@ -27,7 +27,10 @@
     <string name="instructions_delete">• Balayez vers la gauche pour supprimer (ou mettre en file).</string>
     <string name="instructions_keep">• Balayez vers la droite pour garder.</string>
     <string name="instructions_share">• Balayez vers le haut pour partager.</string>
-    <string name="instructions_queue">• Touchez « Supprimer en file » pour confirmer toutes les suppressions en attente.</string>
+    <string name="instructions_queue">• Touchez \"Supprimer en file\" pour confirmer toutes les suppressions en attente.</string>
+    <string name="instructions_share_scroll">• Balayez vers la droite pour partager le dossier/la photo en cours.</string>
+    <string name="instructions_next_scroll">• Balayez vers le haut pour voir la photo suivante (arrive par le bas).</string>
+    <string name="instructions_prev_scroll">• Balayez vers le bas pour revenir à la photo précédente (arrive par le haut).</string>
     <string name="settings_title">Paramètres</string>
     <string name="done">Terminé</string>
     <string name="photo_review_order">Ordre de revue des photos</string>
@@ -36,6 +39,9 @@
     <string name="delete_mode">Mode de suppression</string>
     <string name="delete_mode_immediate">Immédiat (confirmation par suppression si nécessaire)</string>
     <string name="delete_mode_queued">Mettre en file et confirmer une fois</string>
+    <string name="snap_interaction_mode">Mode d\'interaction</string>
+    <string name="mode_swipe_to_choose">Balayer pour choisir</string>
+    <string name="mode_scroll_and_delete">Faire défiler et supprimer</string>
     <string name="app_language">Langue de l’application</string>
     <string name="use_device_language">Utiliser la langue de l’appareil</string>
     <string name="language_english">Anglais</string>

@@ -1,6 +1,14 @@
 package com.snapswipe.app.ui
 
+import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutVertically
+import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.background
+import androidx.compose.foundation.gestures.detectDragGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
@@ -8,16 +16,16 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.offset
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.gestures.detectDragGestures
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Settings
-import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Check
+import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.Undo
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
@@ -29,10 +37,9 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.SheetState
-import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.material3.surfaceColorAtElevation
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -45,17 +52,21 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.RectangleShape
-import androidx.compose.ui.graphics.Shape
-import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.input.pointer.pointerInput
-import kotlin.math.abs
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
-import androidx.compose.ui.res.stringResource
 import com.snapswipe.app.R
+import com.snapswipe.app.data.InteractionMode
+import kotlin.math.abs
 
+@Suppress(
+    "UNUSED_VARIABLE",
+    "UNUSED_VALUE",
+    "ComposableLambdaParameterNaming",
+    "ComposableInvocation"
+)
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MainSwipeScreen(
@@ -67,17 +78,34 @@ fun MainSwipeScreen(
     onUndo: () -> Unit = {},
     onHome: () -> Unit = {},
     onShare: () -> Unit = {},
+    interactionMode: InteractionMode = InteractionMode.SWIPE_TO_CHOOSE,
     onRestart: () -> Unit = {},
     onReload: () -> Unit = {},
     queuedDeleteCount: Int = 0,
     onCommitQueuedDeletes: () -> Unit = {},
     showInstructions: Boolean = false,
-    onDismissInstructions: () -> Unit = {}
+    onDismissInstructions: () -> Unit = {},
+    onScrollForward: () -> Unit = {},
+    onScrollBack: () -> Unit = {}
 ) {
+    val isScrollMode = interactionMode == InteractionMode.SCROLL_AND_DELETE
     val hasPhotos = uiState.photos.isNotEmpty()
     val processedAll = !hasPhotos && uiState.lastAction != null && !uiState.isLoading
     var showShareSheet by remember { mutableStateOf(false) }
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
+    var lastScrollDirection by remember { mutableStateOf(0) }
+    var previousIndex by remember { mutableStateOf(uiState.currentIndex) }
+    LaunchedEffect(isScrollMode) {
+        if (isScrollMode) {
+            showShareSheet = false
+        }
+    }
+    LaunchedEffect(uiState.currentIndex) {
+        val diff = uiState.currentIndex - previousIndex
+        if (diff > 0) lastScrollDirection = 1
+        else if (diff < 0) lastScrollDirection = -1
+        previousIndex = uiState.currentIndex
+    }
     LaunchedEffect(processedAll, queuedDeleteCount) {
         if (processedAll && queuedDeleteCount > 0) {
             onCommitQueuedDeletes()
@@ -181,10 +209,12 @@ fun MainSwipeScreen(
 
                 hasPhotos -> {
                     val photo = uiState.currentPhoto
+                    val horizontalThreshold = 60f
+                    val verticalThreshold = 80f
                     Box(
                         modifier = Modifier
                             .fillMaxSize()
-                            .pointerInput(uiState.currentIndex) {
+                            .pointerInput(uiState.currentIndex, interactionMode) {
                                 var totalDx = 0f
                                 var totalDy = 0f
                                 detectDragGestures(
@@ -195,11 +225,30 @@ fun MainSwipeScreen(
                                     onDragEnd = {
                                         if (abs(totalDx) > abs(totalDy)) {
                                             when {
-                                                totalDx > 60 -> onKeep()
-                                                totalDx < -60 -> onDelete()
+                                                totalDx > horizontalThreshold -> {
+                                                    if (isScrollMode) {
+                                                        onShare()
+                                                    } else {
+                                                        onKeep()
+                                                    }
+                                                }
+                                                totalDx < -horizontalThreshold -> onDelete()
                                             }
-                                        } else if (totalDy < -80) {
-                                            showShareSheet = true
+                                        } else {
+                                            when {
+                                                totalDy < -verticalThreshold -> {
+                                                    if (isScrollMode) {
+                                                        lastScrollDirection = 1
+                                                        onScrollForward()
+                                                    } else {
+                                                        showShareSheet = true
+                                                    }
+                                                }
+                                                totalDy > verticalThreshold && isScrollMode -> {
+                                                    lastScrollDirection = -1
+                                                    onScrollBack()
+                                                }
+                                            }
                                         }
                                     }
                                 ) { change, dragAmount ->
@@ -210,12 +259,31 @@ fun MainSwipeScreen(
                                 }
                             }
                     ) {
-                        AsyncImage(
-                            model = photo?.uri,
-                            contentDescription = "Current photo",
-                            modifier = Modifier.fillMaxSize(),
-                            contentScale = ContentScale.Crop
-                        )
+                        AnimatedContent(
+                            targetState = photo,
+                            transitionSpec = {
+                                if (isScrollMode) {
+                                    val direction = if (lastScrollDirection >= 0) 1 else -1
+                                    slideInVertically(
+                                        animationSpec = tween(durationMillis = 200)
+                                    ) { fullHeight -> fullHeight * direction } togetherWith
+                                        slideOutVertically(
+                                            animationSpec = tween(durationMillis = 200)
+                                        ) { fullHeight -> -fullHeight * direction }
+                                } else {
+                                    fadeIn(animationSpec = tween(150)) togetherWith fadeOut(animationSpec = tween(150))
+                                }
+                            },
+                            label = "photoTransition",
+                            modifier = Modifier.fillMaxSize()
+                        ) { targetPhoto ->
+                            AsyncImage(
+                                model = targetPhoto?.uri,
+                                contentDescription = "Current photo",
+                                modifier = Modifier.fillMaxSize(),
+                                contentScale = ContentScale.Crop
+                            )
+                        }
 
                         // Gradient overlay for legibility using theme colors.
                         Box(
@@ -264,6 +332,7 @@ fun MainSwipeScreen(
                                     val xOffsetLeft = this.maxWidth / 3 - buttonSize / 2
                                     val xOffsetRight = this.maxWidth * 2 / 3 - buttonSize / 2
                                     val xOffsetBack = (xOffsetLeft / 2) - (buttonSize / 2)
+
                                     IconButton(
                                         onClick = onUndo,
                                         modifier = Modifier.offset(x = xOffsetBack)
@@ -302,7 +371,7 @@ fun MainSwipeScreen(
                                         }
                                     }
                                     IconButton(
-                                        onClick = onKeep,
+                                        onClick = if (isScrollMode) onScrollForward else onKeep,
                                         modifier = Modifier
                                             .offset(x = xOffsetRight)
                                     ) {
@@ -329,7 +398,7 @@ fun MainSwipeScreen(
         }
     }
 
-    if (showShareSheet) {
+    if (showShareSheet && !isScrollMode) {
         ModalBottomSheet(
             onDismissRequest = { showShareSheet = false },
             sheetState = sheetState
@@ -372,9 +441,16 @@ fun MainSwipeScreen(
             title = { Text(stringResource(R.string.instructions_title)) },
             text = {
                 Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                    Text(stringResource(R.string.instructions_delete))
-                    Text(stringResource(R.string.instructions_keep))
-                    Text(stringResource(R.string.instructions_share))
+                    if (isScrollMode) {
+                        Text(stringResource(R.string.instructions_delete))
+                        Text(stringResource(R.string.instructions_share_scroll))
+                        Text(stringResource(R.string.instructions_next_scroll))
+                        Text(stringResource(R.string.instructions_prev_scroll))
+                    } else {
+                        Text(stringResource(R.string.instructions_delete))
+                        Text(stringResource(R.string.instructions_keep))
+                        Text(stringResource(R.string.instructions_share))
+                    }
                     if (queuedDeleteCount > 0) {
                         Text(stringResource(R.string.instructions_queue))
                     }

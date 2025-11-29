@@ -1,0 +1,67 @@
+<resources>
+    <string name="app_name">Snap Swipe</string>
+
+    <!-- Permissions -->
+    <string name="permission_title">Snap Swipe को आपकी गैलरी साफ करने में मदद के लिए फोटो एक्सेस चाहिए।</string>
+    <string name="permission_rationale">हम केवल डिवाइस पर फोटो पढ़ते हैं ताकि उन्हें रखना, हटाना या साझा करना आसान हो। कुछ भी अपलोड नहीं होता।</string>
+    <string name="permission_denied_message">फोटो लोड करने के लिए अनुमति चाहिए। कृपया अनुमति दें।</string>
+    <string name="grant_photo_access">फोटो एक्सेस दें</string>
+    <string name="permission_granted">अनुमति मिली</string>
+    <string name="continue_without_access">बिना एक्सेस जारी रखें</string>
+
+    <!-- Main UI -->
+    <string name="loading_photos">फोटो लोड हो रहे हैं…</string>
+    <string name="check_permissions">अनुमति जाँचें</string>
+    <string name="reviewed_run_title">आपने इस रन की सभी फोटो देख ली हैं।</string>
+    <string name="reviewed_run_subtitle">क्रम बदलने के लिए फिर से शुरू करें या सेटिंग बदलें।</string>
+    <string name="restart">फिर से शुरू</string>
+    <string name="settings">सेटिंग्स</string>
+    <string name="no_photos_title">कोई फोटो नहीं मिली।</string>
+    <string name="no_photos_subtitle">डिवाइस में फोटो जोड़ें और रिफ्रेश करें।</string>
+    <string name="refresh">रिफ्रेश</string>
+    <string name="photo_position">फोटो %1$d / %2$d</string>
+    <string name="delete_queued_count">हटाने की कतार (%1$d)</string>
+    <string name="delete_label">हटाएँ</string>
+    <string name="keep_label">रखें</string>
+    <string name="share_sheet_title">इस फोटो को साझा करें</string>
+    <string name="share_photo">फोटो साझा करें</string>
+    <string name="cancel">रद्द करें</string>
+    <string name="home">होम</string>
+    <string name="instructions_title">स्वाइप कैसे करें</string>
+    <string name="instructions_delete">• बाएँ स्वाइप करें हटाने के लिए (या कतार में जोड़ें)।</string>
+    <string name="instructions_keep">• दाएँ स्वाइप करें रखने के लिए।</string>
+    <string name="instructions_share">• ऊपर स्वाइप करें साझा करने के लिए।</string>
+    <string name="instructions_queue">• “हटाने की कतार” पर टैप करें सभी को एक बार में पुष्टि करें।</string>
+    <string name="instructions_share_scroll">• दाएँ स्वाइप करें वर्तमान फोटो साझा करने के लिए।</string>
+    <string name="instructions_next_scroll">• ऊपर स्वाइप करें अगली फोटो देखने के लिए (नीचे से स्लाइड इन)।</string>
+    <string name="instructions_prev_scroll">• नीचे स्वाइप करें पिछली फोटो पर लौटने के लिए (ऊपर से स्लाइड इन)।</string>
+
+    <!-- Settings -->
+    <string name="settings_title">सेटिंग्स</string>
+    <string name="done">हो गया</string>
+    <string name="photo_review_order">फोटो देखने का क्रम</string>
+    <string name="newest_to_oldest">नया से पुराना</string>
+    <string name="oldest_to_newest">पुराना से नया</string>
+    <string name="delete_mode">हटाने का मोड</string>
+    <string name="delete_mode_immediate">तुरंत (ज़रूरत पर प्रति फोटो पुष्टि)</string>
+    <string name="delete_mode_queued">कतार में जोड़ें और एक बार में पुष्टि</string>
+    <string name="snap_interaction_mode">इंटरैक्शन मोड</string>
+    <string name="app_language">ऐप की भाषा</string>
+    <string name="use_device_language">डिवाइस की भाषा इस्तेमाल करें</string>
+    <string name="language_english">अंग्रेज़ी</string>
+    <string name="language_korean">कोरियाई</string>
+    <string name="language_french">फ़्रेंच</string>
+    <string name="language_spanish">स्पैनिश</string>
+    <string name="language_german">जर्मन</string>
+    <string name="language_chinese_simplified">चीनी (सरलीकृत)</string>
+    <string name="interaction_mode_setting">इंटरैक्शन मोड</string>
+    <string name="mode_swipe_to_choose">स्वाइप करके चुनें</string>
+    <string name="mode_scroll_and_delete">स्क्रॉल करें और हटाएँ</string>
+    <string name="about_snap_swipe">Snap Swipe के बारे में</string>
+    <string name="about_snap_swipe_body">स्वाइप करके फोटो रखें, हटाएँ या साझा करें और गैलरी साफ करें।</string>
+    <string name="version_label">संस्करण %1$s</string>
+    <string name="support">सहायता</string>
+    <string name="support_email">support@snapswipe.xyz</string>
+    <string name="supported_android_versions">समर्थित Android संस्करण: %1$s से %2$s</string>
+    <string name="supported_languages_list">समर्थित भाषाएँ: अंग्रेजी, कोरियाई, फ्रेंच, स्पेनिश, जर्मन, चीनी (सरलीकृत), जापानी, वियतनामी, थाई, हिंदी</string>
+</resources>

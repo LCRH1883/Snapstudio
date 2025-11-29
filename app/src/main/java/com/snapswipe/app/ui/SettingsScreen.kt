@@ -19,7 +19,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.text.style.TextAlign
@@ -34,7 +33,7 @@ import androidx.compose.ui.semantics.Role
 import com.snapswipe.app.data.SortOrder
 import com.snapswipe.app.data.SortOrderPreferences
 import com.snapswipe.app.data.DeleteMode
-import androidx.appcompat.app.AppCompatDelegate
+import com.snapswipe.app.data.InteractionMode
 import kotlinx.coroutines.launch
 import android.content.Intent
 import android.net.Uri
@@ -56,13 +55,9 @@ fun SettingsScreen(
     val sortOrderPreferences = androidx.compose.runtime.remember { SortOrderPreferences(context) }
     val sortOrder by sortOrderPreferences.sortOrderFlow.collectAsState(initial = SortOrder.NEWEST_FIRST)
     val deleteMode by sortOrderPreferences.deleteModeFlow.collectAsState(initial = DeleteMode.IMMEDIATE)
-    var selectedLanguage by remember { mutableStateOf(AppCompatDelegate.getApplicationLocales().toAppLanguage()) }
+    val interactionMode by sortOrderPreferences.interactionModeFlow.collectAsState(initial = InteractionMode.SWIPE_TO_CHOOSE)
     val coroutineScope = rememberCoroutineScope()
     val showAbout = remember { mutableStateOf(false) }
-    val applyLanguage: (AppLanguage) -> Unit = { language ->
-        selectedLanguage = language
-        AppCompatDelegate.setApplicationLocales(language.toLocaleList())
-    }
 
     Scaffold(
         topBar = {
@@ -127,43 +122,22 @@ fun SettingsScreen(
 
             Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
                 Text(
-                    text = stringResource(R.string.app_language),
+                    text = stringResource(R.string.snap_interaction_mode),
                     style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.SemiBold)
                 )
                 SettingsRadioOption(
-                    label = stringResource(R.string.use_device_language),
-                    selected = selectedLanguage == AppLanguage.SYSTEM,
-                    onSelect = { applyLanguage(AppLanguage.SYSTEM) }
+                    label = stringResource(R.string.mode_swipe_to_choose),
+                    selected = interactionMode == InteractionMode.SWIPE_TO_CHOOSE,
+                    onSelect = {
+                        coroutineScope.launch { sortOrderPreferences.setInteractionMode(InteractionMode.SWIPE_TO_CHOOSE) }
+                    }
                 )
                 SettingsRadioOption(
-                    label = stringResource(R.string.language_english),
-                    selected = selectedLanguage == AppLanguage.ENGLISH,
-                    onSelect = { applyLanguage(AppLanguage.ENGLISH) }
-                )
-                SettingsRadioOption(
-                    label = stringResource(R.string.language_korean),
-                    selected = selectedLanguage == AppLanguage.KOREAN,
-                    onSelect = { applyLanguage(AppLanguage.KOREAN) }
-                )
-                SettingsRadioOption(
-                    label = stringResource(R.string.language_french),
-                    selected = selectedLanguage == AppLanguage.FRENCH,
-                    onSelect = { applyLanguage(AppLanguage.FRENCH) }
-                )
-                SettingsRadioOption(
-                    label = stringResource(R.string.language_spanish),
-                    selected = selectedLanguage == AppLanguage.SPANISH,
-                    onSelect = { applyLanguage(AppLanguage.SPANISH) }
-                )
-                SettingsRadioOption(
-                    label = stringResource(R.string.language_german),
-                    selected = selectedLanguage == AppLanguage.GERMAN,
-                    onSelect = { applyLanguage(AppLanguage.GERMAN) }
-                )
-                SettingsRadioOption(
-                    label = stringResource(R.string.language_chinese_simplified),
-                    selected = selectedLanguage == AppLanguage.CHINESE_SIMPLIFIED,
-                    onSelect = { applyLanguage(AppLanguage.CHINESE_SIMPLIFIED) }
+                    label = stringResource(R.string.mode_scroll_and_delete),
+                    selected = interactionMode == InteractionMode.SCROLL_AND_DELETE,
+                    onSelect = {
+                        coroutineScope.launch { sortOrderPreferences.setInteractionMode(InteractionMode.SCROLL_AND_DELETE) }
+                    }
                 )
             }
 
@@ -256,6 +230,7 @@ fun SettingsScreen(
             }
         )
     }
+
 }
 
 @Composable
@@ -285,29 +260,4 @@ private fun SettingsRadioOption(
             style = MaterialTheme.typography.bodyLarge
         )
     }
-}
-
-private enum class AppLanguage(val languageTag: String) {
-    SYSTEM(""),
-    ENGLISH("en"),
-    KOREAN("ko"),
-    FRENCH("fr"),
-    SPANISH("es"),
-    GERMAN("de"),
-    CHINESE_SIMPLIFIED("zh-CN");
-
-    fun toLocaleList(): LocaleListCompat {
-        return if (this == SYSTEM) {
-            LocaleListCompat.getEmptyLocaleList()
-        } else {
-            LocaleListCompat.forLanguageTags(languageTag)
-        }
-    }
-}
-
-private fun LocaleListCompat.toAppLanguage(): AppLanguage {
-    if (isEmpty) return AppLanguage.SYSTEM
-    val firstTag = toLanguageTags().substringBefore(",")
-    return AppLanguage.entries.firstOrNull { it.languageTag.equals(firstTag, ignoreCase = true) }
-        ?: AppLanguage.SYSTEM
 }

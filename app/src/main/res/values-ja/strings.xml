@@ -1,0 +1,67 @@
+<resources>
+    <string name="app_name">Snap Swipe</string>
+
+    <!-- Permissions -->
+    <string name="permission_title">Snap Swipeはギャラリー整理のために写真へのアクセスが必要です。</string>
+    <string name="permission_rationale">写真は端末内でのみ読み取り、保持・削除・共有を行います。アップロードはしません。</string>
+    <string name="permission_denied_message">写真を読み込むには権限が必要です。許可してください。</string>
+    <string name="grant_photo_access">写真アクセスを許可</string>
+    <string name="permission_granted">権限が付与されました</string>
+    <string name="continue_without_access">アクセスせずに続行</string>
+
+    <!-- Main UI -->
+    <string name="loading_photos">写真を読み込み中…</string>
+    <string name="check_permissions">権限を確認</string>
+    <string name="reviewed_run_title">このラウンドの写真をすべて確認しました。</string>
+    <string name="reviewed_run_subtitle">順序を変えるには再開または設定を調整してください。</string>
+    <string name="restart">再開</string>
+    <string name="settings">設定</string>
+    <string name="no_photos_title">写真が見つかりません。</string>
+    <string name="no_photos_subtitle">端末に写真を追加して更新してください。</string>
+    <string name="refresh">更新</string>
+    <string name="photo_position">写真 %1$d / %2$d</string>
+    <string name="delete_queued_count">削除待ち (%1$d)</string>
+    <string name="delete_label">削除</string>
+    <string name="keep_label">キープ</string>
+    <string name="share_sheet_title">この写真を共有</string>
+    <string name="share_photo">写真を共有</string>
+    <string name="cancel">キャンセル</string>
+    <string name="home">ホーム</string>
+    <string name="instructions_title">スワイプ操作</string>
+    <string name="instructions_delete">• 左にスワイプで削除（またはキュー）。</string>
+    <string name="instructions_keep">• 右にスワイプでキープ。</string>
+    <string name="instructions_share">• 上にスワイプで共有。</string>
+    <string name="instructions_queue">• 「削除待ち」をタップして一括確認。</string>
+    <string name="instructions_share_scroll">• 右にスワイプで現在の写真を共有。</string>
+    <string name="instructions_next_scroll">• 上にスワイプで次の写真（下から表示）。</string>
+    <string name="instructions_prev_scroll">• 下にスワイプで前の写真（上から表示）。</string>
+
+    <!-- Settings -->
+    <string name="settings_title">設定</string>
+    <string name="done">完了</string>
+    <string name="photo_review_order">写真の確認順</string>
+    <string name="newest_to_oldest">新しい順</string>
+    <string name="oldest_to_newest">古い順</string>
+    <string name="delete_mode">削除モード</string>
+    <string name="delete_mode_immediate">即時（必要に応じて個別確認）</string>
+    <string name="delete_mode_queued">キューに追加して一括確認</string>
+    <string name="snap_interaction_mode">操作モード</string>
+    <string name="app_language">アプリの言語</string>
+    <string name="use_device_language">デバイスの言語を使用</string>
+    <string name="language_english">英語</string>
+    <string name="language_korean">韓国語</string>
+    <string name="language_french">フランス語</string>
+    <string name="language_spanish">スペイン語</string>
+    <string name="language_german">ドイツ語</string>
+    <string name="language_chinese_simplified">中国語（簡体字）</string>
+    <string name="interaction_mode_setting">操作モード</string>
+    <string name="mode_swipe_to_choose">スワイプで選択</string>
+    <string name="mode_scroll_and_delete">スクロールして削除</string>
+    <string name="about_snap_swipe">Snap Swipeについて</string>
+    <string name="about_snap_swipe_body">スワイプで写真をキープ、削除、共有して整理します。</string>
+    <string name="version_label">バージョン %1$s</string>
+    <string name="support">サポート</string>
+    <string name="support_email">support@snapswipe.xyz</string>
+    <string name="supported_android_versions">対応Androidバージョン: %1$s 〜 %2$s</string>
+    <string name="supported_languages_list">対応言語: 英語、韓国語、フランス語、スペイン語、ドイツ語、中国語（簡体字）、日本語、ベトナム語、タイ語、ヒンディー語</string>
+</resources>

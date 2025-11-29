@@ -35,6 +35,7 @@ import com.snapswipe.app.data.SortOrder
 import com.snapswipe.app.data.SortOrderPreferences
 import com.snapswipe.app.data.PhotoItem
 import com.snapswipe.app.data.DeleteMode
+import com.snapswipe.app.data.InteractionMode
 import com.snapswipe.app.R
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.NavHost
@@ -49,6 +50,7 @@ private const val ROUTE_PERMISSIONS = "permissions"
 private const val ROUTE_MAIN = "main"
 private const val ROUTE_SETTINGS = "settings"
 
+@Suppress("UNUSED_VALUE")
 @Composable
 fun SnapSwipeApp() {
     val navController = rememberNavController()
@@ -78,7 +80,6 @@ fun SnapSwipeApp() {
             permissionsRoute(
                 onGrantAccess = {
                     hasPhotoPermission = true
-                    permissionDenied = false
                 },
                 onSkip = {
                     // Inform the user; keeping placeholder until a dedicated UI is added.
@@ -211,6 +212,7 @@ private fun MainScreen(
     val sortOrder by sortOrderPreferences.sortOrderFlow.collectAsState(initial = SortOrder.NEWEST_FIRST)
     val deleteModePref by sortOrderPreferences.deleteModeFlow.collectAsState(initial = DeleteMode.IMMEDIATE)
     val instructionsSeen by sortOrderPreferences.instructionsSeenFlow.collectAsState(initial = false)
+    val interactionMode by sortOrderPreferences.interactionModeFlow.collectAsState(initial = InteractionMode.SWIPE_TO_CHOOSE)
     val coroutineScope = rememberCoroutineScope()
     val deleteLauncher = rememberLauncherForActivityResult(ActivityResultContracts.StartIntentSenderForResult()) { result ->
         val success = result.resultCode == android.app.Activity.RESULT_OK
@@ -237,6 +239,7 @@ private fun MainScreen(
         onUndo = { viewModel.undoLast() },
         onHome = { viewModel.goHome() },
         onShare = { sharePhoto(context, uiState.currentPhoto) },
+        interactionMode = interactionMode,
         onRestart = { viewModel.restart() },
         onReload = { viewModel.reload() },
         queuedDeleteCount = uiState.queuedDeletes.size,
@@ -244,11 +247,13 @@ private fun MainScreen(
         showInstructions = !instructionsSeen,
         onDismissInstructions = {
             coroutineScope.launch { sortOrderPreferences.setInstructionsSeen(true) }
-        }
+        },
+        onScrollForward = { viewModel.stepForward() },
+        onScrollBack = { viewModel.stepBack() }
     )
 }
 
-private fun isPhotoPermissionGranted(context: android.content.Context): Boolean {
+private fun isPhotoPermissionGranted(context: Context): Boolean {
     val permission = photoPermissionForDevice()
     return ContextCompat.checkSelfPermission(context, permission) == android.content.pm.PackageManager.PERMISSION_GRANTED
 }
