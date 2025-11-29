@@ -95,3 +95,4 @@
 | 9.5    | 2025-11-28       | Codex  | Added Portuguese, Italian, Dutch, and Ukrainian locales/strings; updated locale config and docs. |
 | ver1.2.0 |                  | Codex  | Switched to zero-padded MMmmpp versionCode scheme, set 1.2.0 / 010200, added VERSIONING.md + VERSION_HISTORY.md. |
 | ver1.2.0a |                  | Codex  | Added one-time “What’s New” popup keyed to version, updated strings and release notes for scroll mode + languages. |
+| 10.1   | 2025-11-29       | Codex  | Restyled Settings screen with profile header and chip-based controls inspired by the wireframe kit; added helper strings. |

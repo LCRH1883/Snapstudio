@@ -67,4 +67,15 @@
     <string name="support_email">support@snapswipe.xyz</string>
     <string name="supported_android_versions">Supported Android versions: %1$s to %2$s</string>
     <string name="supported_languages_list">Supported languages: English, Korean, French, Spanish, German, Chinese (Simplified), Japanese, Vietnamese, Thai, Hindi, Portuguese, Italian, Dutch, Ukrainian</string>
+    <string name="settings_section_review">Review flow</string>
+    <string name="settings_section_review_subtitle">Adjust how photos are ordered and how gestures behave.</string>
+    <string name="settings_sort_subtitle">Pick the order photos appear while you review.</string>
+    <string name="settings_interaction_subtitle">Choose your preferred swipe/scroll style.</string>
+    <string name="settings_delete_mode_subtitle">Queue deletes to confirm once, or delete immediately.</string>
+    <string name="settings_section_support">Support &amp; info</string>
+    <string name="settings_section_support_subtitle">Find what changed or reach out for help.</string>
+    <string name="settings_whats_new_subtitle">See the latest updates in this version.</string>
+    <string name="settings_about_subtitle">See supported devices and languages.</string>
+    <string name="settings_profile_tagline">Photo cleanup companion</string>
+    <string name="settings_header_hint">Tune how Snap Swipe behaves before you start swiping.</string>
 </resources>
