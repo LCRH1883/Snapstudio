@@ -253,7 +253,7 @@ private fun MainScreen(
     )
 }
 
-private fun isPhotoPermissionGranted(context: android.content.Context): Boolean {
+private fun isPhotoPermissionGranted(context: Context): Boolean {
     val permission = photoPermissionForDevice()
     return ContextCompat.checkSelfPermission(context, permission) == android.content.pm.PackageManager.PERMISSION_GRANTED
 }

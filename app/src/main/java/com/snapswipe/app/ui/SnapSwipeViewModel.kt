@@ -32,7 +32,6 @@ data class SnapSwipeUiState(
     val confirmedDeleteCount: Int = 0
 ) {
     val currentPhoto: PhotoItem? get() = photos.getOrNull(currentIndex)
-    val isAtEnd: Boolean get() = photos.isNotEmpty() && currentIndex >= photos.size
     val displayTotal: Int
         get() = (totalCount - confirmedDeleteCount).coerceAtLeast(0)
     val currentPosition: Int?
@@ -125,10 +124,6 @@ class SnapSwipeViewModel(
                 }
             }
         }
-    }
-
-    fun nextPhoto() {
-        advanceIndex()
     }
 
     fun stepForward() {
@@ -247,18 +242,6 @@ class SnapSwipeViewModel(
                         keptCount = (state.keptCount - 1).coerceAtLeast(0)
                     )
                 }
-            }
-        }
-    }
-
-    private fun advanceIndex() {
-        _uiState.update { state ->
-            if (state.photos.isEmpty()) {
-                state
-            } else {
-                val maxIndex = state.photos.lastIndex
-                val nextIndex = (state.currentIndex + 1).coerceAtMost(maxIndex)
-                state.copy(currentIndex = nextIndex)
             }
         }
     }

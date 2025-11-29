@@ -10,7 +10,7 @@
     <string name="continue_without_access">Continue without access</string>
 
     <!-- Main UI -->
-    <string name="loading_photos">Loading photos...</string>
+    <string name="loading_photos">Loading photos…</string>
     <string name="check_permissions">Check permissions</string>
     <string name="reviewed_run_title">You’ve reviewed all photos in this run.</string>
     <string name="reviewed_run_subtitle">Restart or adjust settings to change the order.</string>
