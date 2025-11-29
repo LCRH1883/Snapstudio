@@ -21,6 +21,7 @@ class SortOrderPreferences(private val context: Context) {
     private val deleteModeKey = stringPreferencesKey("delete_mode")
     private val instructionsSeenKey = stringPreferencesKey("instructions_seen")
     private val interactionModeKey = stringPreferencesKey("interaction_mode")
+    private val lastSeenVersionKey = stringPreferencesKey("last_seen_version")
 
     val sortOrderFlow: Flow<SortOrder> = context.dataStore.data
         .catch { exception ->
@@ -80,6 +81,17 @@ class SortOrderPreferences(private val context: Context) {
             } ?: InteractionMode.SWIPE_TO_CHOOSE
         }
 
+    val lastSeenVersionFlow: Flow<String?> = context.dataStore.data
+        .catch { exception ->
+            if (exception is IOException) {
+                Log.w(TAG, "Last seen version read failed; using default", exception)
+                emit(emptyPreferences())
+            } else {
+                throw exception
+            }
+        }
+        .map { preferences -> preferences[lastSeenVersionKey] }
+
     suspend fun setSortOrder(order: SortOrder) {
         context.dataStore.edit { prefs ->
             prefs[sortOrderKey] = order.name
@@ -101,6 +113,12 @@ class SortOrderPreferences(private val context: Context) {
     suspend fun setInteractionMode(mode: InteractionMode) {
         context.dataStore.edit { prefs ->
             prefs[interactionModeKey] = mode.name
+        }
+    }
+
+    suspend fun setLastSeenVersion(version: String) {
+        context.dataStore.edit { prefs ->
+            prefs[lastSeenVersionKey] = version
         }
     }
 

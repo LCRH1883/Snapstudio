@@ -31,6 +31,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.snapswipe.app.BuildConfig
 import com.snapswipe.app.data.SortOrder
 import com.snapswipe.app.data.SortOrderPreferences
 import com.snapswipe.app.data.PhotoItem
@@ -213,10 +214,19 @@ private fun MainScreen(
     val deleteModePref by sortOrderPreferences.deleteModeFlow.collectAsState(initial = DeleteMode.IMMEDIATE)
     val instructionsSeen by sortOrderPreferences.instructionsSeenFlow.collectAsState(initial = false)
     val interactionMode by sortOrderPreferences.interactionModeFlow.collectAsState(initial = InteractionMode.SWIPE_TO_CHOOSE)
+    val lastSeenVersion by sortOrderPreferences.lastSeenVersionFlow.collectAsState(initial = null)
     val coroutineScope = rememberCoroutineScope()
     val deleteLauncher = rememberLauncherForActivityResult(ActivityResultContracts.StartIntentSenderForResult()) { result ->
         val success = result.resultCode == android.app.Activity.RESULT_OK
         viewModel.onDeleteCompleted(success)
+    }
+    var showWhatsNew by remember { mutableStateOf(false) }
+
+    LaunchedEffect(lastSeenVersion) {
+        val current = BuildConfig.VERSION_NAME
+        if (lastSeenVersion != current) {
+            showWhatsNew = true
+        }
     }
 
     LaunchedEffect(sortOrder) {
@@ -244,12 +254,20 @@ private fun MainScreen(
         onReload = { viewModel.reload() },
         queuedDeleteCount = uiState.queuedDeletes.size,
         onCommitQueuedDeletes = { viewModel.commitQueuedDeletes() },
-        showInstructions = !instructionsSeen,
+        showInstructions = !instructionsSeen && !showWhatsNew,
         onDismissInstructions = {
             coroutineScope.launch { sortOrderPreferences.setInstructionsSeen(true) }
         },
         onScrollForward = { viewModel.stepForward() },
-        onScrollBack = { viewModel.stepBack() }
+        onScrollBack = { viewModel.stepBack() },
+        showWhatsNew = showWhatsNew,
+        whatsNewVersionName = BuildConfig.VERSION_NAME,
+        onDismissWhatsNew = {
+            showWhatsNew = false
+            coroutineScope.launch {
+                sortOrderPreferences.setLastSeenVersion(BuildConfig.VERSION_NAME)
+            }
+        }
     )
 }
 

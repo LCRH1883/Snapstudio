@@ -4,5 +4,5 @@ Release log with notes (versionCode shown as zero-padded `MMmmpp` for readabilit
 
 | versionName | versionCode | Date | Notes |
 |-------------|-------------|------|-------|
-| 1.2.0       | 010200      | -    | Adds scroll interaction mode and expands language support. |
+| 1.2.0       | 010200      | -    | Adds scroll interaction mode, more languages, and a one-time What&apos;s New popup. |
 | 4 (legacy)  | 000004      | -    | Earlier linear versioning before SemVer adoption. |

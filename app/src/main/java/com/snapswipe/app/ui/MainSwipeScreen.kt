@@ -86,7 +86,10 @@ fun MainSwipeScreen(
     showInstructions: Boolean = false,
     onDismissInstructions: () -> Unit = {},
     onScrollForward: () -> Unit = {},
-    onScrollBack: () -> Unit = {}
+    onScrollBack: () -> Unit = {},
+    showWhatsNew: Boolean = false,
+    whatsNewVersionName: String = "",
+    onDismissWhatsNew: () -> Unit = {}
 ) {
     val isScrollMode = interactionMode == InteractionMode.SCROLL_AND_DELETE
     val hasPhotos = uiState.photos.isNotEmpty()
@@ -430,6 +433,22 @@ fun MainSwipeScreen(
                 }
             }
         }
+    }
+
+    if (showWhatsNew) {
+        AlertDialog(
+            onDismissRequest = onDismissWhatsNew,
+            confirmButton = {
+                TextButton(onClick = onDismissWhatsNew) { Text(stringResource(R.string.done)) }
+            },
+            title = { Text(stringResource(R.string.whats_new_title, whatsNewVersionName)) },
+            text = {
+                Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                    Text(stringResource(R.string.whats_new_item_scroll_mode))
+                    Text(stringResource(R.string.whats_new_item_languages))
+                }
+            }
+        )
     }
 
     if (showInstructions) {
