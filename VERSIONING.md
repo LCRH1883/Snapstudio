@@ -26,4 +26,6 @@ Track each published build here (versionCode shown as zero-padded `MMmmpp`):
 | versionName | versionCode | Date | Notes |
 |-------------|-------------|------|-------|
 | 1.2.0       | 010200      | -    | Adds scroll interaction mode, expands language support, and shows a one-time What&apos;s New prompt. |
-| 4 (legacy)  | 000004      | -    | Previous linear versioning; pre-SemVer baseline. |
+| 1.1.0       | 010100      | -    | Added multi-language support. |
+| 1.0.0       | 010000      | -    | First swipe app release. |
+| 0.1.0       | 000100      | -    | Alpha rough version of the app. |
