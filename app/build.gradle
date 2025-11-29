@@ -4,44 +4,44 @@ plugins {
 }
 
 android {
-    namespace 'com.snapswipe.app'
-    compileSdk 35
+    namespace = 'com.snapswipe.app'
+    compileSdk = 35
 
     defaultConfig {
-        applicationId 'com.snapswipe.app'
-        minSdk 26
-        targetSdk 35
-        versionCode 3
-        versionName "3"
+        applicationId = 'com.snapswipe.app'
+        minSdk = 26
+        targetSdk = 35
+        versionCode = 3
+        versionName = "3"
 
-        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-        vectorDrawables { useSupportLibrary true }
+        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        vectorDrawables { useSupportLibrary = true }
     }
 
     buildTypes {
         release {
-            minifyEnabled true
-            shrinkResources true
+            minifyEnabled = true
+            shrinkResources = true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-            debuggable false
+            debuggable = false
         }
     }
 
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_17
-        targetCompatibility JavaVersion.VERSION_17
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
     kotlinOptions {
         jvmTarget = '17'
     }
 
     buildFeatures {
-        compose true
-        buildConfig true
+        compose = true
+        buildConfig = true
     }
 
     composeOptions {
-        kotlinCompilerExtensionVersion '1.5.3'
+        kotlinCompilerExtensionVersion = '1.5.3'
     }
 
     packaging {
