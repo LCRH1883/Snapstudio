@@ -58,6 +58,7 @@ fun SettingsScreen(
     val interactionMode by sortOrderPreferences.interactionModeFlow.collectAsState(initial = InteractionMode.SWIPE_TO_CHOOSE)
     val coroutineScope = rememberCoroutineScope()
     val showAbout = remember { mutableStateOf(false) }
+    val showWhatsNew = remember { mutableStateOf(false) }
 
     Scaffold(
         topBar = {
@@ -159,6 +160,12 @@ fun SettingsScreen(
                     modifier = Modifier.fillMaxWidth(),
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
+                TextButton(
+                    onClick = { showWhatsNew.value = true },
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Text(stringResource(R.string.snapw_whats_new_button))
+                }
                 Text(
                     text = stringResource(R.string.support),
                     style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.SemiBold),
@@ -226,6 +233,24 @@ fun SettingsScreen(
                         text = stringResource(R.string.supported_languages_list),
                         style = MaterialTheme.typography.bodyMedium
                     )
+                }
+            }
+        )
+    }
+
+    if (showWhatsNew.value) {
+        AlertDialog(
+            onDismissRequest = { showWhatsNew.value = false },
+            confirmButton = {
+                TextButton(onClick = { showWhatsNew.value = false }) {
+                    Text(stringResource(R.string.done))
+                }
+            },
+            title = { Text("${stringResource(R.string.snapw_whats_new_title)} ${BuildConfig.VERSION_NAME}") },
+            text = {
+                Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                    Text(stringResource(R.string.snapw_whats_new_item_scroll_mode))
+                    Text(stringResource(R.string.snapw_whats_new_item_languages))
                 }
             }
         )

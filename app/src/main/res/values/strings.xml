@@ -35,9 +35,10 @@
     <string name="instructions_share_scroll">• Swipe right to share the current folder/photo.</string>
     <string name="instructions_next_scroll">• Swipe up to view the next photo (slides in from bottom).</string>
     <string name="instructions_prev_scroll">• Swipe down to go back to the previous photo (slides in from top).</string>
-    <string name="whats_new_title">What&apos;s new in %1$s</string>
-    <string name="whats_new_item_scroll_mode">• New “Scroll and delete” mode: swipe vertically to move, left to delete, right to share.</string>
-    <string name="whats_new_item_languages">• Added more languages: Japanese, Vietnamese, Thai, Hindi, Portuguese, Italian, Dutch, Ukrainian.</string>
+    <string name="snapw_whats_new_title">Whats new</string>
+    <string name="snapw_whats_new_item_scroll_mode">- New "Scroll and delete" mode: swipe vertically to move, left to delete, right to share.</string>
+    <string name="snapw_whats_new_item_languages">- Added more languages: Japanese, Vietnamese, Thai, Hindi, Portuguese, Italian, Dutch, Ukrainian.</string>
+    <string name="snapw_whats_new_button">See whats new</string>
 
     <!-- Settings -->
     <string name="settings_title">Settings</string>

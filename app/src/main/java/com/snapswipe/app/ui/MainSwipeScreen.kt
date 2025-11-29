@@ -441,11 +441,11 @@ fun MainSwipeScreen(
             confirmButton = {
                 TextButton(onClick = onDismissWhatsNew) { Text(stringResource(R.string.done)) }
             },
-            title = { Text(stringResource(R.string.whats_new_title, whatsNewVersionName)) },
+            title = { Text("${stringResource(R.string.snapw_whats_new_title)} ${whatsNewVersionName}") },
             text = {
                 Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                    Text(stringResource(R.string.whats_new_item_scroll_mode))
-                    Text(stringResource(R.string.whats_new_item_languages))
+                    Text(stringResource(R.string.snapw_whats_new_item_scroll_mode))
+                    Text(stringResource(R.string.snapw_whats_new_item_languages))
                 }
             }
         )
