@@ -11,7 +11,7 @@
     <string name="continue_without_access">Continua senza accesso</string>
 
     <!-- Main UI -->
-    <string name="loading_photos">Caricamento foto...</string>
+    <string name="loading_photos">Caricamento foto…</string>
     <string name="check_permissions">Controlla i permessi</string>
     <string name="reviewed_run_title">Hai esaminato tutte le foto di questa sessione.</string>
     <string name="reviewed_run_subtitle">Riavvia o modifica le impostazioni per cambiare l\'ordine.</string>

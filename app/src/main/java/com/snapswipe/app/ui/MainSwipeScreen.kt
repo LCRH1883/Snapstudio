@@ -61,7 +61,12 @@ import com.snapswipe.app.R
 import com.snapswipe.app.data.InteractionMode
 import kotlin.math.abs
 
-@Suppress("UNUSED_VARIABLE", "UNUSED_VALUE", "ComposableLambdaParameterNaming")
+@Suppress(
+    "UNUSED_VARIABLE",
+    "UNUSED_VALUE",
+    "ComposableLambdaParameterNaming",
+    "ComposableInvocation"
+)
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MainSwipeScreen(

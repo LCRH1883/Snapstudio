@@ -45,6 +45,15 @@
     <string name="delete_mode">Chế độ xóa</string>
     <string name="delete_mode_immediate">Ngay lập tức (xác nhận từng ảnh nếu cần)</string>
     <string name="delete_mode_queued">Xếp hàng và xác nhận một lần</string>
+    <string name="snap_interaction_mode">Chế độ tương tác</string>
+    <string name="app_language">Ngôn ngữ ứng dụng</string>
+    <string name="use_device_language">Dùng ngôn ngữ thiết bị</string>
+    <string name="language_english">Tiếng Anh</string>
+    <string name="language_korean">Tiếng Hàn</string>
+    <string name="language_french">Tiếng Pháp</string>
+    <string name="language_spanish">Tiếng Tây Ban Nha</string>
+    <string name="language_german">Tiếng Đức</string>
+    <string name="language_chinese_simplified">Tiếng Trung (giản thể)</string>
     <string name="interaction_mode_setting">Chế độ tương tác</string>
     <string name="mode_swipe_to_choose">Vuốt để chọn</string>
     <string name="mode_scroll_and_delete">Cuộn và xóa</string>

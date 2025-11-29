@@ -45,6 +45,15 @@
     <string name="delete_mode">โหมดลบ</string>
     <string name="delete_mode_immediate">ลบทันที (ยืนยันรายรูปหากจำเป็น)</string>
     <string name="delete_mode_queued">ต่อคิวแล้วยืนยันครั้งเดียว</string>
+    <string name="snap_interaction_mode">โหมดการโต้ตอบ</string>
+    <string name="app_language">ภาษาของแอป</string>
+    <string name="use_device_language">ใช้ภาษาของอุปกรณ์</string>
+    <string name="language_english">อังกฤษ</string>
+    <string name="language_korean">เกาหลี</string>
+    <string name="language_french">ฝรั่งเศส</string>
+    <string name="language_spanish">สเปน</string>
+    <string name="language_german">เยอรมัน</string>
+    <string name="language_chinese_simplified">จีน (ตัวย่อ)</string>
     <string name="interaction_mode_setting">โหมดการโต้ตอบ</string>
     <string name="mode_swipe_to_choose">ปัดเพื่อเลือก</string>
     <string name="mode_scroll_and_delete">เลื่อนแล้วลบ</string>

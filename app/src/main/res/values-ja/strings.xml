@@ -45,6 +45,15 @@
     <string name="delete_mode">削除モード</string>
     <string name="delete_mode_immediate">即時（必要に応じて個別確認）</string>
     <string name="delete_mode_queued">キューに追加して一括確認</string>
+    <string name="snap_interaction_mode">操作モード</string>
+    <string name="app_language">アプリの言語</string>
+    <string name="use_device_language">デバイスの言語を使用</string>
+    <string name="language_english">英語</string>
+    <string name="language_korean">韓国語</string>
+    <string name="language_french">フランス語</string>
+    <string name="language_spanish">スペイン語</string>
+    <string name="language_german">ドイツ語</string>
+    <string name="language_chinese_simplified">中国語（簡体字）</string>
     <string name="interaction_mode_setting">操作モード</string>
     <string name="mode_swipe_to_choose">スワイプで選択</string>
     <string name="mode_scroll_and_delete">スクロールして削除</string>

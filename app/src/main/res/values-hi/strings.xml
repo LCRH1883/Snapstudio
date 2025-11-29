@@ -45,6 +45,15 @@
     <string name="delete_mode">हटाने का मोड</string>
     <string name="delete_mode_immediate">तुरंत (ज़रूरत पर प्रति फोटो पुष्टि)</string>
     <string name="delete_mode_queued">कतार में जोड़ें और एक बार में पुष्टि</string>
+    <string name="snap_interaction_mode">इंटरैक्शन मोड</string>
+    <string name="app_language">ऐप की भाषा</string>
+    <string name="use_device_language">डिवाइस की भाषा इस्तेमाल करें</string>
+    <string name="language_english">अंग्रेज़ी</string>
+    <string name="language_korean">कोरियाई</string>
+    <string name="language_french">फ़्रेंच</string>
+    <string name="language_spanish">स्पैनिश</string>
+    <string name="language_german">जर्मन</string>
+    <string name="language_chinese_simplified">चीनी (सरलीकृत)</string>
     <string name="interaction_mode_setting">इंटरैक्शन मोड</string>
     <string name="mode_swipe_to_choose">स्वाइप करके चुनें</string>
     <string name="mode_scroll_and_delete">स्क्रॉल करें और हटाएँ</string>
