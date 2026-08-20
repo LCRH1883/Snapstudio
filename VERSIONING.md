@@ -25,6 +25,7 @@ Track each published build here (versionCode shown as zero-padded `MMmmpp`):
 
 | versionName | versionCode | Date | Notes |
 |-------------|-------------|------|-------|
+| 1.2.1       | 010201      | -    | Targets Android 16 (API 36) for Play compliance and fixes edge-to-edge padding on the main screen. |
 | 1.2.0       | 010200      | -    | Adds scroll interaction mode, expands language support, and shows a one-time What&apos;s New prompt. |
 | 1.1.0       | 010100      | -    | Added multi-language support. |
 | 1.0.0       | 010000      | -    | First swipe app release. |

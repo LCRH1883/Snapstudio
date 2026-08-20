@@ -302,3 +302,16 @@ PHASE 10 – Settings UI Polish
 [x] 10.2 – Theme selector (light/dark/system)
     - Add a Settings control for appearance and persist it.
     - Wire the preference through SnapSwipeTheme so the entire app follows the chosen light/dark/system mode.
+
+------------------------------------------------------------
+PHASE 11 – Platform Compliance
+------------------------------------------------------------
+
+[x] 11.1 – Target API 36 (Android 16) for Google Play compliance
+    - Raise compileSdk and targetSdk from 35 to 36; bump to 1.2.1 / 010201.
+    - Android 16 removes the edge-to-edge opt-out and ignores android:statusBarColor, so drop the
+      deprecated theme attribute and add navigationBarsPadding() to the main screen's bottom
+      overlay (photo counter, delete/keep/undo buttons) so it clears the gesture bar / nav bar.
+    - Manual check: On an Android 16 device, the header clears the status bar and the bottom
+      controls clear the navigation bar in both gesture and 3-button modes; photo load, delete,
+      and share still work.

@@ -18,6 +18,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.height
@@ -289,7 +290,9 @@ fun MainSwipeScreen(
                                 .padding(horizontal = 16.dp, vertical = 20.dp)
                         ) {
                             Column(
-                                modifier = Modifier.fillMaxWidth(),
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .navigationBarsPadding(),
                                 verticalArrangement = Arrangement.spacedBy(8.dp)
                             ) {
                                 val position = uiState.currentPosition ?: 0

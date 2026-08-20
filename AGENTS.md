@@ -98,3 +98,4 @@
 | 10.1   | 2025-11-29       | Codex  | Restyled Settings screen with profile header and chip-based controls inspired by the wireframe kit; added helper strings. |
 | 10.2   | 2025-11-29       | Codex  | Added app appearance setting (light/dark/system), wired theme preference through DataStore and theme wrapper. |
 | 10.3   | 2025-11-29       | Codex  | Shrunk main screen header bar (home/settings) for a slimmer photo-viewing layout. |
+| 11.1   | 2026-08-19       | Claude | Raised compile/target SDK to 36 (Android 16) for Play's Aug 31 2026 target API requirement, bumped to 1.2.1 / 010201, removed the deprecated statusBarColor theme attribute, and added navigation-bar padding to the main screen's bottom controls. |
