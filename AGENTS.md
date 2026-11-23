@@ -109,3 +109,6 @@
 | 13.0a  | 2026-11-23       | Codex  | Aligned the opaque review controls, moved Undo to the taller translucent header, and adapted the existing layouts for phone and tablet windows. |
 | 13.0b  | 2026-11-23       | Codex  | Set neutral light and dark menu colors and added year, month, and day jumps to the oldest-first timeline. |
 | 14.1   | 2026-11-23       | Codex  | Prepared version-matched Play Store screenshots and English copy, and saved the production listing changes in Play Console. |
+| 14.3   | 2026-11-23       | Codex  | Added Indonesian, Turkish, Bengali, and Arabic, preserved physical swipe control placement in Arabic, and prepared 1.4.2 and the localized Play listing copy. |
+| 14.4   | 2026-11-23       | Codex  | Verified that Play Console moved all four localized store listings into review alongside the English listing and trader-status declaration. |
+| 14.5   | 2026-11-23       | Codex  | Bundled all 18 app languages for offline use, verified them from the release bundle, and turned off Gemini app-string translation in Play Console. |

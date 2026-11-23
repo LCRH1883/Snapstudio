@@ -62,11 +62,11 @@
     <string name="support">การช่วยเหลือ</string>
     <string name="support_email">support@snapswipe.xyz</string>
     <string name="supported_android_versions">Android ที่รองรับ: %1$s ถึง %2$s</string>
-    <string name="supported_languages_list">ภาษาที่รองรับ: อังกฤษ เกาหลี ฝรั่งเศส สเปน เยอรมัน จีน (ตัวย่อ) ญี่ปุ่น เวียดนาม ไทย ฮินดี</string>
+    <string name="supported_languages_list">ภาษาที่รองรับ: อังกฤษ เกาหลี ฝรั่งเศส สเปน เยอรมัน จีน (ตัวย่อ) ญี่ปุ่น เวียดนาม ไทย ฮินดี โปรตุเกส อิตาลี ดัตช์ ยูเครน อินโดนีเซีย ตุรกี เบงกาลี อาหรับ</string>
 
     <string name="snapw_whats_new_title">มีอะไรใหม่</string>
-    <string name="snapw_whats_new_item_scroll_mode">– โหมดเลื่อนแบบใหม่: ปัดขึ้นลงเพื่อดูรูป ปัดซ้ายเพื่อลบ และปัดขวาเพื่อแชร์</string>
-    <string name="snapw_whats_new_item_languages">– เพิ่มภาษาญี่ปุ่น เวียดนาม ไทย ฮินดี โปรตุเกส อิตาลี ดัตช์ และยูเครน</string>
+    <string name="snapw_whats_new_item_review">กลับไปตรวจรูปต่อจากที่บันทึกไว้ หรือข้ามไปยังวันที่ในไทม์ไลน์รูปภาพ</string>
+    <string name="snapw_whats_new_item_languages">เพิ่มภาษาอินโดนีเซีย ตุรกี เบงกาลี และอาหรับ</string>
     <string name="snapw_whats_new_button">ดูสิ่งใหม่</string>
     <string name="settings_section_review">การตรวจรูปภาพ</string>
     <string name="settings_section_review_subtitle">ปรับลำดับรูปภาพและการทำงานของท่าทาง</string>

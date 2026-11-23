@@ -63,11 +63,11 @@
     <string name="support">Supporto</string>
     <string name="support_email">support@snapswipe.xyz</string>
     <string name="supported_android_versions">Versioni Android supportate: %1$s - %2$s</string>
-    <string name="supported_languages_list">Lingue supportate: inglese, coreano, francese, spagnolo, tedesco, cinese (semplificato), giapponese, vietnamita, thailandese, hindi, portoghese, italiano, olandese, ucraino</string>
+    <string name="supported_languages_list">Lingue supportate: inglese, coreano, francese, spagnolo, tedesco, cinese (semplificato), giapponese, vietnamita, thailandese, hindi, portoghese, italiano, olandese, ucraino, indonesiano, turco, bengalese, arabo</string>
 
     <string name="snapw_whats_new_title">Novità</string>
-    <string name="snapw_whats_new_item_scroll_mode">– Nuova modalità di scorrimento: scorri in verticale per sfogliare, a sinistra per eliminare e a destra per condividere.</string>
-    <string name="snapw_whats_new_item_languages">– Nuove lingue: giapponese, vietnamita, thailandese, hindi, portoghese, italiano, olandese e ucraino.</string>
+    <string name="snapw_whats_new_item_review">Riprendi una revisione salvata o vai a una data nella cronologia delle foto.</string>
+    <string name="snapw_whats_new_item_languages">Ora disponibile in indonesiano, turco, bengalese e arabo.</string>
     <string name="snapw_whats_new_button">Mostra le novità</string>
     <string name="settings_section_review">Revisione delle foto</string>
     <string name="settings_section_review_subtitle">Modifica l’ordine e il comportamento dei gesti.</string>

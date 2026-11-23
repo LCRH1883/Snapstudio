@@ -296,7 +296,8 @@ fun MainSwipeScreen(
                             }
                             Row(
                                 modifier = Modifier.fillMaxWidth(),
-                                horizontalArrangement = Arrangement.SpaceEvenly,
+                                // Keep the controls aligned with the physical swipe directions.
+                                horizontalArrangement = Arrangement.Absolute.SpaceEvenly,
                                 verticalAlignment = Alignment.CenterVertically
                             ) {
                                 FilledIconButton(
@@ -529,7 +530,7 @@ fun MainSwipeScreen(
             title = { Text("${stringResource(R.string.snapw_whats_new_title)} ${whatsNewVersionName}") },
             text = {
                 Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                    Text(stringResource(R.string.snapw_whats_new_item_scroll_mode))
+                    Text(stringResource(R.string.snapw_whats_new_item_review))
                     Text(stringResource(R.string.snapw_whats_new_item_languages))
                 }
             }

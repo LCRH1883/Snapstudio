@@ -285,7 +285,7 @@ fun SettingsScreen(
             title = { Text("${stringResource(R.string.snapw_whats_new_title)} ${BuildConfig.VERSION_NAME}") },
             text = {
                 Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                    Text(stringResource(R.string.snapw_whats_new_item_scroll_mode))
+                    Text(stringResource(R.string.snapw_whats_new_item_review))
                     Text(stringResource(R.string.snapw_whats_new_item_languages))
                 }
             }

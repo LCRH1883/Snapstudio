@@ -25,6 +25,7 @@ Track release builds here. Historical codes retain their original zero padding.
 
 | versionName | versionCode | Date | Notes |
 |-------------|-------------|------|-------|
+| 1.4.2       | 14002       | -    | Bundles Indonesian, Turkish, Bengali, and Arabic translations. |
 | 1.4.0       | 14000       | -    | Adds review resume and the photo timeline, fixes deletion and photo access, and targets Android 16 (API 36). |
 | 1.3.1       | 010301      | -    | Prepared Android 16 (API 36) compliance update for Play build 10300. |
 | 1.3.0       | 010300      | -    | Settings UI refresh, theme selector (light/dark/system), and slimmer floating header. |

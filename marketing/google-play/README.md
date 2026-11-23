@@ -6,6 +6,8 @@
 
 Use the [short description](en-US/short-description.txt) with the matching full description and screenshot set below. Google Play lists version 1.3.0 as the previous public release. The 1.4.0 set includes the photo timeline and saved review, so use it with that release.
 
+Production listing text is also available in [Indonesian](id), [Turkish](tr-TR), [Bengali](bn-BD), and [Arabic](ar). It describes the 1.3.0 features.
+
 ## Production 1.3.0
 
 [Full description](en-US/production-1.3.0/full-description.txt)

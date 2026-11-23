@@ -11,8 +11,8 @@ android {
         applicationId = 'com.snapswipe.app'
         minSdk = 26
         targetSdk = 36
-        versionCode = 14000
-        versionName = "1.4.0"
+        versionCode = 14002
+        versionName = "1.4.2"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables { useSupportLibrary = true }
@@ -24,6 +24,13 @@ android {
             shrinkResources = true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
             debuggable = false
+        }
+    }
+
+    bundle {
+        language {
+            // Keep all supported app languages available immediately after install.
+            enableSplit = false
         }
     }
 

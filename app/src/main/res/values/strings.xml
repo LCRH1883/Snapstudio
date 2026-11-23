@@ -35,10 +35,10 @@
     <string name="instructions_share_scroll">• Swipe right to share the current folder/photo.</string>
     <string name="instructions_next_scroll">• Swipe up to view the next photo (slides in from bottom).</string>
     <string name="instructions_prev_scroll">• Swipe down to go back to the previous photo (slides in from top).</string>
-    <string name="snapw_whats_new_title">Whats new</string>
-    <string name="snapw_whats_new_item_scroll_mode">- New "Scroll and delete" mode: swipe vertically to move, left to delete, right to share.</string>
-    <string name="snapw_whats_new_item_languages">- Added more languages: Japanese, Vietnamese, Thai, Hindi, Portuguese, Italian, Dutch, Ukrainian.</string>
-    <string name="snapw_whats_new_button">See whats new</string>
+    <string name="snapw_whats_new_title">What’s new</string>
+    <string name="snapw_whats_new_item_review">Resume a saved review or jump to a date in the photo timeline.</string>
+    <string name="snapw_whats_new_item_languages">Added Indonesian, Turkish, Bengali, and Arabic.</string>
+    <string name="snapw_whats_new_button">See what’s new</string>
 
     <!-- Settings -->
     <string name="settings_title">Settings</string>
@@ -66,7 +66,7 @@
     <string name="support">Support</string>
     <string name="support_email">support@snapswipe.xyz</string>
     <string name="supported_android_versions">Supported Android versions: %1$s to %2$s</string>
-    <string name="supported_languages_list">Supported languages: English, Korean, French, Spanish, German, Chinese (Simplified), Japanese, Vietnamese, Thai, Hindi, Portuguese, Italian, Dutch, Ukrainian</string>
+    <string name="supported_languages_list">Supported languages: English, Korean, French, Spanish, German, Chinese (Simplified), Japanese, Vietnamese, Thai, Hindi, Portuguese, Italian, Dutch, Ukrainian, Indonesian, Turkish, Bengali, Arabic</string>
     <string name="settings_section_review">Review flow</string>
     <string name="settings_section_review_subtitle">Adjust how photos are ordered and how gestures behave.</string>
     <string name="settings_sort_subtitle">Pick the order photos appear while you review.</string>

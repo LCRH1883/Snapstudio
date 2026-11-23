@@ -62,11 +62,11 @@
     <string name="support">सहायता</string>
     <string name="support_email">support@snapswipe.xyz</string>
     <string name="supported_android_versions">समर्थित Android संस्करण: %1$s से %2$s</string>
-    <string name="supported_languages_list">समर्थित भाषाएँ: अंग्रेजी, कोरियाई, फ्रेंच, स्पेनिश, जर्मन, चीनी (सरलीकृत), जापानी, वियतनामी, थाई, हिंदी</string>
+    <string name="supported_languages_list">समर्थित भाषाएँ: अंग्रेजी, कोरियाई, फ्रेंच, स्पेनिश, जर्मन, चीनी (सरलीकृत), जापानी, वियतनामी, थाई, हिंदी, पुर्तगाली, इतालवी, डच, यूक्रेनी, इंडोनेशियाई, तुर्की, बांग्ला, अरबी</string>
 
     <string name="snapw_whats_new_title">नया क्या है</string>
-    <string name="snapw_whats_new_item_scroll_mode">– नया स्क्रोल मोड: फ़ोटो बदलने के लिए ऊपर या नीचे, मिटाने के लिए बाएँ और शेयर करने के लिए दाएँ स्वाइप करें।</string>
-    <string name="snapw_whats_new_item_languages">– नई भाषाएँ: जापानी, वियतनामी, थाई, हिंदी, पुर्तगाली, इतालवी, डच और यूक्रेनी।</string>
+    <string name="snapw_whats_new_item_review">सेव की गई समीक्षा जारी रखें या फ़ोटो की टाइमलाइन में किसी तारीख पर जाएँ।</string>
+    <string name="snapw_whats_new_item_languages">इंडोनेशियाई, तुर्की, बांग्ला और अरबी जोड़ी गई हैं।</string>
     <string name="snapw_whats_new_button">नई सुविधाएँ देखें</string>
     <string name="settings_section_review">फ़ोटो की समीक्षा</string>
     <string name="settings_section_review_subtitle">फ़ोटो का क्रम और स्वाइप करने का तरीका बदलें।</string>

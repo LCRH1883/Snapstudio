@@ -380,4 +380,10 @@ The touch-target and contrast findings need verification across devices and them
 ## Phase 14 · Google Play listing
 
 - [x] **14.1 · Refresh the English listing.** Write short and full descriptions for the free, ad-free photo cleaner. Capture and verify four phone screenshots for production 1.3.0 and five for release 1.4.0. The newer set includes the timeline and saved review. Save the production copy and screenshots in Play Console. [Listing assets and upload order](marketing/google-play/README.md)
-- [ ] **14.2 · Submit the listing update.** Play Console saved the three listing changes and reported an incomplete app-level trader-status declaration during pre-review checks.
+- [x] **14.2 · Submit the English listing update.** Play Console lists the English copy, phone screenshots, and app-level trader-status declaration under Changes in review.
+
+- [x] **14.3 · Expand bundled localization.** Add Indonesian, Turkish, Bengali, and Arabic resources and Android app-language entries. Keep the Delete and Keep controls aligned with their physical swipe directions in Arabic. Prepare localized Play listing copy for the four languages and build 1.4.2 / 14002 for signing.
+  - Verified all 106 resource keys and format arguments in each locale. The emulator displayed the new Settings and review labels in all four languages. The Arabic timeline opened, a right swipe kept the photo, and a left swipe opened Android’s Trash confirmation.
+- [x] **14.4 · Submit the localized listings.** Play Console lists Indonesian, Turkish, Bengali, and Arabic under Changes in review alongside the English listing and trader-status declaration.
+- [x] **14.5 · Package and verify offline app languages.** Disable language splits and Gemini app-string translation in Play Console. Verify all 18 locale selections offline on an emulator using APKs generated from the release bundle.
+- [ ] **14.6 · Verify Google Play delivery.** Sign the release bundle with the upload key and verify it on a Play testing track.

@@ -56,11 +56,11 @@
     <string name="support">지원</string>
     <string name="support_email">support@snapswipe.xyz</string>
     <string name="supported_android_versions">지원 Android 버전: %1$s ~ %2$s</string>
-    <string name="supported_languages_list">지원 언어: 영어, 한국어, 프랑스어, 스페인어, 독일어, 중국어(간체)</string>
+    <string name="supported_languages_list">지원 언어: 영어, 한국어, 프랑스어, 스페인어, 독일어, 중국어(간체), 일본어, 베트남어, 태국어, 힌디어, 포르투갈어, 이탈리아어, 네덜란드어, 우크라이나어, 인도네시아어, 튀르키예어, 벵골어, 아랍어</string>
 
     <string name="snapw_whats_new_title">새로운 기능</string>
-    <string name="snapw_whats_new_item_scroll_mode">– 새 스크롤 모드: 위아래로 밀어 이동하고, 왼쪽으로 밀어 삭제하거나 오른쪽으로 밀어 공유하세요.</string>
-    <string name="snapw_whats_new_item_languages">– 지원 언어 추가: 일본어, 베트남어, 태국어, 힌디어, 포르투갈어, 이탈리아어, 네덜란드어, 우크라이나어.</string>
+    <string name="snapw_whats_new_item_review">저장한 사진 정리를 이어서 하거나 사진 타임라인에서 원하는 날짜로 이동할 수 있습니다.</string>
+    <string name="snapw_whats_new_item_languages">인도네시아어, 튀르키예어, 벵골어, 아랍어를 추가했습니다.</string>
     <string name="snapw_whats_new_button">새로운 기능 보기</string>
     <string name="settings_section_review">사진 검토</string>
     <string name="settings_section_review_subtitle">사진 순서와 제스처 동작을 조정하세요.</string>

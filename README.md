@@ -10,7 +10,7 @@ Snap Swipe is a Jetpack Compose Android app that helps you clean up your photos 
 - Sort order: newest-to-oldest or oldest-to-newest.
 - Share via system chooser with read permission granted.
 - End-of-run and empty-state handling with restart/refresh.
-- Localized UI in EN, KO, FR, ES, DE, zh-CN.
+- Localized UI in 18 languages, including Indonesian, Turkish, Bengali, and Arabic.
 - Permission rationale explains local-only photo access; nothing is uploaded.
 
 ## Build & run
@@ -36,7 +36,7 @@ If you prefer APK for testing:
 Artifact: `app/build/outputs/apk/release/app-release.apk`.
 
 ### Release checklist (summary)
-- versionCode/versionName set (current: versionName 1.4.0, versionCode 14000; see VERSIONING.md).
+- Version 1.4.2, build 14002. See [versioning](VERSIONING.md).
 - Shrink/obfuscate enabled for release; allowBackup=false.
 - Permissions: READ_MEDIA_IMAGES (and READ_EXTERNAL_STORAGE maxSdk32).
 - Smoke-test release build on device: permissions, swipes, delete modes, share, settings, numbering, undo/back, home.
@@ -44,8 +44,10 @@ Artifact: `app/build/outputs/apk/release/app-release.apk`.
 See `RELEASE_CHECKLIST.md` for full list.
 
 ## Localization
-- Strings are in `app/src/main/res/values/strings.xml` with translations in `values-ko`, `values-fr`, `values-es`, `values-de`, `values-zh-rCN`, `values-ja`, `values-vi`, `values-th`, `values-hi`, `values-pt`, `values-it`, `values-nl`, `values-uk`.
-- UI uses `stringResource`; device/app locale selects the matching resources automatically (English is the fallback). There is no in-app picker.
+- Keep English source strings in `app/src/main/res/values/strings.xml` and bundled translations in the locale-specific `values-*` folders. The supported locale list is in `app/src/main/res/xml/locales_config.xml`.
+- Compose uses `stringResource` to match the Android app or device language, with English as the fallback.
+- Android 13 and later offer **Settings → Apps → Snap Swipe → Language**. Earlier Android versions use the device language. The release bundle installs every supported language so switching works offline.
+- To ship the bundled translations, disable automatic app-string translation for their languages in Play Console. Google Play overrides bundled strings for languages it manages.
 
 ## Permissions and privacy
 - Requests photo access (READ_MEDIA_IMAGES; legacy READ_EXTERNAL_STORAGE on SDK ≤ 32).

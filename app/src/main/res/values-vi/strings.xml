@@ -62,11 +62,11 @@
     <string name="support">Hỗ trợ</string>
     <string name="support_email">support@snapswipe.xyz</string>
     <string name="supported_android_versions">Phiên bản Android hỗ trợ: %1$s đến %2$s</string>
-    <string name="supported_languages_list">Ngôn ngữ hỗ trợ: Tiếng Anh, Hàn, Pháp, Tây Ban Nha, Đức, Trung (Giản thể), Nhật, Việt, Thái, Hindi</string>
+    <string name="supported_languages_list">Ngôn ngữ hỗ trợ: Tiếng Anh, Hàn, Pháp, Tây Ban Nha, Đức, Trung (Giản thể), Nhật, Việt, Thái, Hindi, Bồ Đào Nha, Ý, Hà Lan, Ukraina, Indonesia, Thổ Nhĩ Kỳ, Bengal, Ả Rập</string>
 
     <string name="snapw_whats_new_title">Có gì mới</string>
-    <string name="snapw_whats_new_item_scroll_mode">– Chế độ cuộn mới: vuốt dọc để di chuyển, vuốt trái để xóa và vuốt phải để chia sẻ.</string>
-    <string name="snapw_whats_new_item_languages">– Thêm tiếng Nhật, tiếng Việt, tiếng Thái, tiếng Hindi, tiếng Bồ Đào Nha, tiếng Ý, tiếng Hà Lan và tiếng Ukraina.</string>
+    <string name="snapw_whats_new_item_review">Tiếp tục phiên xem ảnh đã lưu hoặc chuyển đến một ngày trên dòng thời gian ảnh.</string>
+    <string name="snapw_whats_new_item_languages">Đã thêm tiếng Indonesia, tiếng Thổ Nhĩ Kỳ, tiếng Bengal và tiếng Ả Rập.</string>
     <string name="snapw_whats_new_button">Xem tính năng mới</string>
     <string name="settings_section_review">Duyệt ảnh</string>
     <string name="settings_section_review_subtitle">Điều chỉnh thứ tự ảnh và thao tác vuốt.</string>

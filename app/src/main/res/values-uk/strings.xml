@@ -62,11 +62,11 @@
     <string name="support">Підтримка</string>
     <string name="support_email">support@snapswipe.xyz</string>
     <string name="supported_android_versions">Підтримувані Android: %1$s до %2$s</string>
-    <string name="supported_languages_list">Підтримувані мови: англійська, корейська, французька, іспанська, німецька, китайська (спрощена), японська, в’єтнамська, тайська, хінді, португальська, італійська, нідерландська, українська</string>
+    <string name="supported_languages_list">Підтримувані мови: англійська, корейська, французька, іспанська, німецька, китайська (спрощена), японська, в’єтнамська, тайська, хінді, португальська, італійська, нідерландська, українська, індонезійська, турецька, бенгальська, арабська</string>
 
     <string name="snapw_whats_new_title">Що нового</string>
-    <string name="snapw_whats_new_item_scroll_mode">– Новий режим прокручування: гортайте вертикально, ліворуч для видалення, праворуч для поширення.</string>
-    <string name="snapw_whats_new_item_languages">– Нові мови: японська, в’єтнамська, тайська, гінді, португальська, італійська, нідерландська й українська.</string>
+    <string name="snapw_whats_new_item_review">Продовжте збережений перегляд або перейдіть до потрібної дати на часовій шкалі фото.</string>
+    <string name="snapw_whats_new_item_languages">Додано індонезійську, турецьку, бенгальську й арабську мови.</string>
     <string name="snapw_whats_new_button">Переглянути новинки</string>
     <string name="settings_section_review">Перегляд фотографій</string>
     <string name="settings_section_review_subtitle">Налаштуйте порядок фотографій і жести.</string>

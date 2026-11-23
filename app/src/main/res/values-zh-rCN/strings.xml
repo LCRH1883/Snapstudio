@@ -56,11 +56,11 @@
     <string name="support">支持</string>
     <string name="support_email">support@snapswipe.xyz</string>
     <string name="supported_android_versions">支持的 Android 版本：%1$s 至 %2$s</string>
-    <string name="supported_languages_list">支持的语言：英语、韩语、法语、西班牙语、德语、中文（简体）</string>
+    <string name="supported_languages_list">支持的语言：英语、韩语、法语、西班牙语、德语、中文（简体）、日语、越南语、泰语、印地语、葡萄牙语、意大利语、荷兰语、乌克兰语、印度尼西亚语、土耳其语、孟加拉语、阿拉伯语</string>
 
     <string name="snapw_whats_new_title">新功能</string>
-    <string name="snapw_whats_new_item_scroll_mode">– 新增滚动模式：上下滑动浏览，向左滑动删除，向右滑动分享。</string>
-    <string name="snapw_whats_new_item_languages">– 新增语言：日语、越南语、泰语、印地语、葡萄牙语、意大利语、荷兰语和乌克兰语。</string>
+    <string name="snapw_whats_new_item_review">继续上次保存的整理进度，或在照片时间线中跳转到指定日期。</string>
+    <string name="snapw_whats_new_item_languages">新增印度尼西亚语、土耳其语、孟加拉语和阿拉伯语。</string>
     <string name="snapw_whats_new_button">查看新功能</string>
     <string name="settings_section_review">照片浏览</string>
     <string name="settings_section_review_subtitle">调整照片顺序和手势操作。</string>
