@@ -108,3 +108,4 @@
 | 13.0   | 2026-11-23       | Codex  | Audited the Compose UI on Android 16 and documented the Material 3 update plan. |
 | 13.0a  | 2026-11-23       | Codex  | Aligned the opaque review controls, moved Undo to the taller translucent header, and adapted the existing layouts for phone and tablet windows. |
 | 13.0b  | 2026-11-23       | Codex  | Set neutral light and dark menu colors and added year, month, and day jumps to the oldest-first timeline. |
+| 14.1   | 2026-11-23       | Codex  | Prepared version-matched Play Store screenshots and English copy, and saved the production listing changes in Play Console. |

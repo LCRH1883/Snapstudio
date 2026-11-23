@@ -1,0 +1,16 @@
+Clean up your Android gallery with Snap Swipe, a free photo cleaner that lets you review your photos one at a time. Snap Swipe is completely free, with no ads, subscriptions, or in-app purchases.
+
+Swipe to keep or delete
+In Swipe to choose mode, swipe right to keep a photo, left to delete it, or up to share it. You can also use the on-screen controls to keep or delete photos.
+
+Clear out photo clutter
+Sort through blurry shots, old screenshots, and extra copies. Delete photos as you go or queue them for batch deletion. You decide what stays in your gallery.
+
+Review at your pace
+Start with your newest photos or work from oldest to newest. Choose between swipe review and scroll mode, and use light or dark appearance.
+
+Jump to a date or resume later
+Open the photo timeline to browse from oldest to newest. Use the calendar to jump to a year, month, or day with photos. If you leave partway through a cleanup, resume your saved review when you return.
+
+Photos stay on your device
+Snap Swipe reviews photos locally and does not upload them. When you share a photo, you choose where to send it through Android’s share menu.
