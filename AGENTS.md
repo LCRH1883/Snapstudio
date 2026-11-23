@@ -105,3 +105,4 @@
 | 12.2   | 2026-11-23       | Codex  | Fixed the extra resume prompt after Android confirmation dialogs, then repeated the review, queue, Trash, and restore checks on the attached Galaxy. |
 | 12.3   | 2026-11-23       | Codex  | Preserved saved and in-progress review choices across gallery retries and background refreshes, with two regression tests. |
 | ver1.4.0 | 2026-11-23     | Codex  | Set the Android release version to 1.4.0 and build code to 14000. |
+| 13.0   | 2026-11-23       | Codex  | Audited the Compose UI on Android 16 and documented the Material 3 update plan. |
