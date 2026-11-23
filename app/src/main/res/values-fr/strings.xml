@@ -95,6 +95,12 @@
     <string name="photo_timeline">Chronologie des photos</string>
     <string name="start_here">Commencer ici</string>
     <string name="timeline_scrubber">Parcourir la chronologie des photos</string>
+    <string name="timeline_jump_to_date">Aller à la date</string>
+    <string name="timeline_year">Année</string>
+    <string name="timeline_month">Mois</string>
+    <string name="timeline_day">Jour</string>
+    <string name="timeline_all_months">Tous les mois</string>
+    <string name="timeline_all_days">Tous les jours</string>
     <string name="resume_review_title">Reprendre le tri ?</string>
     <string name="resume_review_description">Reprenez à la dernière photo ou recommencez le tri depuis le début.</string>
     <string name="resume_review">Reprendre</string>

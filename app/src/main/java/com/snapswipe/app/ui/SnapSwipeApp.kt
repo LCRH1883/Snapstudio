@@ -30,6 +30,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -138,36 +139,38 @@ fun SnapSwipeApp(
     val manageAccess = if (photoAccess == PhotoAccess.SELECTED) requestAccess else openAppSettings
 
     SnapSwipeTheme(themeMode = themeMode) {
-        NavHost(navController = navController, startDestination = ROUTE_PERMISSIONS) {
-            composable(ROUTE_PERMISSIONS) {
-                PermissionsScreen(
-                    onGrantAccess = requestAccess,
-                    onSkip = { navController.navigate(ROUTE_SETTINGS) },
-                    onOpenAppSettings = openAppSettings,
-                    permissionDenied = permissionDenied
-                )
-            }
-            composable(ROUTE_MAIN) {
-                if (photoAccess != PhotoAccess.NONE) {
-                    val viewModel: SnapSwipeViewModel = viewModel(
-                        factory = remember { SnapSwipeViewModelFactory(context.applicationContext) }
-                    )
-                    MainScreen(
-                        onOpenSettings = { navController.navigate(ROUTE_SETTINGS) },
-                        onRequestPermissions = manageAccess,
-                        hasLimitedAccess = photoAccess == PhotoAccess.SELECTED,
-                        accessRevision = accessRevision,
-                        returnRevision = returnRevision,
-                        onSystemFlowChanged = onSystemFlowChanged,
-                        viewModel = viewModel
+        Surface(Modifier.fillMaxSize()) {
+            NavHost(navController = navController, startDestination = ROUTE_PERMISSIONS) {
+                composable(ROUTE_PERMISSIONS) {
+                    PermissionsScreen(
+                        onGrantAccess = requestAccess,
+                        onSkip = { navController.navigate(ROUTE_SETTINGS) },
+                        onOpenAppSettings = openAppSettings,
+                        permissionDenied = permissionDenied
                     )
                 }
-            }
-            composable(ROUTE_SETTINGS) {
-                SettingsScreen(
-                    onDone = { navController.popBackStack() },
-                    onManagePhotoAccess = manageAccess
-                )
+                composable(ROUTE_MAIN) {
+                    if (photoAccess != PhotoAccess.NONE) {
+                        val viewModel: SnapSwipeViewModel = viewModel(
+                            factory = remember { SnapSwipeViewModelFactory(context.applicationContext) }
+                        )
+                        MainScreen(
+                            onOpenSettings = { navController.navigate(ROUTE_SETTINGS) },
+                            onRequestPermissions = manageAccess,
+                            hasLimitedAccess = photoAccess == PhotoAccess.SELECTED,
+                            accessRevision = accessRevision,
+                            returnRevision = returnRevision,
+                            onSystemFlowChanged = onSystemFlowChanged,
+                            viewModel = viewModel
+                        )
+                    }
+                }
+                composable(ROUTE_SETTINGS) {
+                    SettingsScreen(
+                        onDone = { navController.popBackStack() },
+                        onManagePhotoAccess = manageAccess
+                    )
+                }
             }
         }
     }

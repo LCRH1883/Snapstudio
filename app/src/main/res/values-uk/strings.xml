@@ -101,6 +101,12 @@
     <string name="photo_timeline">Хронологія фотографій</string>
     <string name="start_here">Почати тут</string>
     <string name="timeline_scrubber">Переміщатися хронологією фотографій</string>
+    <string name="timeline_jump_to_date">Перейти до дати</string>
+    <string name="timeline_year">Рік</string>
+    <string name="timeline_month">Місяць</string>
+    <string name="timeline_day">День</string>
+    <string name="timeline_all_months">Усі місяці</string>
+    <string name="timeline_all_days">Усі дні</string>
     <string name="resume_review_title">Продовжити перегляд?</string>
     <string name="resume_review_description">Продовжте з останньої фотографії або почніть новий перегляд спочатку.</string>
     <string name="resume_review">Продовжити</string>

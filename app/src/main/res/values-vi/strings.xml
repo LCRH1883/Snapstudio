@@ -101,6 +101,12 @@
     <string name="photo_timeline">Dòng thời gian ảnh</string>
     <string name="start_here">Bắt đầu tại đây</string>
     <string name="timeline_scrubber">Di chuyển trên dòng thời gian ảnh</string>
+    <string name="timeline_jump_to_date">Chuyển đến ngày</string>
+    <string name="timeline_year">Năm</string>
+    <string name="timeline_month">Tháng</string>
+    <string name="timeline_day">Ngày</string>
+    <string name="timeline_all_months">Tất cả các tháng</string>
+    <string name="timeline_all_days">Tất cả các ngày</string>
     <string name="resume_review_title">Tiếp tục duyệt ảnh?</string>
     <string name="resume_review_description">Tiếp tục từ ảnh gần nhất hoặc bắt đầu lượt duyệt mới từ đầu.</string>
     <string name="resume_review">Tiếp tục</string>

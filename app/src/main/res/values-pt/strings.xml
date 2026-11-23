@@ -101,6 +101,12 @@
     <string name="photo_timeline">Linha do tempo de fotos</string>
     <string name="start_here">Começar aqui</string>
     <string name="timeline_scrubber">Navegar pela linha do tempo de fotos</string>
+    <string name="timeline_jump_to_date">Ir para a data</string>
+    <string name="timeline_year">Ano</string>
+    <string name="timeline_month">Mês</string>
+    <string name="timeline_day">Dia</string>
+    <string name="timeline_all_months">Todos os meses</string>
+    <string name="timeline_all_days">Todos os dias</string>
     <string name="resume_review_title">Retomar a revisão?</string>
     <string name="resume_review_description">Continue da última foto ou inicie uma nova revisão desde o começo.</string>
     <string name="resume_review">Retomar</string>

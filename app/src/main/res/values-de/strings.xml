@@ -95,6 +95,12 @@
     <string name="photo_timeline">Foto-Zeitleiste</string>
     <string name="start_here">Hier beginnen</string>
     <string name="timeline_scrubber">Durch die Foto-Zeitleiste blättern</string>
+    <string name="timeline_jump_to_date">Zum Datum springen</string>
+    <string name="timeline_year">Jahr</string>
+    <string name="timeline_month">Monat</string>
+    <string name="timeline_day">Tag</string>
+    <string name="timeline_all_months">Alle Monate</string>
+    <string name="timeline_all_days">Alle Tage</string>
     <string name="resume_review_title">Durchsicht fortsetzen?</string>
     <string name="resume_review_description">Fahre beim letzten Foto fort oder beginne von vorn.</string>
     <string name="resume_review">Fortsetzen</string>

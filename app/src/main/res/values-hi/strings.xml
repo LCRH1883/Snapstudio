@@ -101,6 +101,12 @@
     <string name="photo_timeline">फ़ोटो की टाइमलाइन</string>
     <string name="start_here">यहाँ से शुरू करें</string>
     <string name="timeline_scrubber">फ़ोटो की टाइमलाइन में आगे या पीछे जाएँ</string>
+    <string name="timeline_jump_to_date">तारीख पर जाएँ</string>
+    <string name="timeline_year">साल</string>
+    <string name="timeline_month">महीना</string>
+    <string name="timeline_day">दिन</string>
+    <string name="timeline_all_months">सभी महीने</string>
+    <string name="timeline_all_days">सभी दिन</string>
     <string name="resume_review_title">समीक्षा जारी रखें?</string>
     <string name="resume_review_description">आखिरी फ़ोटो से जारी रखें या शुरुआत से नई समीक्षा करें।</string>
     <string name="resume_review">जारी रखें</string>

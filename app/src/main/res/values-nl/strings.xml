@@ -101,6 +101,12 @@
     <string name="photo_timeline">Fototijdlijn</string>
     <string name="start_here">Hier beginnen</string>
     <string name="timeline_scrubber">Door de fototijdlijn bladeren</string>
+    <string name="timeline_jump_to_date">Naar datum gaan</string>
+    <string name="timeline_year">Jaar</string>
+    <string name="timeline_month">Maand</string>
+    <string name="timeline_day">Dag</string>
+    <string name="timeline_all_months">Alle maanden</string>
+    <string name="timeline_all_days">Alle dagen</string>
     <string name="resume_review_title">Verder met bekijken?</string>
     <string name="resume_review_description">Ga verder bij je laatste foto of begin opnieuw vanaf het begin.</string>
     <string name="resume_review">Hervatten</string>

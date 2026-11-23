@@ -95,6 +95,12 @@
     <string name="photo_timeline">사진 타임라인</string>
     <string name="start_here">여기서 시작</string>
     <string name="timeline_scrubber">사진 타임라인 탐색</string>
+    <string name="timeline_jump_to_date">날짜로 이동</string>
+    <string name="timeline_year">연도</string>
+    <string name="timeline_month">월</string>
+    <string name="timeline_day">일</string>
+    <string name="timeline_all_months">모든 월</string>
+    <string name="timeline_all_days">모든 날짜</string>
     <string name="resume_review_title">사진 검토를 계속할까요?</string>
     <string name="resume_review_description">마지막 사진부터 계속하거나 처음부터 새로 시작하세요.</string>
     <string name="resume_review">계속</string>

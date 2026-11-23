@@ -101,6 +101,12 @@
     <string name="photo_timeline">写真のタイムライン</string>
     <string name="start_here">ここから開始</string>
     <string name="timeline_scrubber">写真のタイムラインを移動</string>
+    <string name="timeline_jump_to_date">日付に移動</string>
+    <string name="timeline_year">年</string>
+    <string name="timeline_month">月</string>
+    <string name="timeline_day">日</string>
+    <string name="timeline_all_months">すべての月</string>
+    <string name="timeline_all_days">すべての日</string>
     <string name="resume_review_title">写真の確認を再開しますか？</string>
     <string name="resume_review_description">前回の写真から再開するか、最初から確認を始められます。</string>
     <string name="resume_review">再開</string>

@@ -100,6 +100,12 @@
     <string name="photo_timeline">Photo timeline</string>
     <string name="start_here">Start here</string>
     <string name="timeline_scrubber">Scrub through the photo timeline</string>
+    <string name="timeline_jump_to_date">Jump to date</string>
+    <string name="timeline_year">Year</string>
+    <string name="timeline_month">Month</string>
+    <string name="timeline_day">Day</string>
+    <string name="timeline_all_months">All months</string>
+    <string name="timeline_all_days">All days</string>
     <string name="resume_review_title">Resume your review?</string>
     <string name="resume_review_description">Continue from your last photo or start a new review from the beginning.</string>
     <string name="resume_review">Resume</string>
