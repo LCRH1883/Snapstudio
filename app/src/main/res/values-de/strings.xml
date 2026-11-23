@@ -99,4 +99,5 @@
     <string name="resume_review_description">Fahre beim letzten Foto fort oder beginne von vorn.</string>
     <string name="resume_review">Fortsetzen</string>
     <string name="start_from_beginning">Von vorn beginnen</string>
+    <string name="review_options">Optionen für die Durchsicht</string>
 </resources>

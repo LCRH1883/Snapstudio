@@ -12,37 +12,44 @@ import androidx.compose.foundation.gestures.detectDragGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
-import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.navigationBarsPadding
-import androidx.compose.foundation.layout.offset
+import androidx.compose.foundation.layout.WindowInsetsSides
+import androidx.compose.foundation.layout.only
+import androidx.compose.foundation.layout.safeDrawing
+import androidx.compose.foundation.layout.windowInsetsPadding
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.statusBarsPadding
-import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowForward
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.DateRange
-import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.Undo
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FilledIconButton
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
+import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Scaffold
@@ -57,6 +64,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -66,7 +74,12 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.text.rememberTextMeasurer
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.snapswipe.app.R
@@ -80,7 +93,7 @@ import kotlin.math.abs
     "ComposableLambdaParameterNaming",
     "ComposableInvocation"
 )
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalLayoutApi::class, ExperimentalMaterial3Api::class)
 @Composable
 fun MainSwipeScreen(
     uiState: SnapSwipeUiState,
@@ -89,7 +102,7 @@ fun MainSwipeScreen(
     onKeep: () -> Unit,
     onDelete: () -> Unit,
     onUndo: () -> Unit = {},
-    onHome: () -> Unit = {},
+    onStartFromBeginning: () -> Unit = {},
     onShare: () -> Unit = {},
     interactionMode: InteractionMode = InteractionMode.SWIPE_TO_CHOOSE,
     onRestart: () -> Unit = {},
@@ -112,10 +125,11 @@ fun MainSwipeScreen(
 ) {
     val isScrollMode = interactionMode == InteractionMode.SCROLL_AND_DELETE
     val hasPhotos = uiState.photos.isNotEmpty()
+    val showPhoto = hasPhotos && !uiState.isLoading && uiState.loadError == null
     val processedAll = !hasPhotos && uiState.totalCount > 0 && !uiState.isLoading
-    var showQueue by remember { mutableStateOf(false) }
-    var showTimeline by remember { mutableStateOf(false) }
-    var showShareSheet by remember { mutableStateOf(false) }
+    var showQueue by rememberSaveable { mutableStateOf(false) }
+    var showTimeline by rememberSaveable { mutableStateOf(false) }
+    var showShareSheet by rememberSaveable { mutableStateOf(false) }
     val snackbar = remember { SnackbarHostState() }
     val context = LocalContext.current
     LaunchedEffect(uiState.offerResume) {
@@ -146,306 +160,271 @@ fun MainSwipeScreen(
         previousIndex = uiState.currentIndex
     }
     Scaffold(
-        snackbarHost = { SnackbarHost(snackbar, Modifier.navigationBarsPadding()) },
-        topBar = {},
+        snackbarHost = {
+            SnackbarHost(
+                snackbar,
+                Modifier.windowInsetsPadding(
+                    WindowInsets.safeDrawing.only(WindowInsetsSides.Bottom + WindowInsetsSides.Horizontal)
+                )
+            )
+        },
         contentWindowInsets = WindowInsets(0)
     ) { innerPadding ->
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(innerPadding),
-            contentAlignment = Alignment.Center
+        BoxWithConstraints(
+            modifier = Modifier.fillMaxSize().padding(innerPadding)
         ) {
-            when {
-                uiState.isLoading -> {
-                    Column(
-                        horizontalAlignment = Alignment.CenterHorizontally,
-                        verticalArrangement = Arrangement.spacedBy(12.dp)
-                    ) {
-                        CircularProgressIndicator()
-                        Text(stringResource(R.string.loading_photos))
-                    }
-                }
-
-                uiState.loadError != null -> {
-                    Column(
-                        horizontalAlignment = Alignment.CenterHorizontally,
-                        verticalArrangement = Arrangement.spacedBy(8.dp)
-                    ) {
-                        Text(
-                            text = stringResource(uiState.loadError),
-                            color = MaterialTheme.colorScheme.error
-                        )
-                        val permissionError = uiState.loadError == R.string.permission_denied_message
-                        Button(onClick = if (permissionError) onRequestPermissions else onReload) {
-                            Text(stringResource(if (permissionError) R.string.check_permissions else R.string.refresh))
-                        }
-                    }
-                }
-
-                processedAll -> {
-                    Column(
-                        horizontalAlignment = Alignment.CenterHorizontally,
-                        verticalArrangement = Arrangement.spacedBy(12.dp),
-                        modifier = Modifier.padding(horizontal = 24.dp)
-                    ) {
-                        Text(
-                            text = stringResource(R.string.reviewed_run_title),
-                            style = MaterialTheme.typography.titleMedium
-                        )
-                        Text(
-                            text = stringResource(R.string.reviewed_run_subtitle),
-                            style = MaterialTheme.typography.bodyMedium
-                        )
-                        if (queuedDeleteCount > 0) {
-                            Button(onClick = { showQueue = true }, enabled = !uiState.mediaBusy) {
-                                Text(stringResource(R.string.review_queue, queuedDeleteCount))
+            val compactHeight = maxHeight < 400.dp
+            val fitPhoto = compactHeight || maxWidth >= 600.dp
+            if (showPhoto) {
+                val photo = uiState.currentPhoto
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .background(Color.Black)
+                        .pointerInput(uiState.currentPhoto?.uri, interactionMode, uiState.mediaBusy, uiState.deleteMode) {
+                            if (uiState.mediaBusy) return@pointerInput
+                            val horizontalThreshold = 60f
+                            val verticalThreshold = 80f
+                            var totalDx = 0f
+                            var totalDy = 0f
+                            detectDragGestures(
+                                onDragStart = {
+                                    totalDx = 0f
+                                    totalDy = 0f
+                                },
+                                onDragEnd = {
+                                    if (abs(totalDx) > abs(totalDy)) {
+                                        when {
+                                            totalDx > horizontalThreshold -> {
+                                                if (isScrollMode) {
+                                                    onShare()
+                                                } else {
+                                                    onKeep()
+                                                }
+                                            }
+                                            totalDx < -horizontalThreshold -> onDelete()
+                                        }
+                                    } else {
+                                        when {
+                                            totalDy < -verticalThreshold -> {
+                                                if (isScrollMode) {
+                                                    lastScrollDirection = 1
+                                                    onScrollForward()
+                                                } else {
+                                                    showShareSheet = true
+                                                }
+                                            }
+                                            totalDy > verticalThreshold && isScrollMode -> {
+                                                lastScrollDirection = -1
+                                                onScrollBack()
+                                            }
+                                        }
+                                    }
+                                }
+                            ) { change, dragAmount ->
+                                val (dx, dy) = dragAmount
+                                totalDx += dx
+                                totalDy += dy
+                                change.consume()
                             }
                         }
-                        if (uiState.lastAction != null) {
-                            TextButton(onClick = onUndo, enabled = !uiState.mediaBusy) {
-                                Text(stringResource(R.string.undo))
+                ) {
+                    AnimatedContent(
+                        targetState = photo,
+                        transitionSpec = {
+                            if (isScrollMode) {
+                                val direction = if (lastScrollDirection >= 0) 1 else -1
+                                slideInVertically(
+                                    animationSpec = tween(durationMillis = 200)
+                                ) { fullHeight -> fullHeight * direction } togetherWith
+                                    slideOutVertically(
+                                        animationSpec = tween(durationMillis = 200)
+                                    ) { fullHeight -> -fullHeight * direction }
+                            } else {
+                                fadeIn(animationSpec = tween(150)) togetherWith fadeOut(animationSpec = tween(150))
                             }
-                        }
-                        Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-                            Button(onClick = onRestart, enabled = !uiState.mediaBusy) {
-                                Text(stringResource(R.string.restart))
-                            }
-                            Button(onClick = onOpenSettings, enabled = !uiState.mediaBusy) {
-                                Text(stringResource(R.string.settings))
-                            }
-                        }
-                    }
-                }
-
-                !hasPhotos -> {
-                    Column(
-                        horizontalAlignment = Alignment.CenterHorizontally,
-                        verticalArrangement = Arrangement.spacedBy(8.dp)
-                    ) {
-                        Text(
-                            text = stringResource(R.string.no_photos_title),
-                            style = MaterialTheme.typography.titleMedium
+                        },
+                        label = "photoTransition",
+                        modifier = Modifier.fillMaxSize()
+                    ) { targetPhoto ->
+                        AsyncImage(
+                            model = targetPhoto?.uri,
+                            contentDescription = stringResource(R.string.current_photo),
+                            modifier = Modifier.fillMaxSize(),
+                            contentScale = if (fitPhoto) ContentScale.Fit else ContentScale.Crop
                         )
-                        Text(
-                            text = stringResource(R.string.no_photos_subtitle),
-                            style = MaterialTheme.typography.bodyMedium
-                        )
-                        Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-                            Button(onClick = onReload) { Text(stringResource(R.string.refresh)) }
-                            Button(onClick = onOpenSettings) { Text(stringResource(R.string.settings)) }
-                        }
                     }
-                }
 
-                hasPhotos -> {
-                    val photo = uiState.currentPhoto
-                    val horizontalThreshold = 60f
-                    val verticalThreshold = 80f
                     Box(
                         modifier = Modifier
-                            .fillMaxSize()
-                            .pointerInput(uiState.currentPhoto?.uri, interactionMode, uiState.mediaBusy, uiState.deleteMode) {
-                                if (uiState.mediaBusy) return@pointerInput
-                                var totalDx = 0f
-                                var totalDy = 0f
-                                detectDragGestures(
-                                    onDragStart = {
-                                        totalDx = 0f
-                                        totalDy = 0f
-                                    },
-                                    onDragEnd = {
-                                        if (abs(totalDx) > abs(totalDy)) {
-                                            when {
-                                                totalDx > horizontalThreshold -> {
-                                                    if (isScrollMode) {
-                                                        onShare()
-                                                    } else {
-                                                        onKeep()
-                                                    }
-                                                }
-                                                totalDx < -horizontalThreshold -> onDelete()
-                                            }
-                                        } else {
-                                            when {
-                                                totalDy < -verticalThreshold -> {
-                                                    if (isScrollMode) {
-                                                        lastScrollDirection = 1
-                                                        onScrollForward()
-                                                    } else {
-                                                        showShareSheet = true
-                                                    }
-                                                }
-                                                totalDy > verticalThreshold && isScrollMode -> {
-                                                    lastScrollDirection = -1
-                                                    onScrollBack()
-                                                }
-                                            }
-                                        }
-                                    }
-                                ) { change, dragAmount ->
-                                    val (dx, dy) = dragAmount
-                                    totalDx += dx
-                                    totalDy += dy
-                                    change.consume()
-                                }
-                            }
-                    ) {
-                        AnimatedContent(
-                            targetState = photo,
-                            transitionSpec = {
-                                if (isScrollMode) {
-                                    val direction = if (lastScrollDirection >= 0) 1 else -1
-                                    slideInVertically(
-                                        animationSpec = tween(durationMillis = 200)
-                                    ) { fullHeight -> fullHeight * direction } togetherWith
-                                        slideOutVertically(
-                                            animationSpec = tween(durationMillis = 200)
-                                        ) { fullHeight -> -fullHeight * direction }
-                                } else {
-                                    fadeIn(animationSpec = tween(150)) togetherWith fadeOut(animationSpec = tween(150))
-                                }
-                            },
-                            label = "photoTransition",
-                            modifier = Modifier.fillMaxSize()
-                        ) { targetPhoto ->
-                            AsyncImage(
-                                model = targetPhoto?.uri,
-                                contentDescription = stringResource(R.string.current_photo),
-                                modifier = Modifier.fillMaxSize(),
-                                contentScale = ContentScale.Crop
-                            )
-                        }
-
-                        // Gradient overlay for legibility using theme colors.
-                        Box(
-                            modifier = Modifier
-                                .align(Alignment.BottomCenter)
-                                .fillMaxWidth()
-                                .clip(RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp))
-                                .background(
-                                    Brush.verticalGradient(
-                                        colors = listOf(
-                                            MaterialTheme.colorScheme.scrim.copy(alpha = 0.55f),
-                                            MaterialTheme.colorScheme.scrim.copy(alpha = 0.15f)
-                                        )
+                            .align(Alignment.BottomCenter)
+                            .fillMaxWidth()
+                            .clip(RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp))
+                            .background(
+                                Brush.verticalGradient(
+                                    colors = listOf(
+                                        MaterialTheme.colorScheme.scrim.copy(alpha = 0.55f),
+                                        MaterialTheme.colorScheme.scrim.copy(alpha = 0.15f)
                                     )
                                 )
-                                .padding(horizontal = 16.dp, vertical = 20.dp)
+                            )
+                            .windowInsetsPadding(
+                                WindowInsets.safeDrawing.only(WindowInsetsSides.Bottom + WindowInsetsSides.Horizontal)
+                            )
+                            .padding(horizontal = 16.dp, vertical = if (compactHeight) 8.dp else 20.dp),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Column(
+                            modifier = Modifier.widthIn(max = 440.dp).fillMaxWidth(),
+                            verticalArrangement = Arrangement.spacedBy(8.dp)
                         ) {
-                            Column(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .navigationBarsPadding(),
-                                verticalArrangement = Arrangement.spacedBy(8.dp)
-                            ) {
-                                val position = uiState.currentPosition ?: 0
-                                val total = if (uiState.displayTotal > 0) uiState.displayTotal else uiState.photos.size
-                                Text(
-                                    text = stringResource(R.string.photo_position, position, total),
-                                    style = MaterialTheme.typography.titleMedium,
-                                    color = Color.White
-                                )
-                                if (queuedDeleteCount > 0) {
-                                    Row(
-                                        modifier = Modifier.fillMaxWidth(),
-                                        horizontalArrangement = Arrangement.Start
-                                    ) {
-                                        Button(
-                                            onClick = { showQueue = true },
-                                            enabled = !uiState.mediaBusy,
-                                            modifier = Modifier.weight(1f)
-                                        ) {
-                                            Text(stringResource(R.string.review_queue, queuedDeleteCount))
-                                        }
-                                    }
-                                }
-                                BoxWithConstraints(
+                            val position = uiState.currentPosition ?: 0
+                            val total = uiState.displayTotal.takeIf { it > 0 } ?: uiState.photos.size
+                            Text(
+                                text = stringResource(R.string.photo_position, position, total),
+                                style = MaterialTheme.typography.titleMedium,
+                                color = Color.White
+                            )
+                            if (queuedDeleteCount > 0) {
+                                Button(
+                                    onClick = { showQueue = true },
+                                    enabled = !uiState.mediaBusy,
                                     modifier = Modifier.fillMaxWidth()
                                 ) {
-                                    val buttonSize = 56.dp
-                                    val xOffsetLeft = this.maxWidth / 3 - buttonSize / 2
-                                    val xOffsetRight = this.maxWidth * 2 / 3 - buttonSize / 2
-                                    val xOffsetBack = (xOffsetLeft / 2) - (buttonSize / 2)
-
-                                    IconButton(
-                                        onClick = onUndo,
-                                        enabled = !uiState.mediaBusy && uiState.lastAction != null,
-                                        modifier = Modifier.offset(x = xOffsetBack)
-                                    ) {
-                                        Box(
-                                            modifier = Modifier
-                                                .size(buttonSize)
-                                                .clip(CircleShape)
-                                                .background(MaterialTheme.colorScheme.surfaceColorAtElevation(6.dp).copy(alpha = 0.65f)),
-                                            contentAlignment = Alignment.Center
-                                        ) {
-                                            Icon(
-                                                imageVector = Icons.Default.Undo,
-                                                contentDescription = stringResource(R.string.undo),
-                                                tint = Color.White.copy(alpha = if (uiState.lastAction != null) 1f else 0.45f)
-                                            )
-                                        }
-                                    }
-                                    IconButton(
-                                        onClick = onDelete,
-                                        enabled = !uiState.mediaBusy,
-                                        modifier = Modifier
-                                            .offset(x = xOffsetLeft)
-                                    ) {
-                                        Box(
-                                            modifier = Modifier
-                                                .size(buttonSize)
-                                                .clip(CircleShape)
-                                                .background(Color.Red.copy(alpha = 0.6f)),
-                                            contentAlignment = Alignment.Center
-                                        ) {
-                                            Icon(
-                                                imageVector = Icons.Default.Close,
-                                                contentDescription = stringResource(R.string.delete_label),
-                                                tint = Color.White
-                                            )
-                                        }
-                                    }
-                                    IconButton(
-                                        onClick = if (isScrollMode) onScrollForward else onKeep,
-                                        enabled = !uiState.mediaBusy && (!isScrollMode || uiState.currentIndex < uiState.photos.lastIndex),
-                                        modifier = Modifier
-                                            .offset(x = xOffsetRight)
-                                    ) {
-                                        Box(
-                                            modifier = Modifier
-                                                .size(buttonSize)
-                                                .clip(CircleShape)
-                                                .background(Color(0xFF2E7D32).copy(alpha = 0.6f)),
-                                            contentAlignment = Alignment.Center
-                                        ) {
-                                            Icon(
-                                                imageVector = if (isScrollMode) Icons.Default.ArrowForward else Icons.Default.Check,
-                                                contentDescription = stringResource(if (isScrollMode) R.string.next_photo else R.string.keep_label),
-                                                tint = Color.White
-                                            )
-                                        }
-                                    }
+                                    Text(stringResource(R.string.review_queue, queuedDeleteCount))
+                                }
+                            }
+                            Row(
+                                modifier = Modifier.fillMaxWidth(),
+                                horizontalArrangement = Arrangement.SpaceEvenly,
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+                                FilledIconButton(
+                                    onClick = onDelete,
+                                    enabled = !uiState.mediaBusy,
+                                    modifier = Modifier.size(56.dp),
+                                    colors = IconButtonDefaults.filledIconButtonColors(
+                                        containerColor = Color(0xFFFF8178),
+                                        contentColor = Color(0xFF340A05),
+                                        disabledContainerColor = InactivePhotoControl,
+                                        disabledContentColor = OnInactivePhotoControl
+                                    )
+                                ) {
+                                    Icon(Icons.Default.Close, stringResource(R.string.delete_label))
+                                }
+                                FilledIconButton(
+                                    onClick = if (isScrollMode) onScrollForward else onKeep,
+                                    enabled = !uiState.mediaBusy && (!isScrollMode || uiState.currentIndex < uiState.photos.lastIndex),
+                                    modifier = Modifier.size(56.dp),
+                                    colors = IconButtonDefaults.filledIconButtonColors(
+                                        containerColor = Color(0xFF7BD890),
+                                        contentColor = Color(0xFF092B15),
+                                        disabledContainerColor = InactivePhotoControl,
+                                        disabledContentColor = OnInactivePhotoControl
+                                    )
+                                ) {
+                                    Icon(
+                                        imageVector = if (isScrollMode) Icons.Default.ArrowForward else Icons.Default.Check,
+                                        contentDescription = stringResource(if (isScrollMode) R.string.next_photo else R.string.keep_label)
+                                    )
                                 }
                             }
                         }
                     }
                 }
             }
-            FloatingHeaderBar(
-                onHome = onHome,
-                onOpenSettings = onOpenSettings,
-                onOpenTimeline = { showTimeline = true },
-                timelineAvailable = !uiState.isLoading && uiState.loadError == null && uiState.timelinePhotos.isNotEmpty(),
-                enabled = !uiState.mediaBusy
-            )
-            if (hasLimitedAccess) {
-                Button(
-                    onClick = onRequestPermissions,
-                    enabled = !uiState.mediaBusy,
-                    modifier = Modifier.align(Alignment.TopCenter).statusBarsPadding().padding(top = 52.dp)
-                ) { Text(stringResource(R.string.manage_photo_access)) }
+            Column(
+                modifier = Modifier
+                    .align(Alignment.TopCenter)
+                    .windowInsetsPadding(
+                        WindowInsets.safeDrawing.only(WindowInsetsSides.Top + WindowInsetsSides.Horizontal)
+                    )
+                    .padding(horizontal = 16.dp)
+                    .widthIn(max = 640.dp)
+                    .fillMaxWidth()
+                    .padding(top = 10.dp),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                FloatingHeaderBar(
+                    onUndo = onUndo,
+                    canUndo = uiState.lastAction != null && !uiState.isLoading && uiState.loadError == null,
+                    onOpenSettings = onOpenSettings,
+                    onOpenTimeline = { showTimeline = true },
+                    onStartFromBeginning = onStartFromBeginning,
+                    timelineAvailable = !uiState.isLoading && uiState.loadError == null && uiState.timelinePhotos.isNotEmpty(),
+                    enabled = !uiState.mediaBusy
+                )
+                if (hasLimitedAccess) {
+                    Button(
+                        onClick = onRequestPermissions,
+                        enabled = !uiState.mediaBusy,
+                        modifier = Modifier.padding(top = 6.dp)
+                    ) { Text(stringResource(R.string.manage_photo_access)) }
+                }
+                if (!showPhoto) {
+                    Box(
+                        modifier = Modifier
+                            .weight(1f)
+                            .windowInsetsPadding(WindowInsets.safeDrawing.only(WindowInsetsSides.Bottom))
+                            .widthIn(max = 480.dp)
+                            .fillMaxWidth(),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Column(
+                            modifier = Modifier.verticalScroll(rememberScrollState()).padding(vertical = 12.dp),
+                            horizontalAlignment = Alignment.CenterHorizontally,
+                            verticalArrangement = Arrangement.spacedBy(8.dp)
+                        ) {
+                            when {
+                                uiState.isLoading -> {
+                                    CircularProgressIndicator()
+                                    Text(stringResource(R.string.loading_photos))
+                                }
+                                uiState.loadError != null -> {
+                                    Text(
+                                        text = stringResource(uiState.loadError),
+                                        color = MaterialTheme.colorScheme.error,
+                                        textAlign = TextAlign.Center
+                                    )
+                                    val permissionError = uiState.loadError == R.string.permission_denied_message
+                                    Button(onClick = if (permissionError) onRequestPermissions else onReload) {
+                                        Text(stringResource(if (permissionError) R.string.check_permissions else R.string.refresh))
+                                    }
+                                }
+                                else -> {
+                                    Text(
+                                        text = stringResource(if (processedAll) R.string.reviewed_run_title else R.string.no_photos_title),
+                                        style = MaterialTheme.typography.titleMedium,
+                                        textAlign = TextAlign.Center
+                                    )
+                                    Text(
+                                        text = stringResource(if (processedAll) R.string.reviewed_run_subtitle else R.string.no_photos_subtitle),
+                                        style = MaterialTheme.typography.bodyMedium,
+                                        textAlign = TextAlign.Center
+                                    )
+                                    if (processedAll && queuedDeleteCount > 0) {
+                                        Button(onClick = { showQueue = true }, enabled = !uiState.mediaBusy) {
+                                            Text(stringResource(R.string.review_queue, queuedDeleteCount))
+                                        }
+                                    }
+                                    FlowRow(
+                                        horizontalArrangement = Arrangement.spacedBy(12.dp, Alignment.CenterHorizontally)
+                                    ) {
+                                        Button(
+                                            onClick = if (processedAll) onRestart else onReload,
+                                            enabled = !uiState.mediaBusy
+                                        ) {
+                                            Text(stringResource(if (processedAll) R.string.restart else R.string.refresh))
+                                        }
+                                        Button(onClick = onOpenSettings, enabled = !uiState.mediaBusy) {
+                                            Text(stringResource(R.string.settings))
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
             }
         }
     }
@@ -468,7 +447,7 @@ fun MainSwipeScreen(
             title = { Text(stringResource(R.string.review_queue, queuedDeleteCount)) },
             text = {
                 Column {
-                    LazyColumn(Modifier.heightIn(max = 320.dp)) {
+                    LazyColumn(Modifier.weight(1f, fill = false).heightIn(max = 320.dp)) {
                         itemsIndexed(uiState.queuedDeletes, key = { _, photo -> photo.uri.toString() }) { index, photo ->
                             val photoLabel = stringResource(R.string.photo_position, index + 1, queuedDeleteCount)
                             Row(
@@ -514,6 +493,7 @@ fun MainSwipeScreen(
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
+                    .verticalScroll(rememberScrollState())
                     .padding(horizontal = 24.dp, vertical = 20.dp),
                 verticalArrangement = Arrangement.spacedBy(12.dp)
             ) {
@@ -584,65 +564,111 @@ fun MainSwipeScreen(
     }
 }
 
+private val InactivePhotoControl = Color(0xFF40434A)
+private val OnInactivePhotoControl = Color(0xFFB6BAC4)
+
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun BoxScope.FloatingHeaderBar(
-    onHome: () -> Unit,
+private fun FloatingHeaderBar(
+    onUndo: () -> Unit,
+    canUndo: Boolean,
     onOpenSettings: () -> Unit,
     onOpenTimeline: () -> Unit,
+    onStartFromBeginning: () -> Unit,
     timelineAvailable: Boolean,
     enabled: Boolean
 ) {
-    Row(
+    var showOptions by remember { mutableStateOf(false) }
+    val colors = IconButtonDefaults.filledIconButtonColors(
+        containerColor = MaterialTheme.colorScheme.surface,
+        contentColor = MaterialTheme.colorScheme.onSurface,
+        disabledContainerColor = MaterialTheme.colorScheme.surfaceVariant,
+        disabledContentColor = MaterialTheme.colorScheme.onSurfaceVariant
+    )
+    val title = stringResource(R.string.app_name)
+    val titleStyle = MaterialTheme.typography.titleMedium
+    val titleWidth = rememberTextMeasurer().measure(
+        text = AnnotatedString(title),
+        style = titleStyle,
+        softWrap = false,
+        maxLines = 1
+    ).size.width
+    BoxWithConstraints(
         modifier = Modifier
             .fillMaxWidth()
-            .statusBarsPadding()
-            .padding(top = 4.dp, start = 16.dp, end = 16.dp)
-            .align(Alignment.TopCenter),
-        horizontalArrangement = Arrangement.Center,
-        verticalAlignment = Alignment.Top
+            .heightIn(min = 56.dp)
+            .clip(RoundedCornerShape(14.dp))
+            .background(MaterialTheme.colorScheme.surfaceColorAtElevation(6.dp).copy(alpha = 0.66f))
+            .padding(horizontal = 4.dp, vertical = 4.dp)
     ) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(42.dp)
-                .clip(RoundedCornerShape(14.dp))
-                .background(MaterialTheme.colorScheme.surfaceColorAtElevation(6.dp).copy(alpha = 0.66f)),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            IconButton(
-                modifier = Modifier.size(44.dp),
-                onClick = onHome,
-                enabled = enabled
+        val availableTitleWidth = maxWidth - (48.dp * 4) - 8.dp
+        val titleFits = with(LocalDensity.current) { titleWidth.toDp() } <= availableTitleWidth
+        Column(horizontalAlignment = Alignment.CenterHorizontally) {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically
             ) {
-                Icon(
-                    imageVector = Icons.Filled.Home,
-                    contentDescription = stringResource(R.string.home)
-                )
+                FilledIconButton(
+                    onClick = onUndo,
+                    enabled = enabled && canUndo,
+                    colors = colors
+                ) {
+                    Icon(Icons.Default.Undo, stringResource(R.string.undo))
+                }
+                if (titleFits) {
+                    Text(
+                        text = title,
+                        style = titleStyle,
+                        modifier = Modifier.weight(1f).padding(horizontal = 4.dp),
+                        textAlign = TextAlign.Center,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis
+                    )
+                } else {
+                    Spacer(Modifier.weight(1f))
+                }
+                FilledIconButton(
+                    onClick = onOpenTimeline,
+                    enabled = enabled && timelineAvailable,
+                    colors = colors
+                ) {
+                    Icon(Icons.Default.DateRange, stringResource(R.string.photo_timeline))
+                }
+                FilledIconButton(
+                    onClick = onOpenSettings,
+                    enabled = enabled,
+                    colors = colors
+                ) {
+                    Icon(Icons.Default.Settings, stringResource(R.string.settings))
+                }
+                Box {
+                    FilledIconButton(
+                        onClick = { showOptions = true },
+                        enabled = enabled && timelineAvailable,
+                        colors = colors
+                    ) {
+                        Icon(Icons.Default.MoreVert, stringResource(R.string.review_options))
+                    }
+                    DropdownMenu(
+                        expanded = showOptions,
+                        onDismissRequest = { showOptions = false }
+                    ) {
+                        DropdownMenuItem(
+                            text = { Text(stringResource(R.string.start_from_beginning)) },
+                            onClick = {
+                                showOptions = false
+                                onStartFromBeginning()
+                            }
+                        )
+                    }
+                }
             }
-            Text(
-                text = stringResource(R.string.app_name),
-                style = MaterialTheme.typography.titleMedium,
-                modifier = Modifier.weight(1f),
-                textAlign = androidx.compose.ui.text.style.TextAlign.Center
-            )
-            IconButton(
-                modifier = Modifier.size(44.dp),
-                onClick = onOpenTimeline,
-                enabled = enabled && timelineAvailable
-            ) {
-                Icon(
-                    imageVector = Icons.Default.DateRange,
-                    contentDescription = stringResource(R.string.photo_timeline)
-                )
-            }
-            IconButton(
-                modifier = Modifier.size(44.dp),
-                onClick = onOpenSettings,
-                enabled = enabled
-            ) {
-                Icon(
-                    imageVector = Icons.Filled.Settings,
-                    contentDescription = stringResource(R.string.settings)
+            if (!titleFits) {
+                Text(
+                    text = title,
+                    style = titleStyle,
+                    modifier = Modifier.padding(horizontal = 8.dp, vertical = 2.dp),
+                    textAlign = TextAlign.Center
                 )
             }
         }

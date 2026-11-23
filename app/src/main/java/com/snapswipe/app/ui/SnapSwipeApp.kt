@@ -17,11 +17,17 @@ import android.content.ActivityNotFoundException
 import android.util.Log
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.safeDrawingPadding
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -174,38 +180,44 @@ private fun PermissionsScreen(
     onOpenAppSettings: () -> Unit,
     permissionDenied: Boolean
 ) {
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(horizontal = 24.dp),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
+    Box(
+        modifier = Modifier.fillMaxSize().safeDrawingPadding().padding(horizontal = 24.dp),
+        contentAlignment = Alignment.Center
     ) {
-        Text(
-            text = stringResource(R.string.permission_title),
-            style = MaterialTheme.typography.titleMedium
-        )
-        Spacer(modifier = Modifier.height(8.dp))
-        Text(
-            text = stringResource(R.string.permission_rationale),
-            style = MaterialTheme.typography.bodySmall
-        )
-        Spacer(modifier = Modifier.height(16.dp))
-        if (permissionDenied) {
+        Column(
+            modifier = Modifier
+                .widthIn(max = 480.dp)
+                .fillMaxWidth()
+                .verticalScroll(rememberScrollState())
+                .padding(vertical = 16.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
             Text(
-                text = stringResource(R.string.permission_denied_message),
-                style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.error
+                text = stringResource(R.string.permission_title),
+                style = MaterialTheme.typography.titleMedium
             )
             Spacer(modifier = Modifier.height(8.dp))
-        }
-        Button(onClick = onGrantAccess) { Text(stringResource(R.string.grant_photo_access)) }
-        if (permissionDenied) {
-            TextButton(onClick = onOpenAppSettings) { Text(stringResource(R.string.manage_photo_access)) }
-        }
-        Spacer(modifier = Modifier.height(8.dp))
-        Button(onClick = onSkip) {
-            Text(stringResource(R.string.continue_without_access))
+            Text(
+                text = stringResource(R.string.permission_rationale),
+                style = MaterialTheme.typography.bodySmall
+            )
+            Spacer(modifier = Modifier.height(16.dp))
+            if (permissionDenied) {
+                Text(
+                    text = stringResource(R.string.permission_denied_message),
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.error
+                )
+                Spacer(modifier = Modifier.height(8.dp))
+            }
+            Button(onClick = onGrantAccess) { Text(stringResource(R.string.grant_photo_access)) }
+            if (permissionDenied) {
+                TextButton(onClick = onOpenAppSettings) { Text(stringResource(R.string.manage_photo_access)) }
+            }
+            Spacer(modifier = Modifier.height(8.dp))
+            Button(onClick = onSkip) {
+                Text(stringResource(R.string.continue_without_access))
+            }
         }
     }
 }
@@ -376,7 +388,7 @@ private fun MainScreen(
         onKeep = { viewModel.keepCurrent() },
         onDelete = { requestDelete(false) },
         onUndo = { viewModel.undoLast() },
-        onHome = { viewModel.goHome() },
+        onStartFromBeginning = { viewModel.loadPhotos() },
         onShare = { sharePhoto(context, uiState.currentPhoto) },
         interactionMode = interactionMode,
         onRestart = {

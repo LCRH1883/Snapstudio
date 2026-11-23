@@ -105,4 +105,5 @@
     <string name="resume_review_description">ตรวจต่อจากรูปเดิม หรือเริ่มตรวจรูปใหม่ตั้งแต่ต้น</string>
     <string name="resume_review">ตรวจต่อ</string>
     <string name="start_from_beginning">เริ่มตั้งแต่ต้น</string>
+    <string name="review_options">ตัวเลือกการตรวจสอบ</string>
 </resources>

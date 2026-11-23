@@ -99,4 +99,5 @@
     <string name="resume_review_description">Reprenez à la dernière photo ou recommencez le tri depuis le début.</string>
     <string name="resume_review">Reprendre</string>
     <string name="start_from_beginning">Recommencer</string>
+    <string name="review_options">Options de tri</string>
 </resources>

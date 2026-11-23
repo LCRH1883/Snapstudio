@@ -99,4 +99,5 @@
     <string name="resume_review_description">从上次的照片继续，或从头开始新一轮查看。</string>
     <string name="resume_review">继续</string>
     <string name="start_from_beginning">从头开始</string>
+    <string name="review_options">查看选项</string>
 </resources>

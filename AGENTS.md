@@ -106,3 +106,4 @@
 | 12.3   | 2026-11-23       | Codex  | Preserved saved and in-progress review choices across gallery retries and background refreshes, with two regression tests. |
 | ver1.4.0 | 2026-11-23     | Codex  | Set the Android release version to 1.4.0 and build code to 14000. |
 | 13.0   | 2026-11-23       | Codex  | Audited the Compose UI on Android 16 and documented the Material 3 update plan. |
+| 13.0a  | 2026-11-23       | Codex  | Aligned the opaque review controls, moved Undo to the taller translucent header, and adapted the existing layouts for phone and tablet windows. |

@@ -105,4 +105,5 @@
     <string name="resume_review_description">Tiếp tục từ ảnh gần nhất hoặc bắt đầu lượt duyệt mới từ đầu.</string>
     <string name="resume_review">Tiếp tục</string>
     <string name="start_from_beginning">Bắt đầu từ đầu</string>
+    <string name="review_options">Tùy chọn xem ảnh</string>
 </resources>

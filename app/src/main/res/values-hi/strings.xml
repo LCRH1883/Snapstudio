@@ -105,4 +105,5 @@
     <string name="resume_review_description">आखिरी फ़ोटो से जारी रखें या शुरुआत से नई समीक्षा करें।</string>
     <string name="resume_review">जारी रखें</string>
     <string name="start_from_beginning">शुरुआत से शुरू करें</string>
+    <string name="review_options">समीक्षा के विकल्प</string>
 </resources>

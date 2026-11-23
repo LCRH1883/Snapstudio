@@ -99,4 +99,5 @@
     <string name="resume_review_description">Continúa desde la última foto o comienza una revisión desde el principio.</string>
     <string name="resume_review">Reanudar</string>
     <string name="start_from_beginning">Empezar desde el principio</string>
+    <string name="review_options">Opciones de revisión</string>
 </resources>

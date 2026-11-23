@@ -99,4 +99,5 @@
     <string name="resume_review_description">마지막 사진부터 계속하거나 처음부터 새로 시작하세요.</string>
     <string name="resume_review">계속</string>
     <string name="start_from_beginning">처음부터 시작</string>
+    <string name="review_options">검토 옵션</string>
 </resources>

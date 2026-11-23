@@ -166,7 +166,7 @@ class SnapSwipeViewModel(
                         history.addLast(if (action.queued) LastAction.Queued(photo) else LastAction.Kept(photo))
                     }
                 }
-                // Sort and Home reloads retain pending choices, even when no snapshot was used.
+                // Restarting from the beginning or changing sort order keeps pending choices.
                 if (saved == null) {
                     _uiState.value.queuedDeletes.forEach { photo ->
                         photosByUri[photo.uri.toString()]?.let { available ->
@@ -366,7 +366,6 @@ class SnapSwipeViewModel(
         loadPhotos()
     }
     fun reload() = queryLibrary(_uiState.value.sortOrder, reset = !libraryLoaded, resume = !libraryLoaded)
-    fun goHome() = loadPhotos()
 
     fun setDeleteMode(mode: DeleteMode) {
         _uiState.update { it.copy(deleteMode = mode) }

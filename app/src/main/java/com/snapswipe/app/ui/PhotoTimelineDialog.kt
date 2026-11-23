@@ -80,7 +80,7 @@ fun PhotoTimelineDialog(
                 LazyVerticalGrid(
                     columns = GridCells.Adaptive(72.dp),
                     state = gridState,
-                    modifier = Modifier.fillMaxWidth().heightIn(max = 380.dp),
+                    modifier = Modifier.weight(1f, fill = false).fillMaxWidth().heightIn(max = 380.dp),
                     verticalArrangement = Arrangement.spacedBy(4.dp),
                     horizontalArrangement = Arrangement.spacedBy(4.dp)
                 ) {

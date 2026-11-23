@@ -105,4 +105,5 @@
     <string name="resume_review_description">前回の写真から再開するか、最初から確認を始められます。</string>
     <string name="resume_review">再開</string>
     <string name="start_from_beginning">最初から始める</string>
+    <string name="review_options">確認オプション</string>
 </resources>
