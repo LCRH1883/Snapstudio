@@ -7,7 +7,7 @@ This document defines how we track and bump versions for Snap Swipe. The goal is
   - MAJOR: Breaking UX/behavior shifts or impactful platform changes.
   - MINOR: New features or notable improvements.
   - PATCH: Bug fixes and small polish.
-- `versionCode`: Encode as two digits per segment: `MMmmpp` → `MAJOR * 10000 + MINOR * 100 + PATCH`.
+- Default `versionCode` scheme: Encode as two digits per segment: `MMmmpp` → `MAJOR * 10000 + MINOR * 100 + PATCH`.
   - Examples:
     - `1.2.1`  → `010201` (integer `10201`)
     - `2.3.12` → `020312` (integer `20312`)
@@ -16,15 +16,18 @@ This document defines how we track and bump versions for Snap Swipe. The goal is
 
 ## How to bump
 1. Pick the next `versionName` (SemVer).
-2. Compute `versionCode = (MAJOR * 10000) + (MINOR * 100) + PATCH` (write it zero-padded as `MMmmpp` in docs for clarity).
+2. Use the release build number if one is specified. Otherwise use the default formula if it produces an unused number above the latest Play build. If it does not, choose the next unused higher number. Version 1.4.0 uses the explicit build number 14000.
 3. Update `app/build.gradle` `defaultConfig.versionName` and `defaultConfig.versionCode`.
 4. Update release notes and record the build in the log below.
 
 ## Version log
-Track each published build here (versionCode shown as zero-padded `MMmmpp`):
+Track release builds here. Historical codes retain their original zero padding.
 
 | versionName | versionCode | Date | Notes |
 |-------------|-------------|------|-------|
+| 1.4.0       | 14000       | -    | Adds review resume and the photo timeline, fixes deletion and photo access, and targets Android 16 (API 36). |
+| 1.3.1       | 010301      | -    | Prepared Android 16 (API 36) compliance update for Play build 10300. |
+| 1.3.0       | 010300      | -    | Settings UI refresh, theme selector (light/dark/system), and slimmer floating header. |
 | 1.2.1       | 010201      | -    | Targets Android 16 (API 36) for Play compliance and fixes edge-to-edge padding on the main screen. |
 | 1.2.0       | 010200      | -    | Adds scroll interaction mode, expands language support, and shows a one-time What&apos;s New prompt. |
 | 1.1.0       | 010100      | -    | Added multi-language support. |

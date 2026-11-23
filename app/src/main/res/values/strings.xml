@@ -31,7 +31,7 @@
     <string name="instructions_delete">• Swipe left to delete (or queue delete).</string>
     <string name="instructions_keep">• Swipe right to keep.</string>
     <string name="instructions_share">• Swipe up to share.</string>
-    <string name="instructions_queue">• Tap \"Delete queued\" to confirm all queued deletes at once.</string>
+    <string name="instructions_queue">• Open the review queue to check or remove photos before confirming.</string>
     <string name="instructions_share_scroll">• Swipe right to share the current folder/photo.</string>
     <string name="instructions_next_scroll">• Swipe up to view the next photo (slides in from bottom).</string>
     <string name="instructions_prev_scroll">• Swipe down to go back to the previous photo (slides in from top).</string>
@@ -71,7 +71,7 @@
     <string name="settings_section_review_subtitle">Adjust how photos are ordered and how gestures behave.</string>
     <string name="settings_sort_subtitle">Pick the order photos appear while you review.</string>
     <string name="settings_interaction_subtitle">Choose your preferred swipe/scroll style.</string>
-    <string name="settings_delete_mode_subtitle">Queue deletes to confirm once, or delete immediately.</string>
+    <string name="settings_delete_mode_subtitle">Review queued photos together, or remove each photo immediately.</string>
     <string name="settings_section_support">Support &amp; info</string>
     <string name="settings_section_support_subtitle">Find what changed or reach out for help.</string>
     <string name="settings_whats_new_subtitle">See the latest updates in this version.</string>
@@ -85,4 +85,23 @@
     <string name="theme_system">Use device</string>
     <string name="theme_light">Light</string>
     <string name="theme_dark">Dark</string>
+    <string name="manage_photo_access">Manage photo access</string>
+    <string name="photo_load_failed">Couldn’t load photos.</string>
+    <string name="photo_delete_failed">Couldn’t remove the photo. Try again.</string>
+    <string name="photo_restore_failed">Couldn’t restore the photo from Trash.</string>
+    <string name="permanent_delete_title">Delete permanently?</string>
+    <string name="permanent_delete_message">This Android version removes the selected photos permanently. You can’t undo this.</string>
+    <string name="review_queue">Review queue (%1$d)</string>
+    <string name="discard_queue">Clear queue and keep photos</string>
+    <string name="move_to_trash">Move to Trash</string>
+    <string name="undo">Undo</string>
+    <string name="current_photo">Current photo</string>
+    <string name="next_photo">Next photo</string>
+    <string name="photo_timeline">Photo timeline</string>
+    <string name="start_here">Start here</string>
+    <string name="timeline_scrubber">Scrub through the photo timeline</string>
+    <string name="resume_review_title">Resume your review?</string>
+    <string name="resume_review_description">Continue from your last photo or start a new review from the beginning.</string>
+    <string name="resume_review">Resume</string>
+    <string name="start_from_beginning">Start from beginning</string>
 </resources>

@@ -18,6 +18,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.foundation.selection.toggleable
+import androidx.compose.ui.semantics.Role
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.AlternateEmail
 import androidx.compose.material.icons.rounded.Brightness6
@@ -25,7 +27,7 @@ import androidx.compose.material.icons.rounded.ChevronRight
 import androidx.compose.material.icons.rounded.DeleteSweep
 import androidx.compose.material.icons.rounded.Gesture
 import androidx.compose.material.icons.rounded.Info
-import androidx.compose.material.icons.rounded.Person
+import androidx.compose.material.icons.rounded.PhotoLibrary
 import androidx.compose.material.icons.rounded.Sort
 import androidx.compose.material.icons.rounded.Star
 import androidx.compose.material3.AlertDialog
@@ -67,7 +69,8 @@ import kotlinx.coroutines.launch
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SettingsScreen(
-    onDone: () -> Unit
+    onDone: () -> Unit,
+    onManagePhotoAccess: () -> Unit
 ) {
     val context = LocalContext.current
     val sortOrderPreferences = remember { SortOrderPreferences(context) }
@@ -174,6 +177,12 @@ fun SettingsScreen(
                     }
                 )
             }
+
+            LinkSettingRow(
+                icon = Icons.Rounded.PhotoLibrary,
+                title = stringResource(R.string.manage_photo_access),
+                onClick = onManagePhotoAccess
+            )
 
             SettingsSectionCard(
                 title = stringResource(R.string.settings_section_support),
@@ -367,7 +376,8 @@ private fun SwitchSettingRow(
 ) {
     Row(
         modifier = Modifier
-            .fillMaxWidth(),
+            .fillMaxWidth()
+            .toggleable(value = checked, role = Role.Switch, onValueChange = onCheckedChange),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(12.dp)
     ) {
@@ -392,7 +402,7 @@ private fun SwitchSettingRow(
                 )
             }
         }
-        Switch(checked = checked, onCheckedChange = onCheckedChange)
+        Switch(checked = checked, onCheckedChange = null)
     }
 }
 

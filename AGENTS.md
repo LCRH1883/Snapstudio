@@ -99,3 +99,9 @@
 | 10.2   | 2025-11-29       | Codex  | Added app appearance setting (light/dark/system), wired theme preference through DataStore and theme wrapper. |
 | 10.3   | 2025-11-29       | Codex  | Shrunk main screen header bar (home/settings) for a slimmer photo-viewing layout. |
 | 11.1   | 2026-08-19       | Claude | Raised compile/target SDK to 36 (Android 16) for Play's Aug 31 2026 target API requirement, bumped to 1.2.1 / 010201, removed the deprecated statusBarColor theme attribute, and added navigation-bar padding to the main screen's bottom controls. |
+| 11.2   | 2026-11-23       | Codex  | Prepared 1.3.1 / 010301 targeting API 36 to supersede Play production 1.3.0 / 010300. |
+| 11.3   | 2026-11-23       | Codex  | Fixed Trash and undo, canceled batch recovery, photo access, older Android deletion, accessibility labels, and missing translations. |
+| 12.1   | 2026-11-23       | Codex  | Added a resume or start-over prompt and a chronological photo picker for choosing a starting point. |
+| 12.2   | 2026-11-23       | Codex  | Fixed the extra resume prompt after Android confirmation dialogs, then repeated the review, queue, Trash, and restore checks on the attached Galaxy. |
+| 12.3   | 2026-11-23       | Codex  | Preserved saved and in-progress review choices across gallery retries and background refreshes, with two regression tests. |
+| ver1.4.0 | 2026-11-23     | Codex  | Set the Android release version to 1.4.0 and build code to 14000. |

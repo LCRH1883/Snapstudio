@@ -315,3 +315,31 @@ PHASE 11 – Platform Compliance
     - Manual check: On an Android 16 device, the header clears the status bar and the bottom
       controls clear the navigation bar in both gesture and 3-button modes; photo load, delete,
       and share still work.
+
+[x] 11.2 – Set a release version newer than production
+    - Prepare 1.3.1 / 010301 targeting API 36 to supersede Play production 1.3.0 / 010300.
+
+[x] 11.3 – Finish the pre-release audit fixes
+    - Android 11 and later use Trash and verify restored photos through MediaStore.
+    - Keep a canceled batch available for review, retry, or discard, and re-query MediaStore on restart.
+    - Handle selected-photo access and older Android delete consent. Label review controls for accessibility and translate the missing strings.
+    - Exercise approval, denial, failure, restore, queue recovery, and permanent delete behavior in regression tests.
+
+------------------------------------------------------------
+PHASE 12 – Review Navigation
+------------------------------------------------------------
+
+[x] 12.1 – Resume a review and choose a timeline starting point
+    - Save the current photo, review range, kept choices, and unsubmitted delete queue on the device.
+    - Match the saved state against the currently accessible MediaStore library and offer Resume or Start from beginning when reopening the app with an unfinished review.
+    - Browse the chronological thumbnail grid and scrub to a date. Start a new review with the selected photo.
+
+[x] 12.2 – Keep the resume prompt out of Android system flows
+    - Offer Resume after leaving the app or reopening a saved review.
+    - Return directly to the review after Android photo permission, Trash, and restore dialogs.
+    - Verified the warm and cold resume choices, queue cancellation, and Trash and restore on the attached Android 13 Galaxy using disposable fixtures.
+
+[x] 12.3 – Preserve review progress during gallery retries and refreshes
+    - Restore saved progress when the first gallery query succeeds on retry.
+    - Keep review decisions made while a background gallery refresh is running.
+    - Cover both paths with regression tests.

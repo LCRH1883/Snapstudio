@@ -22,13 +22,18 @@ import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowForward
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.Undo
@@ -41,6 +46,8 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.rememberModalBottomSheetState
@@ -58,11 +65,13 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.snapswipe.app.R
 import com.snapswipe.app.data.InteractionMode
+import com.snapswipe.app.data.PhotoItem
 import kotlin.math.abs
 
 @Suppress(
@@ -87,6 +96,12 @@ fun MainSwipeScreen(
     onReload: () -> Unit = {},
     queuedDeleteCount: Int = 0,
     onCommitQueuedDeletes: () -> Unit = {},
+    onRemoveFromQueue: (PhotoItem) -> Unit = {},
+    onDiscardQueue: () -> Unit = {},
+    onStartAt: (PhotoItem) -> Unit = {},
+    onClearOperationError: () -> Unit = {},
+    hasLimitedAccess: Boolean = false,
+    supportsTrash: Boolean = true,
     showInstructions: Boolean = false,
     onDismissInstructions: () -> Unit = {},
     onScrollForward: () -> Unit = {},
@@ -97,8 +112,25 @@ fun MainSwipeScreen(
 ) {
     val isScrollMode = interactionMode == InteractionMode.SCROLL_AND_DELETE
     val hasPhotos = uiState.photos.isNotEmpty()
-    val processedAll = !hasPhotos && uiState.lastAction != null && !uiState.isLoading
+    val processedAll = !hasPhotos && uiState.totalCount > 0 && !uiState.isLoading
+    var showQueue by remember { mutableStateOf(false) }
+    var showTimeline by remember { mutableStateOf(false) }
     var showShareSheet by remember { mutableStateOf(false) }
+    val snackbar = remember { SnackbarHostState() }
+    val context = LocalContext.current
+    LaunchedEffect(uiState.offerResume) {
+        if (uiState.offerResume) {
+            showTimeline = false
+            showShareSheet = false
+            showQueue = false
+        }
+    }
+    LaunchedEffect(uiState.operationError) {
+        uiState.operationError?.let { message ->
+            snackbar.showSnackbar(context.getString(message), withDismissAction = true)
+            onClearOperationError()
+        }
+    }
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
     var lastScrollDirection by remember { mutableStateOf(0) }
     var previousIndex by remember { mutableStateOf(uiState.currentIndex) }
@@ -113,12 +145,8 @@ fun MainSwipeScreen(
         else if (diff < 0) lastScrollDirection = -1
         previousIndex = uiState.currentIndex
     }
-    LaunchedEffect(processedAll, queuedDeleteCount) {
-        if (processedAll && queuedDeleteCount > 0) {
-            onCommitQueuedDeletes()
-        }
-    }
     Scaffold(
+        snackbarHost = { SnackbarHost(snackbar, Modifier.navigationBarsPadding()) },
         topBar = {},
         contentWindowInsets = WindowInsets(0)
     ) { innerPadding ->
@@ -139,17 +167,18 @@ fun MainSwipeScreen(
                     }
                 }
 
-                uiState.errorMessage != null -> {
+                uiState.loadError != null -> {
                     Column(
                         horizontalAlignment = Alignment.CenterHorizontally,
                         verticalArrangement = Arrangement.spacedBy(8.dp)
                     ) {
                         Text(
-                            text = uiState.errorMessage,
+                            text = stringResource(uiState.loadError),
                             color = MaterialTheme.colorScheme.error
                         )
-                        Button(onClick = onRequestPermissions) {
-                            Text(stringResource(R.string.check_permissions))
+                        val permissionError = uiState.loadError == R.string.permission_denied_message
+                        Button(onClick = if (permissionError) onRequestPermissions else onReload) {
+                            Text(stringResource(if (permissionError) R.string.check_permissions else R.string.refresh))
                         }
                     }
                 }
@@ -168,9 +197,23 @@ fun MainSwipeScreen(
                             text = stringResource(R.string.reviewed_run_subtitle),
                             style = MaterialTheme.typography.bodyMedium
                         )
+                        if (queuedDeleteCount > 0) {
+                            Button(onClick = { showQueue = true }, enabled = !uiState.mediaBusy) {
+                                Text(stringResource(R.string.review_queue, queuedDeleteCount))
+                            }
+                        }
+                        if (uiState.lastAction != null) {
+                            TextButton(onClick = onUndo, enabled = !uiState.mediaBusy) {
+                                Text(stringResource(R.string.undo))
+                            }
+                        }
                         Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-                            Button(onClick = onRestart) { Text(stringResource(R.string.restart)) }
-                            Button(onClick = onOpenSettings) { Text(stringResource(R.string.settings)) }
+                            Button(onClick = onRestart, enabled = !uiState.mediaBusy) {
+                                Text(stringResource(R.string.restart))
+                            }
+                            Button(onClick = onOpenSettings, enabled = !uiState.mediaBusy) {
+                                Text(stringResource(R.string.settings))
+                            }
                         }
                     }
                 }
@@ -202,7 +245,8 @@ fun MainSwipeScreen(
                     Box(
                         modifier = Modifier
                             .fillMaxSize()
-                            .pointerInput(uiState.currentIndex, interactionMode) {
+                            .pointerInput(uiState.currentPhoto?.uri, interactionMode, uiState.mediaBusy, uiState.deleteMode) {
+                                if (uiState.mediaBusy) return@pointerInput
                                 var totalDx = 0f
                                 var totalDy = 0f
                                 detectDragGestures(
@@ -267,7 +311,7 @@ fun MainSwipeScreen(
                         ) { targetPhoto ->
                             AsyncImage(
                                 model = targetPhoto?.uri,
-                                contentDescription = "Current photo",
+                                contentDescription = stringResource(R.string.current_photo),
                                 modifier = Modifier.fillMaxSize(),
                                 contentScale = ContentScale.Crop
                             )
@@ -308,10 +352,11 @@ fun MainSwipeScreen(
                                         horizontalArrangement = Arrangement.Start
                                     ) {
                                         Button(
-                                            onClick = onCommitQueuedDeletes,
+                                            onClick = { showQueue = true },
+                                            enabled = !uiState.mediaBusy,
                                             modifier = Modifier.weight(1f)
                                         ) {
-                                            Text(stringResource(R.string.delete_queued_count, queuedDeleteCount))
+                                            Text(stringResource(R.string.review_queue, queuedDeleteCount))
                                         }
                                     }
                                 }
@@ -325,6 +370,7 @@ fun MainSwipeScreen(
 
                                     IconButton(
                                         onClick = onUndo,
+                                        enabled = !uiState.mediaBusy && uiState.lastAction != null,
                                         modifier = Modifier.offset(x = xOffsetBack)
                                     ) {
                                         Box(
@@ -336,13 +382,14 @@ fun MainSwipeScreen(
                                         ) {
                                             Icon(
                                                 imageVector = Icons.Default.Undo,
-                                                contentDescription = "Back",
-                                                tint = Color.White
+                                                contentDescription = stringResource(R.string.undo),
+                                                tint = Color.White.copy(alpha = if (uiState.lastAction != null) 1f else 0.45f)
                                             )
                                         }
                                     }
                                     IconButton(
                                         onClick = onDelete,
+                                        enabled = !uiState.mediaBusy,
                                         modifier = Modifier
                                             .offset(x = xOffsetLeft)
                                     ) {
@@ -362,6 +409,7 @@ fun MainSwipeScreen(
                                     }
                                     IconButton(
                                         onClick = if (isScrollMode) onScrollForward else onKeep,
+                                        enabled = !uiState.mediaBusy && (!isScrollMode || uiState.currentIndex < uiState.photos.lastIndex),
                                         modifier = Modifier
                                             .offset(x = xOffsetRight)
                                     ) {
@@ -373,8 +421,8 @@ fun MainSwipeScreen(
                                             contentAlignment = Alignment.Center
                                         ) {
                                             Icon(
-                                                imageVector = Icons.Default.Check,
-                                                contentDescription = stringResource(R.string.keep_label),
+                                                imageVector = if (isScrollMode) Icons.Default.ArrowForward else Icons.Default.Check,
+                                                contentDescription = stringResource(if (isScrollMode) R.string.next_photo else R.string.keep_label),
                                                 tint = Color.White
                                             )
                                         }
@@ -387,12 +435,78 @@ fun MainSwipeScreen(
             }
             FloatingHeaderBar(
                 onHome = onHome,
-                onOpenSettings = onOpenSettings
+                onOpenSettings = onOpenSettings,
+                onOpenTimeline = { showTimeline = true },
+                timelineAvailable = !uiState.isLoading && uiState.loadError == null && uiState.timelinePhotos.isNotEmpty(),
+                enabled = !uiState.mediaBusy
             )
+            if (hasLimitedAccess) {
+                Button(
+                    onClick = onRequestPermissions,
+                    enabled = !uiState.mediaBusy,
+                    modifier = Modifier.align(Alignment.TopCenter).statusBarsPadding().padding(top = 52.dp)
+                ) { Text(stringResource(R.string.manage_photo_access)) }
+            }
         }
     }
 
-    if (showShareSheet && !isScrollMode) {
+    if (!uiState.offerResume && showTimeline && uiState.timelinePhotos.isNotEmpty()) {
+        PhotoTimelineDialog(
+            photos = uiState.timelinePhotos,
+            currentPhoto = uiState.currentPhoto,
+            onDismiss = { showTimeline = false },
+            onSelect = { photo ->
+                showTimeline = false
+                onStartAt(photo)
+            }
+        )
+    }
+
+    if (!uiState.offerResume && showQueue && queuedDeleteCount > 0) {
+        AlertDialog(
+            onDismissRequest = { showQueue = false },
+            title = { Text(stringResource(R.string.review_queue, queuedDeleteCount)) },
+            text = {
+                Column {
+                    LazyColumn(Modifier.heightIn(max = 320.dp)) {
+                        itemsIndexed(uiState.queuedDeletes, key = { _, photo -> photo.uri.toString() }) { index, photo ->
+                            val photoLabel = stringResource(R.string.photo_position, index + 1, queuedDeleteCount)
+                            Row(
+                                modifier = Modifier.fillMaxWidth().padding(vertical = 4.dp),
+                                verticalAlignment = Alignment.CenterVertically,
+                                horizontalArrangement = Arrangement.spacedBy(8.dp)
+                            ) {
+                                AsyncImage(photo.uri, null, Modifier.size(48.dp), contentScale = ContentScale.Crop)
+                                Text(photoLabel, Modifier.weight(1f))
+                                TextButton(onClick = { onRemoveFromQueue(photo) }) {
+                                    Text(stringResource(R.string.keep_label))
+                                }
+                            }
+                        }
+                    }
+                    TextButton(onClick = {
+                        onDiscardQueue()
+                        showQueue = false
+                    }) { Text(stringResource(R.string.discard_queue)) }
+                }
+            },
+            dismissButton = {
+                TextButton(onClick = { showQueue = false }) { Text(stringResource(R.string.done)) }
+            },
+            confirmButton = {
+                TextButton(onClick = {
+                    showQueue = false
+                    onCommitQueuedDeletes()
+                }) {
+                    Text(stringResource(if (supportsTrash) R.string.move_to_trash else R.string.delete_label))
+                }
+            }
+        )
+    } else if (showQueue) {
+        LaunchedEffect(Unit) { showQueue = false }
+    }
+
+    if (!uiState.offerResume && showShareSheet && !isScrollMode) {
         ModalBottomSheet(
             onDismissRequest = { showShareSheet = false },
             sheetState = sheetState
@@ -473,7 +587,10 @@ fun MainSwipeScreen(
 @Composable
 private fun BoxScope.FloatingHeaderBar(
     onHome: () -> Unit,
-    onOpenSettings: () -> Unit
+    onOpenSettings: () -> Unit,
+    onOpenTimeline: () -> Unit,
+    timelineAvailable: Boolean,
+    enabled: Boolean
 ) {
     Row(
         modifier = Modifier
@@ -494,7 +611,8 @@ private fun BoxScope.FloatingHeaderBar(
         ) {
             IconButton(
                 modifier = Modifier.size(44.dp),
-                onClick = onHome
+                onClick = onHome,
+                enabled = enabled
             ) {
                 Icon(
                     imageVector = Icons.Filled.Home,
@@ -509,7 +627,18 @@ private fun BoxScope.FloatingHeaderBar(
             )
             IconButton(
                 modifier = Modifier.size(44.dp),
-                onClick = onOpenSettings
+                onClick = onOpenTimeline,
+                enabled = enabled && timelineAvailable
+            ) {
+                Icon(
+                    imageVector = Icons.Default.DateRange,
+                    contentDescription = stringResource(R.string.photo_timeline)
+                )
+            }
+            IconButton(
+                modifier = Modifier.size(44.dp),
+                onClick = onOpenSettings,
+                enabled = enabled
             ) {
                 Icon(
                     imageVector = Icons.Filled.Settings,

@@ -1,5 +1,6 @@
 package com.snapswipe.app.data
 
+import android.app.RecoverableSecurityException
 import android.content.ContentResolver
 import android.content.ContentUris
 import android.database.Cursor
@@ -7,6 +8,7 @@ import android.os.Build
 import android.content.IntentSender
 import android.provider.MediaStore
 import android.util.Log
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
@@ -17,14 +19,19 @@ enum class SortOrder {
 
 sealed class DeleteResult {
     object Success : DeleteResult()
-    data class RequiresUserApproval(val intentSender: IntentSender) : DeleteResult()
+    data class RequiresUserApproval(
+        val intentSender: IntentSender,
+        val retryAfterApproval: Boolean = false
+    ) : DeleteResult()
     data class Error(val throwable: Throwable) : DeleteResult()
 }
 
 interface PhotoDataSource {
     suspend fun loadPhotos(sortOrder: SortOrder): List<PhotoItem>
-    suspend fun deletePhoto(photo: PhotoItem): DeleteResult
-    suspend fun deletePhotosBatch(photos: List<PhotoItem>): DeleteResult
+    val supportsTrash: Boolean
+    suspend fun removePhotos(photos: List<PhotoItem>, afterApproval: Boolean = false): DeleteResult
+    suspend fun restorePhotos(photos: List<PhotoItem>): DeleteResult
+    suspend fun findVisiblePhotos(photos: List<PhotoItem>): List<PhotoItem>
 }
 
 class PhotoRepository(
@@ -35,22 +42,13 @@ class PhotoRepository(
         try {
             val photos = mutableListOf<PhotoItem>()
             val collection = MediaStore.Images.Media.EXTERNAL_CONTENT_URI
-            val projection = arrayOf(
-                MediaStore.Images.Media._ID,
-                MediaStore.Images.Media.DATE_TAKEN
-            )
-            val orderExpression = when (sortOrder) {
-                SortOrder.NEWEST_FIRST -> "${MediaStore.Images.Media.DATE_TAKEN} DESC, ${MediaStore.Images.Media._ID} DESC"
-                SortOrder.OLDEST_FIRST -> "${MediaStore.Images.Media.DATE_TAKEN} ASC, ${MediaStore.Images.Media._ID} ASC"
-            }
-
-            val cursor = contentResolver.query(
-                collection,
-                projection,
-                null,
-                null,
-                orderExpression
-            )
+            val projection = buildList {
+                add(MediaStore.Images.Media._ID)
+                add(MediaStore.Images.Media.DATE_TAKEN)
+                add(MediaStore.Images.Media.DATE_ADDED)
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) add(MediaStore.MediaColumns.VOLUME_NAME)
+            }.toTypedArray()
+            val cursor = contentResolver.query(collection, projection, null, null, null)
 
             if (cursor == null) {
                 Log.w(TAG, "MediaStore query returned null cursor; possible missing permission")
@@ -60,11 +58,20 @@ class PhotoRepository(
             cursor.use {
                 val idColumn = it.getColumnIndexOrThrow(MediaStore.Images.Media._ID)
                 val dateTakenColumn = it.getColumnIndexOrThrow(MediaStore.Images.Media.DATE_TAKEN)
+                val dateAddedColumn = it.getColumnIndexOrThrow(MediaStore.Images.Media.DATE_ADDED)
+
+                val volumeColumn = it.getColumnIndex(MediaStore.MediaColumns.VOLUME_NAME)
 
                 while (it.moveToNext()) {
                     val id = it.getLong(idColumn)
                     val dateTaken = it.getLongOrNull(dateTakenColumn)?.takeIf { value -> value != 0L }
-                    val uri = ContentUris.withAppendedId(collection, id)
+                        ?: it.getLongOrNull(dateAddedColumn)?.takeIf { value -> value > 0L }?.times(1000L)
+                    val volume = if (volumeColumn >= 0) it.getString(volumeColumn) else null
+                    val uri = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q && volume != null) {
+                        ContentUris.withAppendedId(MediaStore.Images.Media.getContentUri(volume), id)
+                    } else {
+                        ContentUris.withAppendedId(collection, id)
+                    }
 
                     photos += PhotoItem(
                         id = id,
@@ -75,7 +82,8 @@ class PhotoRepository(
             }
 
             Log.d(TAG, "Loaded ${photos.size} photos with order $sortOrder")
-            photos
+            val chronological = compareBy<PhotoItem>({ it.dateTaken ?: Long.MIN_VALUE }, { it.id }, { it.uri.toString() })
+            photos.sortedWith(if (sortOrder == SortOrder.OLDEST_FIRST) chronological else chronological.reversed())
         } catch (se: SecurityException) {
             Log.e(TAG, "Permission denied while loading photos", se)
             throw se
@@ -85,50 +93,58 @@ class PhotoRepository(
         }
     }
 
-    override suspend fun deletePhoto(photo: PhotoItem): DeleteResult = withContext(Dispatchers.IO) {
-        try {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-                val pendingIntent = MediaStore.createDeleteRequest(contentResolver, listOf(photo.uri))
-                Log.d(TAG, "Delete requires user approval for id=${photo.id}")
-                return@withContext DeleteResult.RequiresUserApproval(pendingIntent.intentSender)
-            }
+    override val supportsTrash: Boolean
+        get() = Build.VERSION.SDK_INT >= Build.VERSION_CODES.R
 
-            val rowsDeleted = contentResolver.delete(photo.uri, null, null)
-            if (rowsDeleted > 0) {
-                DeleteResult.Success
-            } else {
-                Log.e(TAG, "Delete returned 0 rows for id=${photo.id}")
-                DeleteResult.Error(IllegalStateException("Delete returned 0 rows"))
+    override suspend fun removePhotos(photos: List<PhotoItem>, afterApproval: Boolean): DeleteResult =
+        withContext(Dispatchers.IO) {
+            try {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                    val request = MediaStore.createTrashRequest(contentResolver, photos.map { it.uri }, true)
+                    DeleteResult.RequiresUserApproval(request.intentSender)
+                } else {
+                    val photo = photos.single()
+                    if (contentResolver.delete(photo.uri, null, null) > 0) {
+                        DeleteResult.Success
+                    } else {
+                        DeleteResult.Error(IllegalStateException("Photo was not deleted"))
+                    }
+                }
+            } catch (e: CancellationException) {
+                throw e
+            } catch (e: SecurityException) {
+                if (Build.VERSION.SDK_INT == Build.VERSION_CODES.Q &&
+                    !afterApproval && e is RecoverableSecurityException
+                ) {
+                    DeleteResult.RequiresUserApproval(e.userAction.actionIntent.intentSender, retryAfterApproval = true)
+                } else {
+                    DeleteResult.Error(e)
+                }
+            } catch (e: Exception) {
+                DeleteResult.Error(e)
             }
+        }
+
+    override suspend fun restorePhotos(photos: List<PhotoItem>): DeleteResult = withContext(Dispatchers.IO) {
+        try {
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.R) {
+                return@withContext DeleteResult.Error(UnsupportedOperationException("Trash is unavailable"))
+            }
+            val request = MediaStore.createTrashRequest(contentResolver, photos.map { it.uri }, false)
+            DeleteResult.RequiresUserApproval(request.intentSender)
+        } catch (e: CancellationException) {
+            throw e
         } catch (e: Exception) {
-            Log.e(TAG, "Failed to delete photo id=${photo.id}", e)
             DeleteResult.Error(e)
         }
     }
 
-    override suspend fun deletePhotosBatch(photos: List<PhotoItem>): DeleteResult = withContext(Dispatchers.IO) {
-        if (photos.isEmpty()) return@withContext DeleteResult.Success
-        val uris = photos.map { it.uri }
-        return@withContext try {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-                val pendingIntent = MediaStore.createDeleteRequest(contentResolver, uris)
-                DeleteResult.RequiresUserApproval(pendingIntent.intentSender)
-            } else {
-                var deleted = 0
-                uris.forEach { uri ->
-                    val rows = contentResolver.delete(uri, null, null)
-                    if (rows > 0) deleted++
-                }
-                if (deleted == uris.size) {
-                    DeleteResult.Success
-                } else {
-                    Log.e(TAG, "Deleted $deleted of ${uris.size} queued photos")
-                    DeleteResult.Error(IllegalStateException("Deleted $deleted of ${uris.size}"))
-                }
-            }
-        } catch (e: Exception) {
-            Log.e(TAG, "Failed to delete batch", e)
-            DeleteResult.Error(e)
+    override suspend fun findVisiblePhotos(photos: List<PhotoItem>): List<PhotoItem> = withContext(Dispatchers.IO) {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.R) return@withContext emptyList()
+        val projection = arrayOf(MediaStore.MediaColumns.IS_TRASHED)
+        photos.filter { photo ->
+            contentResolver.query(photo.uri, projection, null, null, null)
+                ?.use { it.moveToFirst() && it.getInt(0) == 0 } == true
         }
     }
 

@@ -7,7 +7,10 @@ import com.snapswipe.app.data.DeleteResult
 import com.snapswipe.app.data.DeleteMode
 import com.snapswipe.app.data.PhotoDataSource
 import com.snapswipe.app.data.PhotoItem
+import com.snapswipe.app.data.ReviewProgress
+import com.snapswipe.app.data.ReviewProgressStore
 import com.snapswipe.app.data.SortOrder
+import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.StandardTestDispatcher
@@ -18,6 +21,7 @@ import kotlinx.coroutines.test.setMain
 import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
+import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
@@ -73,7 +77,7 @@ class SnapSwipeViewModelTest {
         assertEquals("Processed list should shrink after delete", 2, state.photos.size)
         assertEquals("Display total should decrease after delete", 2, state.displayTotal)
         assertEquals("Base total should remain original until confirmed deletes accumulate", 3, state.totalCount)
-        assertTrue("Last action should record delete", state.lastAction is LastAction.Deleted)
+        assertTrue("Last action should record delete", state.lastAction is LastAction.Trashed)
         assertEquals("Current position should stay at the same slot after delete", 1, state.currentPosition)
     }
 
@@ -99,6 +103,10 @@ class SnapSwipeViewModelTest {
 
         val state = viewModel.uiState.value
         assertNotNull("Pending delete intent should be set when approval is required", state.pendingDeleteIntent)
+        assertEquals(samplePhotos().first(), state.currentPhoto)
+        viewModel.onDeleteCompleted(false)
+        assertEquals(samplePhotos(), viewModel.uiState.value.photos)
+        assertNull(viewModel.uiState.value.lastAction)
     }
 
     @Test
@@ -112,7 +120,7 @@ class SnapSwipeViewModelTest {
         val viewModel = SnapSwipeViewModel(
             FakePhotoDataSource(
                 photos = samplePhotos(),
-                batchResult = DeleteResult.RequiresUserApproval(pending)
+                deleteResult = DeleteResult.RequiresUserApproval(pending)
             )
         )
 
@@ -195,8 +203,338 @@ class SnapSwipeViewModelTest {
         // Immediate delete should confirm and reduce total
         state = viewModel.uiState.value
         assertEquals("Total should drop after delete", 2, state.displayTotal)
-        assertEquals("Position should stay aligned with remaining list", 2, state.currentPosition)
+        assertEquals("Position should stay aligned with remaining list", 1, state.currentPosition)
     }
+
+    @Test
+    fun trashedPhotoReturnsOnlyAfterRestoreApproval() = runTest {
+        val sender = approvalSender()
+        val viewModel = SnapSwipeViewModel(FakePhotoDataSource(
+            samplePhotos(),
+            deleteResult = DeleteResult.RequiresUserApproval(sender),
+            restoreResult = DeleteResult.RequiresUserApproval(sender)
+        ))
+        advanceUntilIdle()
+
+        viewModel.trashCurrent()
+        advanceUntilIdle()
+        assertEquals(sender, viewModel.consumeApprovalRequest())
+        assertNull(viewModel.consumeApprovalRequest())
+        viewModel.onDeleteCompleted(true)
+        assertEquals(samplePhotos().drop(1), viewModel.uiState.value.photos)
+
+        viewModel.undoLast()
+        advanceUntilIdle()
+        assertEquals(samplePhotos().drop(1), viewModel.uiState.value.photos)
+        viewModel.onDeleteCompleted(false)
+        assertEquals(samplePhotos().drop(1), viewModel.uiState.value.photos)
+
+        viewModel.undoLast()
+        advanceUntilIdle()
+        viewModel.onDeleteCompleted(true)
+        advanceUntilIdle()
+        assertEquals(samplePhotos(), viewModel.uiState.value.photos)
+        assertEquals(1, viewModel.uiState.value.currentPosition)
+        assertEquals(0, viewModel.uiState.value.confirmedDeleteCount)
+    }
+
+    @Test
+    fun failedRestoreStaysInTrashAndCanBeRetried() = runTest {
+        val viewModel = SnapSwipeViewModel(FakePhotoDataSource(
+            samplePhotos(), restoreResult = DeleteResult.Error(IllegalStateException())
+        ))
+        advanceUntilIdle()
+        viewModel.trashCurrent()
+        advanceUntilIdle()
+        viewModel.undoLast()
+        advanceUntilIdle()
+
+        assertEquals(samplePhotos().drop(1), viewModel.uiState.value.photos)
+        assertEquals(1, viewModel.uiState.value.confirmedDeleteCount)
+        assertTrue(viewModel.uiState.value.lastAction is LastAction.Trashed)
+        assertNotNull(viewModel.uiState.value.operationError)
+    }
+
+    @Test
+    fun failedImmediateRemovalDoesNotLoseCurrentPhoto() = runTest {
+        val viewModel = SnapSwipeViewModel(FakePhotoDataSource(
+            samplePhotos(), deleteResult = DeleteResult.Error(IllegalStateException())
+        ))
+        advanceUntilIdle()
+        viewModel.trashCurrent()
+        advanceUntilIdle()
+
+        assertEquals(samplePhotos(), viewModel.uiState.value.photos)
+        assertNotNull(viewModel.uiState.value.operationError)
+        assertNull(viewModel.uiState.value.lastAction)
+    }
+
+    @Test
+    fun canceledBatchRemainsActionableAndRestartQueriesGallery() = runTest {
+        val repository = FakePhotoDataSource(
+            samplePhotos(), batchResult = DeleteResult.RequiresUserApproval(approvalSender())
+        )
+        val viewModel = SnapSwipeViewModel(repository)
+        advanceUntilIdle()
+        viewModel.setDeleteMode(DeleteMode.QUEUED)
+        repeat(3) { viewModel.trashCurrent() }
+
+        viewModel.commitQueuedDeletes()
+        advanceUntilIdle()
+        viewModel.onDeleteCompleted(false)
+        assertTrue(viewModel.uiState.value.photos.isEmpty())
+        assertEquals(samplePhotos(), viewModel.uiState.value.queuedDeletes)
+
+        viewModel.removeFromQueue(samplePhotos()[1])
+        assertEquals(listOf(samplePhotos()[1]), viewModel.uiState.value.photos)
+        viewModel.discardQueue()
+        assertEquals(samplePhotos(), viewModel.uiState.value.photos)
+
+        viewModel.keepCurrent()
+        viewModel.restart()
+        advanceUntilIdle()
+        assertEquals(2, repository.loadCount)
+        assertEquals(samplePhotos(), viewModel.uiState.value.photos)
+    }
+
+    @Test
+    fun androidTenApprovalRetriesRemovalAndPermanentDeleteCannotBeUndone() = runTest {
+        val repository = FakePhotoDataSource(
+            samplePhotos(),
+            deleteResult = DeleteResult.RequiresUserApproval(approvalSender(), retryAfterApproval = true),
+            supportsTrash = false
+        )
+        val viewModel = SnapSwipeViewModel(repository)
+        advanceUntilIdle()
+        viewModel.trashCurrent()
+        advanceUntilIdle()
+        assertEquals(samplePhotos(), viewModel.uiState.value.photos)
+
+        viewModel.onDeleteCompleted(true)
+        advanceUntilIdle()
+        assertEquals(listOf(false, true), repository.retryFlags)
+        viewModel.undoLast()
+        assertEquals(samplePhotos().drop(1), viewModel.uiState.value.photos)
+        assertNull(viewModel.uiState.value.lastAction)
+    }
+
+    @Test
+    fun partialBatchCancellationKeepsOnlyUnprocessedPhotosQueued() = runTest {
+        val repository = FakePhotoDataSource(
+            samplePhotos(),
+            deleteResult = DeleteResult.RequiresUserApproval(approvalSender(), retryAfterApproval = true),
+            supportsTrash = false
+        )
+        val viewModel = SnapSwipeViewModel(repository)
+        advanceUntilIdle()
+        viewModel.setDeleteMode(DeleteMode.QUEUED)
+        repeat(3) { viewModel.trashCurrent() }
+        viewModel.commitQueuedDeletes()
+        advanceUntilIdle()
+
+        viewModel.onDeleteCompleted(true)
+        advanceUntilIdle()
+        viewModel.onDeleteCompleted(false)
+
+        assertEquals(samplePhotos().drop(1), viewModel.uiState.value.queuedDeletes)
+        assertEquals(1, viewModel.uiState.value.confirmedDeleteCount)
+    }
+
+    @Test
+    fun approvedRestoreDoesNotDisplayPhotoStillMissingFromMediaStore() = runTest {
+        val repository = FakePhotoDataSource(
+            samplePhotos(),
+            restoreResult = DeleteResult.RequiresUserApproval(approvalSender()),
+            visibleAfterRestore = emptyList()
+        )
+        val viewModel = SnapSwipeViewModel(repository)
+        advanceUntilIdle()
+        viewModel.trashCurrent()
+        advanceUntilIdle()
+        viewModel.undoLast()
+        advanceUntilIdle()
+        viewModel.onDeleteCompleted(true)
+        advanceUntilIdle()
+
+        assertEquals(samplePhotos().drop(1), viewModel.uiState.value.photos)
+        assertNotNull(viewModel.uiState.value.operationError)
+        assertTrue(viewModel.uiState.value.lastAction is LastAction.Trashed)
+    }
+
+    @Test
+    fun confirmedRestartClearsCanceledBatchAndLoadsExistingPhotos() = runTest {
+        val repository = FakePhotoDataSource(
+            samplePhotos(), batchResult = DeleteResult.RequiresUserApproval(approvalSender())
+        )
+        val viewModel = SnapSwipeViewModel(repository)
+        advanceUntilIdle()
+        viewModel.setDeleteMode(DeleteMode.QUEUED)
+        repeat(3) { viewModel.trashCurrent() }
+        viewModel.commitQueuedDeletes()
+        advanceUntilIdle()
+        viewModel.onDeleteCompleted(false)
+
+        viewModel.restart()
+        advanceUntilIdle()
+
+        assertEquals(2, repository.loadCount)
+        assertTrue(viewModel.uiState.value.queuedDeletes.isEmpty())
+        assertEquals(samplePhotos(), viewModel.uiState.value.photos)
+    }
+
+    @Test
+    fun resumeRestoresCurrentPhotoKeepsAndPendingQueue() = runTest {
+        val photos = libraryPhotos()
+        val store = FakeProgressStore()
+        val repository = FakePhotoDataSource(photos)
+        val first = SnapSwipeViewModel(repository, store)
+        advanceUntilIdle()
+        first.keepCurrent()
+        first.setDeleteMode(DeleteMode.QUEUED)
+        first.trashCurrent()
+        first.stepForward()
+        advanceUntilIdle()
+        val saved = first.uiState.value
+
+        val resumed = SnapSwipeViewModel(repository, store)
+        advanceUntilIdle()
+
+        assertTrue(resumed.uiState.value.offerResume)
+        resumed.resumeReview()
+        assertEquals(false, resumed.uiState.value.offerResume)
+        assertEquals(saved.currentPhoto, resumed.uiState.value.currentPhoto)
+        assertEquals(saved.photos, resumed.uiState.value.photos)
+        assertEquals(saved.queuedDeletes, resumed.uiState.value.queuedDeletes)
+        assertEquals(1, resumed.uiState.value.keptCount)
+    }
+
+    @Test
+    fun startingFromTimelineUsesSelectedRangeAfterRelaunch() = runTest {
+        val photos = libraryPhotos()
+        val store = FakeProgressStore()
+        val first = SnapSwipeViewModel(FakePhotoDataSource(photos), store)
+        advanceUntilIdle()
+        first.startAt(photos[2])
+        first.keepCurrent()
+        advanceUntilIdle()
+
+        val resumed = SnapSwipeViewModel(FakePhotoDataSource(photos), store)
+        advanceUntilIdle()
+
+        assertEquals(photos, resumed.uiState.value.timelinePhotos)
+        assertEquals(photos.drop(3), resumed.uiState.value.photos)
+        assertEquals(photos[3], resumed.uiState.value.currentPhoto)
+    }
+
+    @Test
+    fun resumeUsesNearestPositionWhenSavedCurrentPhotoIsMissing() = runTest {
+        val photos = libraryPhotos()
+        val store = FakeProgressStore()
+        val first = SnapSwipeViewModel(FakePhotoDataSource(photos), store)
+        advanceUntilIdle()
+        first.stepForward()
+        advanceUntilIdle()
+
+        val resumed = SnapSwipeViewModel(FakePhotoDataSource(photos - photos[1]), store)
+        advanceUntilIdle()
+
+        assertEquals(photos[2], resumed.uiState.value.currentPhoto)
+    }
+
+    @Test
+    fun startFromBeginningDismissesResumeAndClearsReviewWithoutDeleting() = runTest {
+        val photos = libraryPhotos()
+        val store = FakeProgressStore()
+        val repository = FakePhotoDataSource(photos)
+        val first = SnapSwipeViewModel(repository, store)
+        advanceUntilIdle()
+        first.startAt(photos[2])
+        first.setDeleteMode(DeleteMode.QUEUED)
+        first.trashCurrent()
+        advanceUntilIdle()
+
+        val reopened = SnapSwipeViewModel(repository, store)
+        advanceUntilIdle()
+        assertTrue(reopened.uiState.value.offerResume)
+        reopened.startFromBeginning()
+        advanceUntilIdle()
+
+        assertEquals(false, reopened.uiState.value.offerResume)
+        assertEquals(photos, reopened.uiState.value.photos)
+        assertEquals(photos.first(), reopened.uiState.value.currentPhoto)
+        assertTrue(reopened.uiState.value.queuedDeletes.isEmpty())
+        assertTrue(repository.retryFlags.isEmpty())
+    }
+
+    @Test
+    fun returningToAnInProgressReviewOffersResumeOncePerReturn() = runTest {
+        val photos = libraryPhotos()
+        val viewModel = SnapSwipeViewModel(FakePhotoDataSource(photos))
+        advanceUntilIdle()
+        viewModel.offerResumeAfterReturn(1L)
+        assertEquals(false, viewModel.uiState.value.offerResume)
+
+        viewModel.stepForward()
+        viewModel.offerResumeAfterReturn(2L)
+        assertTrue(viewModel.uiState.value.offerResume)
+        viewModel.resumeReview()
+        assertEquals(photos[1], viewModel.uiState.value.currentPhoto)
+
+        viewModel.offerResumeAfterReturn(2L)
+        assertEquals(false, viewModel.uiState.value.offerResume)
+    }
+
+    @Test
+    fun retryAfterInitialLoadFailurePreservesSavedCursor() = runTest {
+        val photos = libraryPhotos()
+        val store = FakeProgressStore()
+        store.saveReviewProgress(
+            ReviewProgress(SortOrder.NEWEST_FIRST, null, null, photos[2].uri.toString(), 2, emptyList())
+        )
+        val repository = FakePhotoDataSource(photos)
+        repository.queryPhotos = { throw IllegalStateException("Temporary query failure") }
+        val viewModel = SnapSwipeViewModel(repository, store)
+        advanceUntilIdle()
+        assertNotNull(viewModel.uiState.value.loadError)
+
+        repository.queryPhotos = { photos }
+        viewModel.reload()
+        advanceUntilIdle()
+
+        assertNull(viewModel.uiState.value.loadError)
+        assertTrue(viewModel.uiState.value.offerResume)
+        assertEquals(photos[2], viewModel.uiState.value.currentPhoto)
+    }
+
+    @Test
+    fun backgroundRefreshPreservesDecisionsMadeWhileItLoads() = runTest {
+        val photos = libraryPhotos()
+        val repository = FakePhotoDataSource(photos)
+        val viewModel = SnapSwipeViewModel(repository)
+        advanceUntilIdle()
+        val query = CompletableDeferred<List<PhotoItem>>()
+        repository.queryPhotos = { query.await() }
+        viewModel.refreshPhotoAccess()
+        advanceUntilIdle()
+
+        viewModel.keepCurrent()
+        viewModel.setDeleteMode(DeleteMode.QUEUED)
+        viewModel.trashCurrent()
+        query.complete(photos.dropLast(1))
+        advanceUntilIdle()
+
+        assertEquals(listOf(photos[1]), viewModel.uiState.value.queuedDeletes)
+        assertEquals(1, viewModel.uiState.value.keptCount)
+        assertEquals(photos[2], viewModel.uiState.value.currentPhoto)
+    }
+
+    private fun libraryPhotos(): List<PhotoItem> = (1..5).map { index ->
+        PhotoItem(index.toLong(), Uri.parse("content://media/external/images/media/$index"), index * 1000L)
+    }
+
+    private fun approvalSender() = PendingIntent.getActivity(
+        RuntimeEnvironment.getApplication(), 0, Intent(Intent.ACTION_VIEW), PendingIntent.FLAG_IMMUTABLE
+    ).intentSender
 
     private fun samplePhotos(): List<PhotoItem> {
         return (1..3).map { idx ->
@@ -212,18 +550,42 @@ class SnapSwipeViewModelTest {
 private class FakePhotoDataSource(
     private val photos: List<PhotoItem>,
     private val deleteResult: DeleteResult = DeleteResult.Success,
-    private val batchResult: DeleteResult = DeleteResult.Success
+    private val batchResult: DeleteResult = deleteResult,
+    private val restoreResult: DeleteResult = DeleteResult.Success,
+    override val supportsTrash: Boolean = true,
+    private val visibleAfterRestore: List<PhotoItem> = photos
 ) : PhotoDataSource {
+    var loadCount = 0
+        private set
+    val retryFlags = mutableListOf<Boolean>()
+    var queryPhotos: suspend () -> List<PhotoItem> = { photos }
 
     override suspend fun loadPhotos(sortOrder: SortOrder): List<PhotoItem> {
-        return photos
+        loadCount++
+        return queryPhotos()
     }
 
-    override suspend fun deletePhoto(photo: PhotoItem): DeleteResult {
-        return deleteResult
+    override suspend fun removePhotos(photos: List<PhotoItem>, afterApproval: Boolean): DeleteResult {
+        retryFlags.add(afterApproval)
+        return when {
+            afterApproval -> DeleteResult.Success
+            photos.size > 1 -> batchResult
+            else -> deleteResult
+        }
     }
 
-    override suspend fun deletePhotosBatch(photos: List<PhotoItem>): DeleteResult {
-        return batchResult
+    override suspend fun restorePhotos(photos: List<PhotoItem>): DeleteResult = restoreResult
+
+    override suspend fun findVisiblePhotos(photos: List<PhotoItem>): List<PhotoItem> =
+        photos.filter { it in visibleAfterRestore }
+}
+
+private class FakeProgressStore : ReviewProgressStore {
+    private var progress: ReviewProgress? = null
+
+    override suspend fun readReviewProgress(): ReviewProgress? = progress
+
+    override suspend fun saveReviewProgress(progress: ReviewProgress) {
+        this.progress = progress
     }
 }
