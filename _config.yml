@@ -17,7 +17,6 @@ exclude:
   - .github
   - build
   - README.md
-  - claude.md
   - CLAUDE.md
   - AGENTS.md
   - BUILD_PLAN.md

@@ -6,7 +6,7 @@ For each step:
 - Codex should implement the described changes.
 - After implementation, run a build and (where applicable) run the app to manually test.
 - When a step is done, mark its checkbox as `[x]` and add any notes.
-- Important: keep this file in sync with AGENTS.md and claude.md.
+- Important: keep this file in sync with AGENTS.md and CLAUDE.md.
 
 ------------------------------------------------------------
 PHASE 0 – Documentation & Project Setup

@@ -1,82 +1,30 @@
-# CLAUDE.md
+# Claude Instructions – Snap Swipe
 
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+You are Claude, a coding assistant working on the Snap Swipe Android project.
 
-## Project Overview
+Before doing any work:
+- Read AGENTS.md to understand the project, agents, and workflow.
+- Read BUILD_PLAN.md to see the current implementation phase and completed steps.
 
-Snapstudio is an Android application built with Gradle. The project is in its initial setup phase - the core Android project structure (app module, source directories) has not yet been created.
+Project summary:
+- Snap Swipe is a native Android app written in Kotlin using Jetpack Compose.
+- It shows one photo at a time from the device and lets users:
+  - Swipe left/right to keep or delete.
+  - Swipe up to open a share menu.
+  - Change photo order (newest → oldest or oldest → newest) in Settings.
+- No album-management features yet.
+- No paid version logic implemented yet.
 
-## Project Structure
+When you edit or create code:
+- Respect the existing architecture (single-activity Compose app, MVVM pattern with ViewModels and repositories).
+- Keep code style consistent (Kotlin idioms, Compose best practices).
+- Prefer small, focused changes over large rewrites.
+- If you complete any build steps or significantly change the plan, update:
+  - BUILD_PLAN.md (step statuses, notes).
+  - AGENTS.md Task Log (append a line describing what you did).
 
-This is a standard Android/Gradle project following the conventional layout:
-
-- **App code**: `app/src/main/` - Kotlin/Java sources under `java/`, resources under `res/`, shared assets in `assets/`
-- **Unit tests**: `app/src/test/` - JVM unit tests (JUnit, Mockito/MockK)
-- **Instrumented tests**: `app/src/androidTest/` - UI/integration tests (Espresso/Compose test APIs)
-- **Build configuration**:
-  - `settings.gradle` - project-level settings
-  - Root `build.gradle` (or `.kts`) - project-level build config
-  - `app/build.gradle` - app module build config
-  - `local.properties` - local environment config (never commit this)
-
-## Build and Development Commands
-
-```bash
-# Build and assemble
-./gradlew assembleDebug              # Compile and package debug APK
-./gradlew assembleRelease            # Compile and package release APK
-
-# Testing
-./gradlew testDebugUnitTest          # Run JVM unit tests
-./gradlew connectedDebugAndroidTest  # Run instrumented tests on device/emulator
-
-# Code quality
-./gradlew lint                       # Run Android lint checks (fix violations before PRs)
-
-# Development
-# After changing Gradle scripts, use Android Studio's "Sync Project with Gradle Files"
-```
-
-## Coding Conventions
-
-**Language and Style**:
-- Kotlin is preferred over Java
-- 4-space indentation, trailing commas where allowed
-- Use idiomatic Kotlin null-safety patterns
-
-**Naming**:
-- Classes/objects: `PascalCase`
-- Functions/properties: `camelCase`
-- Constants: `UPPER_SNAKE_CASE`
-- Package names: lowercase with no underscores, matching directory structure
-
-**Architecture**:
-- Favor small, single-responsibility classes
-- Avoid God-objects/activities
-- Use Android Studio's "Code > Reformat Code" and optimize imports before commits
-
-## Testing Requirements
-
-**Unit Tests**:
-- Use JUnit with Mockito or MockK for mocking
-- Test naming: `FeatureThingTest`, methods named `featureThingShould...`
-- Always add regression coverage for bugs before marking them fixed
-- New features require at least one happy-path test and one failure-path test
-
-**Instrumented Tests**:
-- Use Espresso for View-based UI or Compose test APIs for Jetpack Compose
-- Rotate/wipe test devices when encountering flakiness in `connected*` tasks
-
-## Commit Guidelines
-
-- Use imperative mood, concise scope (e.g., `Add login validation`, `Fix crash on rotation`)
-- Prefer Conventional Commits format when type is clear: `feat:`, `fix:`, `chore:`
-- Keep commits focused - don't bundle unrelated changes with formatting
-- PRs should describe the change, testing performed, and any UI notes/screenshots for visual changes
-- Link issues/tickets when applicable, call out risky migrations or follow-ups explicitly
-
-## Security
-
-- Never commit secrets, keystores, or `local.properties`
-- Use environment variables or encrypted storage for signing configurations
-- `local.properties` contains local SDK path and must remain untracked
+Typical tasks for you:
+- Review and refactor ViewModels, repositories, and composables.
+- Improve MediaStore and permission-handling robustness.
+- Add or improve tests.
+- Investigate and fix bugs based on human feedback.
